@@ -1,0 +1,151 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Skeleton",
+    "theme_version": "0.1.0",
+    "theme_author": "Shopify",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://support.shopify.com/"
+  },
+  {
+    "name": "t:general.typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:general.fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_primary_font",
+        "default": "inter_n4",
+        "label": "t:general.primary"
+      }
+    ]
+  },
+  {
+    "name": "t:general.layout",
+    "settings": [
+      {
+        "type": "select",
+        "id": "max_page_width",
+        "label": "t:labels.page_width",
+        "options": [
+          {
+            "value": "100rem",
+            "label": "t:options.page_width.narrow"
+          },
+          {
+            "value": "110rem",
+            "label": "t:options.page_width.wide"
+          }
+        ],
+        "default": "110rem"
+      },
+      {
+        "type": "range",
+        "id": "min_page_margin",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.page_margin",
+        "default": 24
+      }
+    ]
+  },
+  {
+    "name": "t:general.colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Base & Text"
+      },
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#FAF7F2",
+        "label": "Base"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#2D2A26",
+        "label": "Ink"
+      },
+      {
+        "type": "header",
+        "content": "Secondary"
+      },
+      {
+        "type": "color",
+        "id": "muted_color",
+        "default": "#9C9589",
+        "label": "Muted"
+      },
+      {
+        "type": "color",
+        "id": "surface_color",
+        "default": "#FFFFFF",
+        "label": "Surface"
+      },
+      {
+        "type": "header",
+        "content": "Watercolor Accents"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#C4727F",
+        "label": "Accent (Blush)"
+      },
+      {
+        "type": "color",
+        "id": "accent_hover_color",
+        "default": "#A85A68",
+        "label": "Accent Hover"
+      },
+      {
+        "type": "header",
+        "content": "Buttons"
+      },
+      {
+        "type": "color",
+        "id": "button_primary_bg",
+        "default": "#C4727F",
+        "label": "Primary Button BG"
+      },
+      {
+        "type": "color",
+        "id": "button_primary_text",
+        "default": "#FFFFFF",
+        "label": "Primary Button Text"
+      },
+      {
+        "type": "color",
+        "id": "button_secondary_bg",
+        "default": "transparent",
+        "label": "Secondary Button BG"
+      },
+      {
+        "type": "color",
+        "id": "button_secondary_text",
+        "default": "#2D2A26",
+        "label": "Secondary Button Text"
+      },
+      {
+        "type": "header",
+        "content": "Inputs"
+      },
+      {
+        "type": "range",
+        "id": "input_corner_radius",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.input_corner_radius",
+        "default": 10
+      }
+    ]
+  }
+]

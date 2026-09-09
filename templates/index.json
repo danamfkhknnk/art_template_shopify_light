@@ -1,0 +1,113 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "subheading": "Art Commission",
+        "tagline": "Let Me Draw Your Imagination Into Reality",
+        "description": "As an artist, I'm here to bring your ideas to life. Let's create something amazing together.",
+        "button_label": "View All Products",
+        "button_link": "/pages/products",
+        "show_scroll": true
+      }
+    },
+    "about": {
+      "type": "about",
+      "settings": {
+        "subheading": "About Us",
+        "heading": "The Artist Behind The Work",
+        "stat_1_number": "8+",
+        "stat_1_label": "Years Drawing",
+        "stat_2_number": "50+",
+        "stat_2_label": "Projects Done",
+        "stat_3_number": "100%",
+        "stat_3_label": "Passion Driven"
+      }
+    },
+    "team": {
+      "type": "team",
+      "settings": {
+        "subheading": "Meet The Artists",
+        "heading": "Our Team"
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "subheading": "Testimonials",
+        "heading": "What Clients Say"
+      },
+      "blocks": {
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The level of detail and creativity is outstanding. My OC has never looked better!",
+            "author": "Sarah Chen",
+            "rating": 5,
+            "platform": "Twitter"
+          }
+        },
+        "testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Fast delivery, great communication, and the art exceeded my expectations.",
+            "author": "Mike Johnson",
+            "rating": 5,
+            "platform": "Discord"
+          }
+        },
+        "testimonial-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I've commissioned many artists but this was by far the best experience.",
+            "author": "Alex Rivera",
+            "rating": 5,
+            "platform": "Instagram"
+          }
+        },
+        "testimonial-4": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The character design was exactly what I envisioned. Will definitely commission again!",
+            "author": "Luna Kim",
+            "rating": 5,
+            "platform": "Twitter"
+          }
+        },
+        "testimonial-5": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Professional, talented, and super easy to work with. Highly recommended!",
+            "author": "Jordan Park",
+            "rating": 5,
+            "platform": "Discord"
+          }
+        },
+        "testimonial-6": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The illustration captured the mood perfectly. My followers loved it!",
+            "author": "Casey Nguyen",
+            "rating": 4,
+            "platform": "Instagram"
+          }
+        }
+      },
+      "block_order": ["testimonial-1", "testimonial-2", "testimonial-3", "testimonial-4", "testimonial-5", "testimonial-6"]
+    },
+    "contact": {
+      "type": "contact",
+      "settings": {
+        "subheading": "Reach Out",
+        "heading": "Get In Touch"
+      }
+    },
+  },
+  "order": [
+    "hero",
+    "about",
+    "team",
+    "testimonials",
+    "contact"
+  ]
+}

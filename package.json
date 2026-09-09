@@ -1,0 +1,26 @@
+{
+  "name": "art_template",
+  "version": "1.0.0",
+  "description": "<h1 align=\"center\" style=\"position: relative;\">\r   <br>\r     <img src=\"./assets/shoppy-x-ray.svg\" alt=\"logo\" width=\"200\">\r   <br>\r   Shopify Skeleton Theme\r </h1>",
+  "main": "index.js",
+  "scripts": {
+    "tailwind:build": "npx @tailwindcss/cli -i src/tailwind.css -o assets/tailwind.css --minify",
+    "tailwind:watch": "npx @tailwindcss/cli -i src/tailwind.css -o assets/tailwind.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danamfkhknnk/art_template.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/danamfkhknnk/art_template/issues"
+  },
+  "homepage": "https://github.com/danamfkhknnk/art_template#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}

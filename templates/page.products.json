@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "services": {
+      "type": "services",
+      "settings": {
+        "subheading": "Products",
+        "heading": "Our Collection",
+        "description": "Explore our curated collection of digital art products and templates",
+        "collection": "digital-art",
+        "show_all": true,
+        "products_to_show": 12,
+        "columns": "3",
+        "button_label": ""
+      }
+    }
+  },
+  "order": [
+    "services"
+  ]
+}

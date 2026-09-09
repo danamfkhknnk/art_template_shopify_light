@@ -1,0 +1,154 @@
+<section id="contact" class="relative py-24 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
+  <!-- Watercolor wash accent -->
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 50% 30%, rgba(196,114,127,0.04) 0%, transparent 50%);"></div>
+
+  <div class="relative section-content max-w-3xl mx-auto">
+    <!-- Heading -->
+    <div class="text-center mb-12">
+      <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2 reveal" style="color: var(--color-blush);">
+        <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+        {{ section.settings.subheading }}
+        <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
+      </p>
+      <h2 class="text-heading font-display mb-4 reveal reveal-delay-1" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+      <p class="text-body-lg max-w-lg mx-auto reveal reveal-delay-2" style="color: var(--color-muted);">
+        Have a project in mind? I'd love to hear about it. Let's create something beautiful together.
+      </p>
+    </div>
+
+    <!-- Centered Form Card -->
+    <div class="watercolor-card p-8 md:p-10 reveal reveal-delay-2">
+      {% form 'contact' %}
+        {% if form.posted_successfully? %}
+          <div class="p-4 rounded-xl mb-6 text-body-sm text-center" style="background: rgba(107,158,107,0.08); border: 1px solid rgba(107,158,107,0.15); color: var(--color-success);">
+            ✨ Thank you for your message! I'll get back to you soon.
+          </div>
+        {% endif %}
+        {% if form.errors %}
+          <div class="p-4 rounded-xl mb-6 text-body-sm" style="background: rgba(196,114,127,0.06); border: 1px solid rgba(196,114,127,0.12); color: var(--color-blush);">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+        <!-- Two column name + email -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">Your Name</label>
+            <input type="text" name="contact[name]" placeholder="John Doe" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required>
+          </div>
+          <div>
+            <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">Your Email</label>
+            <input type="email" name="contact[email]" placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">Service</label>
+          <select name="contact[service]" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;">
+            <option value="">Select a service</option>
+            <option value="portrait">Portrait</option>
+            <option value="character">Character Design</option>
+            <option value="illustration">Illustration</option>
+            <option value="template">Shopify Template</option>
+          </select>
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">Your Message</label>
+          <textarea name="contact[body]" placeholder="Tell me about your project, timeline, and any ideas you have in mind..." rows="5" class="w-full px-4 py-3 rounded-xl text-body-sm resize-none" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full md:w-auto">
+          <span>Send Message</span>
+        </button>
+      {% endform %}
+    </div>
+
+    <!-- Contact Info Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 reveal reveal-delay-3">
+      <!-- Email -->
+      <a href="mailto:{{ section.settings.email }}" class="group watercolor-card p-5 flex items-center gap-4 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background: rgba(196,114,127,0.08);">
+          <svg class="w-5 h-5" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-caption uppercase tracking-wider mb-0.5" style="color: var(--color-blush);">Email</p>
+          <p class="text-body-sm font-medium truncate" style="color: var(--color-foreground);">{{ section.settings.email }}</p>
+        </div>
+      </a>
+
+      <!-- Discord -->
+      <a href="{{ section.settings.discord }}" target="_blank" class="group watercolor-card p-5 flex items-center gap-4 transition-all duration-300 hover:-translate-y-1">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background: rgba(155,142,196,0.08);">
+          <svg class="w-5 h-5" style="color: var(--color-lavender);" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-caption uppercase tracking-wider mb-0.5" style="color: var(--color-lavender);">Discord</p>
+          <p class="text-body-sm font-medium" style="color: var(--color-foreground);">{{ section.settings.discord_name }}</p>
+        </div>
+      </a>
+
+      <!-- Availability -->
+      <div class="watercolor-card p-5 flex items-center gap-4">
+        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background: rgba(139,170,125,0.08);">
+          <svg class="w-5 h-5" style="color: var(--color-sage);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-caption uppercase tracking-wider mb-0.5" style="color: var(--color-sage);">Response Time</p>
+          <p class="text-body-sm font-medium" style="color: var(--color-foreground);">Within 24 hours</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get In Touch"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "hello@example.com"
+    },
+    {
+      "type": "text",
+      "id": "discord",
+      "label": "Discord Invite Link",
+      "default": "#"
+    },
+    {
+      "type": "text",
+      "id": "discord_name",
+      "label": "Discord Name",
+      "default": "username"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact"
+    }
+  ]
+}
+{% endschema %}

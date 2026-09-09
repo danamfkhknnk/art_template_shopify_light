@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "gallery": {
+      "type": "gallery",
+      "settings": {
+        "subheading": "Portfolio",
+        "heading": "Showcase"
+      }
+    }
+  },
+  "order": [
+    "gallery"
+  ]
+}

@@ -1,0 +1,135 @@
+<header class="fixed top-0 left-0 right-0 z-50" style="color: var(--color-foreground);">
+  <nav class="transition-all duration-500" style="background: rgba(250,247,242,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(45,42,38,0.04);">
+    <div class="section-content px-4">
+      <!-- Main row: Logo center, icons right -->
+      <div class="flex items-center h-16 md:h-20 lg:h-24">
+        <!-- Left spacer -->
+        <div class="flex-1"></div>
+
+        <!-- Center: Logo -->
+        <div class="flex-none text-center">
+          <a href="{{ routes.root_url }}" class="block">
+            <h1 class="leading-none select-none whitespace-nowrap" style="font-family: var(--font-display--family); font-size: clamp(1.3rem, 3vw, 2rem); font-weight: 700; letter-spacing: -0.02em; color: var(--color-foreground);">
+              {{ shop.name }}
+            </h1>
+          </a>
+        </div>
+
+        <!-- Right: Hamburger (mobile) + Icons (desktop) -->
+        <div class="flex-1 flex items-center justify-end gap-3">
+          <!-- Hamburger (mobile only) -->
+          <label for="mobile-menu-toggle" class="md:hidden cursor-pointer w-8 h-8 flex flex-col items-center justify-center gap-1.5 relative z-50">
+            <span class="block w-5 h-0.5 transition-all duration-300" style="background: var(--color-foreground);"></span>
+            <span class="block w-5 h-0.5 transition-all duration-300" style="background: var(--color-foreground);"></span>
+            <span class="block w-5 h-0.5 transition-all duration-300" style="background: var(--color-foreground);"></span>
+          </label>
+
+          <!-- Desktop icons -->
+          <div class="hidden md:flex items-center gap-3">
+            {% if shop.customer_accounts_enabled %}
+              <shopify-account menu="{{ section.settings.customer_account_menu }}">
+                <span class="block w-5 h-5 opacity-50 hover:opacity-100 transition-opacity duration-300">{{ 'icon-account.svg' | inline_asset_content }}</span>
+              </shopify-account>
+            {% endif %}
+
+            <a href="{{ routes.cart_url }}" class="relative block w-5 h-5">
+              {% if cart.item_count > 0 %}
+                <sup class="absolute -top-2 -right-2 text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-medium" style="background: var(--color-blush); color: white;">{{ cart.item_count }}</sup>
+              {% endif %}
+              {{ 'icon-cart.svg' | inline_asset_content }}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom row: Nav items centered (desktop only) -->
+      <div class="hidden md:flex items-center justify-center gap-2 pb-3 -mt-1">
+        {% for link in section.settings.menu.links %}
+          <a href="{{ link.url }}" class="nav-link px-3 py-1 text-[0.8rem] tracking-[0.08em] uppercase font-medium transition-all duration-300 rounded-full" style="color: var(--color-muted);">
+            {{ link.title }}
+          </a>
+          {% unless forloop.last %}
+            <span class="text-[0.5rem] opacity-30 mx-1" style="color: var(--color-muted);">✦</span>
+          {% endunless %}
+        {% endfor %}
+      </div>
+
+      <!-- Decorative thin line separator (desktop only) -->
+      <div class="hidden md:block w-full h-px" style="background: linear-gradient(90deg, transparent 0%, rgba(196,114,127,0.15) 30%, rgba(155,142,196,0.15) 50%, rgba(196,114,127,0.15) 70%, transparent 100%);"></div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <input type="checkbox" id="mobile-menu-toggle" class="hidden peer" aria-hidden="true">
+
+  <!-- Mobile menu overlay -->
+  <div class="hidden peer-checked:flex md:hidden fixed inset-0 flex-col items-center justify-center py-8 gap-2 transition-all duration-300 z-40" style="background: rgba(250,247,242,0.97); backdrop-filter: blur(20px);">
+    {% for link in section.settings.menu.links %}
+      <a href="{{ link.url }}" class="w-56 text-center py-3 rounded-full text-lg font-semibold transition-colors" style="color: var(--color-foreground);">
+        {{ link.title }}
+      </a>
+    {% endfor %}
+
+    <!-- Mobile icons -->
+    <div class="flex items-center gap-4 mt-6">
+      {% if shop.customer_accounts_enabled %}
+        <shopify-account menu="{{ section.settings.customer_account_menu }}">
+          <span class="block w-6 h-6 opacity-50">{{ 'icon-account.svg' | inline_asset_content }}</span>
+        </shopify-account>
+      {% endif %}
+      <a href="{{ routes.cart_url }}" class="relative block w-6 h-6">
+        {% if cart.item_count > 0 %}
+          <sup class="absolute -top-2 -right-2 text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-medium" style="background: var(--color-blush); color: white;">{{ cart.item_count }}</sup>
+        {% endif %}
+        {{ 'icon-cart.svg' | inline_asset_content }}
+      </a>
+    </div>
+  </div>
+
+  <style>
+    /* Nav link hover: subtle underline effect */
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1.5px;
+      background: var(--color-blush);
+      transition: width 0.3s ease;
+      border-radius: 1px;
+    }
+    .nav-link:hover {
+      color: var(--color-foreground) !important;
+    }
+    .nav-link:hover::after {
+      width: 60%;
+    }
+  </style>
+</header>
+
+{% schema %}
+{
+  "name": "t:general.header",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "t:labels.customer_account_menu",
+      "default": "customer-account-main-menu"
+    }
+  ]
+}
+{% endschema %}

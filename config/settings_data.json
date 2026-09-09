@@ -1,0 +1,28 @@
+{
+  "current": {
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu"
+        }
+      }
+    },
+    "order": [
+      "header"
+    ],
+    "color": "default",
+    "colors": {
+      "background_color": "#FAF7F2",
+      "foreground_color": "#2D2A26",
+      "muted_color": "#9C9589",
+      "surface_color": "#FFFFFF",
+      "accent_color": "#C4727F",
+      "accent_hover_color": "#A85A68",
+      "button_primary_bg": "#C4727F",
+      "button_primary_text": "#FFFFFF",
+      "button_secondary_bg": "transparent",
+      "button_secondary_text": "#2D2A26"
+    }
+  }
+}

@@ -1,0 +1,315 @@
+<section class="relative pt-36 pb-24 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
+  <!-- Watercolor wash background -->
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 70% 20%, rgba(155,142,196,0.04) 0%, transparent 50%), radial-gradient(ellipse at 30% 80%, rgba(196,162,101,0.03) 0%, transparent 50%);"></div>
+
+  <div class="relative section-content">
+    <!-- Artwork Strip Hero — Gallery specific -->
+    <div class="mb-16 reveal">
+      <div class="flex gap-3 overflow-hidden rounded-2xl mb-8" style="height: 180px;">
+        <div class="flex-1 rounded-xl overflow-hidden">
+          <img src="{{ 'gallery1.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="flex-1 rounded-xl overflow-hidden">
+          <img src="{{ 'gallery2.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="flex-1 rounded-xl overflow-hidden hidden md:block">
+          <img src="{{ 'gallery3.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="flex-1 rounded-xl overflow-hidden hidden lg:block">
+          <img src="{{ 'gallery4.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
+        </div>
+        <div class="flex-1 rounded-xl overflow-hidden hidden xl:block">
+          <img src="{{ 'gallery5.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
+        </div>
+      </div>
+
+      <div class="text-center">
+        <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+          <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+          {{ section.settings.subheading }}
+          <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
+        </p>
+        <h1 class="font-display font-bold mb-4" style="color: var(--color-foreground); font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.02em;">
+          {{ section.settings.heading }}
+        </h1>
+        <p class="text-body-lg max-w-md mx-auto" style="color: var(--color-muted);">A curated collection of my finest work.</p>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="flex flex-wrap justify-center gap-3 mb-12 reveal reveal-delay-1">
+      <button data-filter="all" class="filter-tab active px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: var(--color-blush); color: white;">All</button>
+      <button data-filter="portrait" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">Portrait</button>
+      <button data-filter="character" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">Character</button>
+      <button data-filter="illustration" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">Illustration</button>
+    </div>
+
+    <!-- Masonry Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[180px] md:auto-rows-[220px]" style="opacity:1;transform:none;">
+
+      <!-- Item 1 - Large (2x2) -->
+      <div class="col-span-2 row-span-2 gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery1.jpg' | asset_url }}" alt="Ethereal Portrait" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider mb-1" style="color: var(--color-blush);">Portrait</p>
+            <h3 class="text-subheading font-display" style="color: var(--color-foreground);">Ethereal Portrait</h3>
+            <p class="text-body-sm mt-1" style="color: var(--color-muted);">Digital painting with custom lighting</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="gallery-item" data-category="character" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery2.jpg' | asset_url }}" alt="Warrior OC" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Character</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Warrior OC</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="gallery-item" data-category="illustration" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery3.jpg' | asset_url }}" alt="Dreamscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Illustration</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Dreamscape</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery4.jpg' | asset_url }}" alt="Mystic Mage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Portrait</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Mystic Mage</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="gallery-item" data-category="character" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery5.jpg' | asset_url }}" alt="Cyber Punk" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Character</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Cyber Punk</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 6 - Wide (2x1) -->
+      <div class="col-span-2 gallery-item" data-category="illustration" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery6.jpg' | asset_url }}" alt="Enchanted Forest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider mb-1" style="color: var(--color-blush);">Illustration</p>
+            <h3 class="text-subheading font-display" style="color: var(--color-foreground);">Enchanted Forest</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 7 -->
+      <div class="gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery7.jpg' | asset_url }}" alt="Royal Guard" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Portrait</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Royal Guard</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 8 -->
+      <div class="gallery-item" data-category="character" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery8.jpg' | asset_url }}" alt="Anime Hero" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Character</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Anime Hero</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 9 - Wide (2x1) -->
+      <div class="col-span-2 gallery-item" data-category="illustration" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery9.jpg' | asset_url }}" alt="Starry Night" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider mb-1" style="color: var(--color-blush);">Illustration</p>
+            <h3 class="text-subheading font-display" style="color: var(--color-foreground);">Starry Night</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 10 -->
+      <div class="gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+        <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+          <img src="{{ 'gallery10.jpg' | asset_url }}" alt="Dark Knight" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
+          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <p class="text-caption uppercase tracking-wider" style="color: var(--color-blush);">Portrait</p>
+            <h3 class="text-body font-semibold" style="color: var(--color-foreground);">Dark Knight</h3>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="gallery-lightbox" class="fixed inset-0 z-[100] hidden items-center justify-center p-4" style="background: rgba(250,247,242,0.95); backdrop-filter: blur(12px); opacity:0;transition:opacity .3s ease;" role="dialog" aria-modal="true">
+    <button id="lightbox-close" class="absolute top-4 right-4 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Close">
+      <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <button id="lightbox-prev" class="absolute left-2 md:left-4 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Previous">
+      <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    </button>
+    <button id="lightbox-next" class="absolute right-2 md:right-4 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Next">
+      <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+    </button>
+    <figure class="flex flex-col items-center max-w-[92vw] md:max-w-4xl">
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[75vh] object-contain rounded-2xl" style="box-shadow: 0 16px 64px rgba(45,42,38,0.12); border: 1px solid rgba(45,42,38,0.06);">
+      <figcaption class="mt-4 text-center">
+        <p id="lightbox-category" class="text-caption uppercase tracking-wider" style="color: var(--color-blush);"></p>
+        <h3 id="lightbox-title" class="text-subheading font-display mt-1" style="color: var(--color-foreground);"></h3>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const lightbox = document.getElementById('gallery-lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxTitle = document.getElementById('lightbox-title');
+    const lightboxCategory = document.getElementById('lightbox-category');
+    const tabs = document.querySelectorAll('.filter-tab');
+    const items = document.querySelectorAll('.gallery-item');
+    let visibleItems = [];
+    let currentIndex = 0;
+    let lightboxOpen = false;
+
+    const getVisibleItems = function() {
+      return Array.prototype.filter.call(items, function(item) { return item.style.display !== 'none'; });
+    };
+
+    const showLightboxImage = function(index) {
+      if (!visibleItems.length) return;
+      currentIndex = (index + visibleItems.length) % visibleItems.length;
+      const item = visibleItems[currentIndex];
+      const img = item.querySelector('img');
+      const title = item.querySelector('h3');
+      const category = item.querySelector('.text-caption');
+      lightboxImg.src = img ? img.src : '';
+      lightboxImg.alt = img ? img.alt : '';
+      lightboxTitle.textContent = title ? title.textContent : '';
+      lightboxCategory.textContent = category ? category.textContent : '';
+    };
+
+    const openLightbox = function(item) {
+      visibleItems = getVisibleItems();
+      showLightboxImage(visibleItems.indexOf(item));
+      lightbox.classList.remove('hidden');
+      lightbox.classList.add('flex');
+      requestAnimationFrame(function() { lightbox.style.opacity = '1'; });
+      document.body.style.overflow = 'hidden';
+      lightboxOpen = true;
+    };
+
+    const closeLightbox = function() {
+      lightbox.style.opacity = '0';
+      lightboxOpen = false;
+      document.body.style.overflow = '';
+      setTimeout(function() {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+      }, 300);
+    };
+
+    items.forEach(function(item) {
+      item.addEventListener('click', function() { openLightbox(item); });
+    });
+
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    document.getElementById('lightbox-prev').addEventListener('click', function(e) { e.stopPropagation(); showLightboxImage(currentIndex - 1); });
+    document.getElementById('lightbox-next').addEventListener('click', function(e) { e.stopPropagation(); showLightboxImage(currentIndex + 1); });
+    lightbox.addEventListener('click', function(e) { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', function(e) {
+      if (!lightboxOpen) return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') showLightboxImage(currentIndex - 1);
+      else if (e.key === 'ArrowRight') showLightboxImage(currentIndex + 1);
+    });
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.dataset.filter;
+
+        tabs.forEach(t => {
+          t.classList.remove('active');
+          t.style.background = 'rgba(255,255,255,0.6)';
+          t.style.color = 'var(--color-muted)';
+          t.style.border = '1px solid rgba(45,42,38,0.06)';
+        });
+        tab.classList.add('active');
+        tab.style.background = 'var(--color-blush)';
+        tab.style.color = 'white';
+        tab.style.border = 'none';
+
+        items.forEach(item => {
+          if (filter === 'all' || item.dataset.category === filter) {
+            item.style.display = 'block';
+            item.style.opacity = '1';
+            item.style.transform = 'scale(1)';
+          } else {
+            item.style.opacity = '0';
+            item.style.transform = 'scale(0.95)';
+            setTimeout(() => { item.style.display = 'none'; }, 300);
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Gallery",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Portfolio"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Showcase"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gallery"
+    }
+  ]
+}
+{% endschema %}

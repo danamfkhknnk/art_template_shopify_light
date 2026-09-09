@@ -1,0 +1,63 @@
+{
+  "sections": {
+    "services": {
+      "type": "services",
+      "settings": {
+        "subheading": "Services",
+        "heading": "What I Offer",
+        "description": "Professional art services tailored to bring your vision to life",
+        "products_to_show": 8,
+        "columns": "3"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "subheading": "FAQ",
+        "heading": "Frequently Asked Questions"
+      },
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does a commission take?",
+            "answer": "<p>It depends on the complexity. Simple portraits take 3-5 days, while complex illustrations can take 1-2 weeks. I'll provide an estimated timeline when you commission.</p>"
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "<p>I accept PayPal, Stripe, and bank transfer. Payment is typically split 50% upfront and 50% upon completion.</p>"
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I use the artwork commercially?",
+            "answer": "<p>Commercial use is included in Standard and Premium plans. For Basic plans, you can add commercial use as an add-on for $50.</p>"
+          }
+        },
+        "faq-4": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you offer revisions?",
+            "answer": "<p>Yes! Basic includes 2 revisions, Standard includes 4, and Premium includes unlimited revisions.</p>"
+          }
+        },
+        "faq-5": {
+          "type": "faq",
+          "settings": {
+            "question": "What if I'm not satisfied with the result?",
+            "answer": "<p>I offer unlimited revisions for Premium plans and up to 4 for Standard. Your satisfaction is my priority.</p>"
+          }
+        }
+      },
+      "block_order": ["faq-1", "faq-2", "faq-3", "faq-4", "faq-5"]
+    }
+  },
+  "order": [
+    "services",
+    "faq"
+  ]
+}
