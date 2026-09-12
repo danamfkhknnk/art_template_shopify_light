@@ -127,22 +127,48 @@
             </div>
           </div>
 
-          <!-- Add to Cart -->
-          {% form 'product', product %}
-            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <!-- Add to Cart (AJAX) -->
+          <form id="product-add-to-cart-form" onsubmit="handleAddToCart(event)">
+            <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
             <input type="hidden" id="addon-data" name="properties[Add-ons]" value="">
-            <button type="submit" class="btn-primary w-full flex items-center justify-center gap-2">
+            <button type="submit" id="add-to-cart-btn" class="btn-primary w-full flex items-center justify-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path>
               </svg>
               <span>{{ section.settings.add_to_cart_label }}</span>
             </button>
-          {% endform %}
+          </form>
 
           <!-- Buy Now -->
-          <a href="{{ routes.cart_url }}?add={{ product.selected_or_first_available_variant.id }}" class="btn-secondary w-full flex items-center justify-center gap-2">
+          <a href="{{ routes.cart_url }}" class="btn-secondary w-full flex items-center justify-center gap-2">
             <span>{{ section.settings.buy_now_label }}</span>
           </a>
+
+          <script>
+            async function handleAddToCart(e) {
+              e.preventDefault();
+              var btn = document.getElementById('add-to-cart-btn');
+              var variantId = document.getElementById('variant-id').value;
+              btn.disabled = true;
+              btn.querySelector('span').textContent = 'Adding...';
+              try {
+                var res = await fetch('/cart/add.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ id: parseInt(variantId), quantity: parseInt(document.getElementById('quantity').value || 1) })
+                });
+                if (res.ok) {
+                  openCartDrawer();
+                } else {
+                  alert('Could not add item to cart.');
+                }
+              } catch (err) {
+                console.error('Add to cart error:', err);
+              }
+              btn.disabled = false;
+              btn.querySelector('span').textContent = '{{ section.settings.add_to_cart_label }}';
+            }
+          </script>
         </div>
 
         <!-- Trust badges -->
