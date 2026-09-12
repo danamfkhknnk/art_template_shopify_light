@@ -1,54 +1,36 @@
-<section class="relative pt-36 pb-24 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
+<section data-gs-section="gallery" class="relative pt-36 pb-24 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
   <!-- Watercolor wash background -->
   <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 70% 20%, rgba(155,142,196,0.04) 0%, transparent 50%), radial-gradient(ellipse at 30% 80%, rgba(196,162,101,0.03) 0%, transparent 50%);"></div>
 
   <div class="relative section-content">
     <!-- Artwork Strip Hero — Gallery specific -->
-    <div class="mb-16 reveal">
-      <div class="flex gap-3 overflow-hidden rounded-2xl mb-8" style="height: 180px;">
-        <div class="flex-1 rounded-xl overflow-hidden">
-          <img src="{{ 'gallery1.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="flex-1 rounded-xl overflow-hidden">
-          <img src="{{ 'gallery2.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="flex-1 rounded-xl overflow-hidden hidden md:block">
-          <img src="{{ 'gallery3.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="flex-1 rounded-xl overflow-hidden hidden lg:block">
-          <img src="{{ 'gallery4.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
-        </div>
-        <div class="flex-1 rounded-xl overflow-hidden hidden xl:block">
-          <img src="{{ 'gallery5.jpg' | asset_url }}" alt="" class="w-full h-full object-cover" loading="lazy">
-        </div>
-      </div>
-
+    <div class="mb-16">
       <div class="text-center">
-        <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+        <p data-gs="gallery-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
           <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
           {{ section.settings.subheading }}
           <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
         </p>
-        <h1 class="font-display font-bold mb-4" style="color: var(--color-foreground); font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.02em;">
+        <h1 data-gs="gallery-heading" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 0.02em;">
           {{ section.settings.heading }}
         </h1>
-        <p class="text-body-lg max-w-md mx-auto" style="color: var(--color-muted);">A curated collection of my finest work.</p>
+        <p data-gs="gallery-heading" class="text-body-lg max-w-md mx-auto" style="color: var(--color-muted);">{{ section.settings.description }}</p>
       </div>
     </div>
 
     <!-- Filter tabs -->
-    <div class="flex flex-wrap justify-center gap-3 mb-12 reveal reveal-delay-1">
-      <button data-filter="all" class="filter-tab active px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: var(--color-blush); color: white;">All</button>
-      <button data-filter="portrait" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">Portrait</button>
-      <button data-filter="character" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">Character</button>
-      <button data-filter="illustration" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">Illustration</button>
+    <div class="flex flex-wrap justify-center gap-3 mb-12">
+      {% assign filter_tabs = section.settings.filter_tabs | split: "," %}
+      {% for tab in filter_tabs %}
+        <button data-gs="gallery-tab" data-filter="{{ tab | strip | downcase }}" class="filter-tab {% if forloop.first %}active{% endif %} px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: {% if forloop.first %}var(--color-blush){% else %}rgba(255,255,255,0.6){% endif %}; color: {% if forloop.first %}white{% else %}var(--color-muted){% endif %}; border: 1px solid rgba(45,42,38,0.06);">{{ tab | strip }}</button>
+      {% endfor %}
     </div>
 
     <!-- Masonry Grid -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[180px] md:auto-rows-[220px]" style="opacity:1;transform:none;">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[180px] md:auto-rows-[220px]">
 
       <!-- Item 1 - Large (2x2) -->
-      <div class="col-span-2 row-span-2 gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="col-span-2 row-span-2 gallery-item" data-category="portrait">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery1.jpg' | asset_url }}" alt="Ethereal Portrait" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.9) 100%);"></div>
@@ -61,7 +43,7 @@
       </div>
 
       <!-- Item 2 -->
-      <div class="gallery-item" data-category="character" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="character">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery2.jpg' | asset_url }}" alt="Warrior OC" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -73,7 +55,7 @@
       </div>
 
       <!-- Item 3 -->
-      <div class="gallery-item" data-category="illustration" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="illustration">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery3.jpg' | asset_url }}" alt="Dreamscape" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -85,7 +67,7 @@
       </div>
 
       <!-- Item 4 -->
-      <div class="gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="portrait">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery4.jpg' | asset_url }}" alt="Mystic Mage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -97,7 +79,7 @@
       </div>
 
       <!-- Item 5 -->
-      <div class="gallery-item" data-category="character" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="character">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery5.jpg' | asset_url }}" alt="Cyber Punk" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -109,7 +91,7 @@
       </div>
 
       <!-- Item 6 - Wide (2x1) -->
-      <div class="col-span-2 gallery-item" data-category="illustration" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="col-span-2 gallery-item" data-category="illustration">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery6.jpg' | asset_url }}" alt="Enchanted Forest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.9) 100%);"></div>
@@ -121,7 +103,7 @@
       </div>
 
       <!-- Item 7 -->
-      <div class="gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="portrait">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery7.jpg' | asset_url }}" alt="Royal Guard" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -133,7 +115,7 @@
       </div>
 
       <!-- Item 8 -->
-      <div class="gallery-item" data-category="character" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="character">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery8.jpg' | asset_url }}" alt="Anime Hero" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -145,7 +127,7 @@
       </div>
 
       <!-- Item 9 - Wide (2x1) -->
-      <div class="col-span-2 gallery-item" data-category="illustration" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="col-span-2 gallery-item" data-category="illustration">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery9.jpg' | asset_url }}" alt="Starry Night" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.9) 100%);"></div>
@@ -157,7 +139,7 @@
       </div>
 
       <!-- Item 10 -->
-      <div class="gallery-item" data-category="portrait" style="opacity:1;transform:none;">
+      <div data-gs="gallery-item" class="gallery-item" data-category="portrait">
         <div class="group relative h-full cursor-pointer rounded-2xl overflow-hidden transition-all duration-500" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
           <img src="{{ 'gallery10.jpg' | asset_url }}" alt="Dark Knight" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy">
           <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 50%, rgba(250,247,242,0.9) 100%);"></div>
@@ -194,34 +176,34 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const lightbox = document.getElementById('gallery-lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxTitle = document.getElementById('lightbox-title');
-    const lightboxCategory = document.getElementById('lightbox-category');
-    const tabs = document.querySelectorAll('.filter-tab');
-    const items = document.querySelectorAll('.gallery-item');
-    let visibleItems = [];
-    let currentIndex = 0;
-    let lightboxOpen = false;
+    var lightbox = document.getElementById('gallery-lightbox');
+    var lightboxImg = document.getElementById('lightbox-img');
+    var lightboxTitle = document.getElementById('lightbox-title');
+    var lightboxCategory = document.getElementById('lightbox-category');
+    var tabs = document.querySelectorAll('.filter-tab');
+    var items = document.querySelectorAll('.gallery-item');
+    var visibleItems = [];
+    var currentIndex = 0;
+    var lightboxOpen = false;
 
-    const getVisibleItems = function() {
+    var getVisibleItems = function() {
       return Array.prototype.filter.call(items, function(item) { return item.style.display !== 'none'; });
     };
 
-    const showLightboxImage = function(index) {
+    var showLightboxImage = function(index) {
       if (!visibleItems.length) return;
       currentIndex = (index + visibleItems.length) % visibleItems.length;
-      const item = visibleItems[currentIndex];
-      const img = item.querySelector('img');
-      const title = item.querySelector('h3');
-      const category = item.querySelector('.text-caption');
+      var item = visibleItems[currentIndex];
+      var img = item.querySelector('img');
+      var title = item.querySelector('h3');
+      var category = item.querySelector('.text-caption');
       lightboxImg.src = img ? img.src : '';
       lightboxImg.alt = img ? img.alt : '';
       lightboxTitle.textContent = title ? title.textContent : '';
       lightboxCategory.textContent = category ? category.textContent : '';
     };
 
-    const openLightbox = function(item) {
+    var openLightbox = function(item) {
       visibleItems = getVisibleItems();
       showLightboxImage(visibleItems.indexOf(item));
       lightbox.classList.remove('hidden');
@@ -231,7 +213,7 @@
       lightboxOpen = true;
     };
 
-    const closeLightbox = function() {
+    var closeLightbox = function() {
       lightbox.style.opacity = '0';
       lightboxOpen = false;
       document.body.style.overflow = '';
@@ -256,11 +238,12 @@
       else if (e.key === 'ArrowRight') showLightboxImage(currentIndex + 1);
     });
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const filter = tab.dataset.filter;
+    // Filter tabs with GSAP
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var filter = tab.dataset.filter;
 
-        tabs.forEach(t => {
+        tabs.forEach(function(t) {
           t.classList.remove('active');
           t.style.background = 'rgba(255,255,255,0.6)';
           t.style.color = 'var(--color-muted)';
@@ -271,15 +254,12 @@
         tab.style.color = 'white';
         tab.style.border = 'none';
 
-        items.forEach(item => {
-          if (filter === 'all' || item.dataset.category === filter) {
-            item.style.display = 'block';
-            item.style.opacity = '1';
-            item.style.transform = 'scale(1)';
+        items.forEach(function(item) {
+          var isFirstTab = tabs[0] === tab;
+          if (isFirstTab || filter === 'all' || item.dataset.category === filter) {
+            gsap.to(item, { opacity: 1, scale: 1, display: 'block', duration: 0.3, ease: 'power2.out' });
           } else {
-            item.style.opacity = '0';
-            item.style.transform = 'scale(0.95)';
-            setTimeout(() => { item.style.display = 'none'; }, 300);
+            gsap.to(item, { opacity: 0, scale: 0.95, duration: 0.3, ease: 'power2.in', onComplete: function() { item.style.display = 'none'; } });
           }
         });
       });
@@ -304,11 +284,27 @@
       "id": "heading",
       "label": "Heading",
       "default": "Showcase"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "A curated collection of my finest work."
+    },
+    {
+      "type": "textarea",
+      "id": "filter_tabs",
+      "label": "Filter Tabs (comma-separated)",
+      "info": "Tab labels separated by commas. First tab is active by default. Example: All, Portrait, Character, Illustration",
+      "default": "All,Portrait,Character,Illustration"
     }
   ],
   "presets": [
     {
-      "name": "Gallery"
+      "name": "Gallery",
+      "settings": {
+        "filter_tabs": "All,Portrait,Character,Illustration"
+      }
     }
   ]
 }

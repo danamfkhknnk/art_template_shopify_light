@@ -1,0 +1,251 @@
+{
+  "sections": {
+    "main": {
+      "type": "faq-page",
+      "settings": {
+        "subheading": "FAQ",
+        "heading": "Frequently Asked Questions",
+        "description": "Frequently asked questions by you:",
+        "cta_text": "Still have questions? Reach out and we'll get back to you as soon as possible.",
+        "cta_label": "Contact Us"
+      },
+      "blocks": {
+        "category-general": {
+          "type": "category",
+          "settings": {
+            "category_title": "General",
+            "category_key": "general"
+          }
+        },
+        "q-general-1": {
+          "type": "question",
+          "settings": {
+            "category": "general",
+            "question": "Why should I commission this studio?",
+            "answer": "<p>We specialize in VTuber model creation and custom illustrations, offering high-quality results at budget-friendly prices. We have created more than 500 VTuber models in recent years, and we have a team of experienced artists and riggers at your service.</p>"
+          }
+        },
+        "q-general-2": {
+          "type": "question",
+          "settings": {
+            "category": "general",
+            "question": "How do I start a project?",
+            "answer": "<p>Simply contact us through the Contact Us section and ask for a quotation.</p>"
+          }
+        },
+        "q-general-3": {
+          "type": "question",
+          "settings": {
+            "category": "general",
+            "question": "Is there any form to fill in for commissions?",
+            "answer": "<p>Once you placed the order, a requirement list would be sent for you to fill in.</p>"
+          }
+        },
+        "category-pricing": {
+          "type": "category",
+          "settings": {
+            "category_title": "Price and Payments",
+            "category_key": "pricing"
+          }
+        },
+        "q-pricing-1": {
+          "type": "question",
+          "settings": {
+            "category": "pricing",
+            "question": "How much do your services cost?",
+            "answer": "<p>Our pricing is detailed in our Price List section. If you have a specific project in mind, feel free to contact us for a custom quote.</p>"
+          }
+        },
+        "q-pricing-2": {
+          "type": "question",
+          "settings": {
+            "category": "pricing",
+            "question": "What payment methods do you accept?",
+            "answer": "<p>We accept payments via PayPal, crypto currencies, or you can place your order on our Fiverr and VGen page.</p>"
+          }
+        },
+        "q-pricing-3": {
+          "type": "question",
+          "settings": {
+            "category": "pricing",
+            "question": "Do you offer payment plans?",
+            "answer": "<p>We prefer all payments are made in full upfront, but for clients with special needs, we do offer a two-part payment plan: 50% upfront to place the order and 50% before rigging begins.</p>"
+          }
+        },
+        "category-packages": {
+          "type": "category",
+          "settings": {
+            "category_title": "Packages and Services",
+            "category_key": "packages"
+          }
+        },
+        "q-packages-1": {
+          "type": "question",
+          "settings": {
+            "category": "packages",
+            "question": "What's included in a VTuber model package?",
+            "answer": "<p>Our VTuber packages typically include a fully rigged model, optional poses and expression toggles, and custom designs tailored to your specifications.</p>"
+          }
+        },
+        "q-packages-2": {
+          "type": "question",
+          "settings": {
+            "category": "packages",
+            "question": "Can I request a certain artist and rigger for my model?",
+            "answer": "<p>We assign the artists and riggers according to the branches based on their availability and their specialities. Clients who want to select specific artists or riggers may incur additional fees and longer wait times.</p>"
+          }
+        },
+        "q-packages-3": {
+          "type": "question",
+          "settings": {
+            "category": "packages",
+            "question": "Do you offer art only or rig only commissions?",
+            "answer": "<p>We currently don't accept art-only or rig-only commissions, as we focus on providing complete art + rig packages to ensure the best quality and consistency.</p>"
+          }
+        },
+        "q-packages-4": {
+          "type": "question",
+          "settings": {
+            "category": "packages",
+            "question": "Is the showcase video included in any of the packages?",
+            "answer": "<p>Our showcase videos are designed to promote our services and provide a reference for each tier. Please note that these videos are not included in any of our packages. Models featured in our showcases are selected randomly based on the availability of that team member. As creators, we want to emphasize that we do not have any favorites as every model is a product of our time, effort, and dedication, and we value each creation equally.</p>"
+          }
+        },
+        "q-packages-5": {
+          "type": "question",
+          "settings": {
+            "category": "packages",
+            "question": "What is the outfit design sheet in the PRO packages?",
+            "answer": "<p>Outfit design sheet is an optional item that is made by our costume designer to help the actual artist to have a better idea on the design. It is not extra outfit or character sheet. It is made depending if the PRO artist needs one.</p>"
+          }
+        },
+        "category-others": {
+          "type": "category",
+          "settings": {
+            "category_title": "Others",
+            "category_key": "others"
+          }
+        },
+        "q-others-1": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "How long does it take to create a VTuber model?",
+            "answer": "<p>Please check our Queue Time section for reference.</p>"
+          }
+        },
+        "q-others-2": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "Do you offer fast delivery?",
+            "answer": "<p>No, we don't.</p>"
+          }
+        },
+        "q-others-3": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "What happens after I place the order?",
+            "answer": "<p>Our project manager would be communicating with you on your preferred platform as a bridge between you and the assigned artist and rigger for updates and feedback.</p>"
+          }
+        },
+        "q-others-4": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "Can I request revisions on my VTuber model?",
+            "answer": "<p>Yes! We offer revisions during the design and rigging phases. Please check our process of work on our TOS section for reference.</p>"
+          }
+        },
+        "q-others-5": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "What if I want to cancel my project?",
+            "answer": "<p>Please check our refund policy on our TOS section for reference.</p>"
+          }
+        },
+        "q-others-6": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "What software do you use for VTuber models?",
+            "answer": "<p>We primarily use Live2D for rigging.</p>"
+          }
+        },
+        "q-others-7": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "Are the models here free to use or are they for sale?",
+            "answer": "<p>No, they are not free to use and they are not pre-mades. They are our previous works for our clients.</p>"
+          }
+        },
+        "q-others-8": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "Do you sell the PSD or CMO3 files?",
+            "answer": "<p>No, we don't sell or deliver PSD or CMO3 files.</p>"
+          }
+        },
+        "q-others-9": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "When is a certain artist or rigger available again?",
+            "answer": "<p>We don't recommend waiting, as we have no set date for the queue to open again, and slots tend to fill up quickly once they do. If you do intend to wait for a certain artist or rigger to open again, stay tuned on our Twitter.</p>"
+          }
+        },
+        "q-others-10": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "Can I come back for future add-ons? Such as new outfits and hair styles?",
+            "answer": "<p>Yes, you are welcome to return for future updates. However, please be advised that while we will retain a copy of the source files, we cannot guarantee the availability of future updates due to unforeseen circumstances.</p>"
+          }
+        },
+        "q-others-11": {
+          "type": "question",
+          "settings": {
+            "category": "others",
+            "question": "Do I need Extended Commercial License?",
+            "answer": "<p>Please check under the Reservation of rights section of our TOS for more based on your needs.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "category-general",
+        "q-general-1",
+        "q-general-2",
+        "q-general-3",
+        "category-pricing",
+        "q-pricing-1",
+        "q-pricing-2",
+        "q-pricing-3",
+        "category-packages",
+        "q-packages-1",
+        "q-packages-2",
+        "q-packages-3",
+        "q-packages-4",
+        "q-packages-5",
+        "category-others",
+        "q-others-1",
+        "q-others-2",
+        "q-others-3",
+        "q-others-4",
+        "q-others-5",
+        "q-others-6",
+        "q-others-7",
+        "q-others-8",
+        "q-others-9",
+        "q-others-10",
+        "q-others-11"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

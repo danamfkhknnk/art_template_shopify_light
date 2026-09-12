@@ -1,17 +1,13 @@
-<section class="relative py-24 px-4" style="background: var(--color-background);">
-  <!-- Watercolor divider top -->
-  <div class="absolute top-0 left-0 w-full overflow-hidden" style="height: 60px; transform: translateY(-50%);">
-    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" preserveAspectRatio="none">
-      <path d="M0 30C240 50 480 10 720 30C960 50 1200 10 1440 30V60H0V30Z" fill="var(--color-background)" opacity="0.5"/>
-    </svg>
-  </div>
+<section data-gs-section="about" class="relative py-20 px-4" style="background: var(--bg-about);">
+  <!-- Parallax watercolor blob -->
+  <div data-gs="parallax-blob" data-speed="0.2" class="absolute -top-20 -right-20 w-96 h-96 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(196,114,127,0.05), transparent 70%); filter: blur(40px);"></div>
 
   <div class="relative section-content">
     <!-- Diagonal Split Layout -->
     <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[500px] lg:min-h-[600px]">
 
       <!-- LEFT: Photo with diagonal cut -->
-      <div class="relative reveal" style="min-height: 300px; lg:min-height: 400px;">
+      <div data-gs="about-photo" class="relative" style="min-height: 300px; lg:min-height: 400px;">
         <!-- Photo container with diagonal clip -->
         <div class="absolute inset-0 lg:inset-0" style="clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);">
           <img
@@ -28,65 +24,28 @@
 
         <!-- Decorative watercolor blob behind photo -->
         <div class="absolute -bottom-8 -left-8 w-40 h-40 rounded-full pointer-events-none" style="background: radial-gradient(circle, rgba(196,114,127,0.1), transparent 70%); filter: blur(20px);"></div>
-
-
       </div>
 
       <!-- RIGHT: Text + Stats -->
-      <div class="flex flex-col justify-center py-12 lg:pl-16 reveal reveal-delay-1">
+      <div class="flex flex-col justify-center py-12 lg:pl-16">
         <!-- Subheading -->
-        <p class="text-caption tracking-[0.2em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+        <p data-gs="about-text" class="text-caption tracking-[0.2em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
           <span class="w-6 h-px" style="background: var(--color-blush);"></span>
           {{ section.settings.subheading }}
         </p>
 
         <!-- Heading -->
-        <h2 class="text-heading font-display mb-6" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+        <h2 data-gs="about-text" class="text-heading font-display mb-6" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
 
         <!-- Content -->
-        <div class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">
+        <div data-gs="about-text" class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">
           {{ section.settings.content }}
-        </div>
-
-        <!-- Genre pills -->
-        <div class="flex flex-wrap gap-2 mb-10">
-          {% assign genres = "Portrait,Character Design,Illustration,Fan Art,Concept Art,Chibi" | split: "," %}
-          {% for genre in genres %}
-            {% assign colors = "bg-wc-blush,bg-wc-sky,bg-wc-sage,bg-wc-golden,bg-wc-lavender,bg-wc-blush" | split: "," %}
-            <span class="px-3 py-1 rounded-full text-caption transition-all duration-300 cursor-default {{ colors[forloop.index0] }}" style="border: 1px solid rgba(45,42,38,0.06); color: var(--color-foreground);">
-              ✦ {{ genre }}
-            </span>
-          {% endfor %}
-        </div>
-
-        <!-- Stats row -->
-        <div class="flex items-center gap-8 mb-10">
-          {% if section.settings.stat_1_number != blank %}
-            <div class="text-center">
-              <p class="text-2xl font-display font-bold gradient-text">{{ section.settings.stat_1_number }}</p>
-              <p class="text-caption mt-1" style="color: var(--color-muted);">{{ section.settings.stat_1_label }}</p>
-            </div>
-          {% endif %}
-          <div class="w-px h-10" style="background: linear-gradient(to bottom, transparent, rgba(196,114,127,0.25), transparent);"></div>
-          {% if section.settings.stat_2_number != blank %}
-            <div class="text-center">
-              <p class="text-2xl font-display font-bold gradient-text">{{ section.settings.stat_2_number }}</p>
-              <p class="text-caption mt-1" style="color: var(--color-muted);">{{ section.settings.stat_2_label }}</p>
-            </div>
-          {% endif %}
-          <div class="w-px h-10" style="background: linear-gradient(to bottom, transparent, rgba(196,114,127,0.25), transparent);"></div>
-          {% if section.settings.stat_3_number != blank %}
-            <div class="text-center">
-              <p class="text-2xl font-display font-bold gradient-text">{{ section.settings.stat_3_number }}</p>
-              <p class="text-caption mt-1" style="color: var(--color-muted);">{{ section.settings.stat_3_label }}</p>
-            </div>
-          {% endif %}
         </div>
 
         <!-- CTA Button -->
         <div>
-          <a href="/pages/gallery" class="btn-primary inline-flex items-center gap-2">
-            <span>View Showcase</span>
+          <a data-gs="about-cta" href="{{ section.settings.cta_link }}" class="btn-primary inline-flex items-center gap-2">
+            <span>{{ section.settings.cta_label }}</span>
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
@@ -128,43 +87,18 @@
       "type": "richtext",
       "id": "content",
       "label": "Content",
-      "default": "<p>I've been drawing since I was a kid, spending hours sketching characters and worlds that lived in my imagination. What started as a hobby quickly became my passion.</p><p>Over the years, I've honed my skills in digital illustration, character design, and now — Shopify theme design. I combine my artistic background with modern web design to create templates that don't just look good, they tell a story.</p>"
+      "default": "<p>I've been drawing since I was a kid, spending hours sketching characters and worlds that lived in my imagination. What started as a hobby quickly became my passion.</p><p>Over the years, I've honed my skills in digital illustration, character design, and now Shopify theme design. I combine my artistic background with modern web design to create templates that don't just look good, they tell a story.</p>"
     },
     {
       "type": "text",
-      "id": "stat_1_number",
-      "label": "Stat 1 Number",
-      "default": "8+"
+      "id": "cta_label",
+      "label": "CTA Button Label",
+      "default": "View Showcase"
     },
     {
-      "type": "text",
-      "id": "stat_1_label",
-      "label": "Stat 1 Label",
-      "default": "Years Drawing"
-    },
-    {
-      "type": "text",
-      "id": "stat_2_number",
-      "label": "Stat 2 Number",
-      "default": "50+"
-    },
-    {
-      "type": "text",
-      "id": "stat_2_label",
-      "label": "Stat 2 Label",
-      "default": "Projects Done"
-    },
-    {
-      "type": "text",
-      "id": "stat_3_number",
-      "label": "Stat 3 Number",
-      "default": "100%"
-    },
-    {
-      "type": "text",
-      "id": "stat_3_label",
-      "label": "Stat 3 Label",
-      "default": "Passion Driven"
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
     }
   ],
   "presets": [

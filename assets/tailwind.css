@@ -50,7 +50,7 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --font-display: "Baloo 2", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Protest Revolution", Impact, "Arial Black", sans-serif;
     --text-display: clamp(2.5rem, 5vw, 4.5rem);
     --text-heading: clamp(2rem, 4vw, 3rem);
     --text-subheading: clamp(1.5rem, 3vw, 2rem);

@@ -1,14 +1,9 @@
 {% style %}
-  {{ settings.type_primary_font | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-
   :root {
-    --font-primary--family: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-primary--family: "Quicksand", ui-sans-serif, system-ui, sans-serif;
     --font-primary--style: normal;
     --font-primary--weight: 400;
-    --font-display--family: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-display--family: "Quicksand", ui-sans-serif, system-ui, sans-serif;
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
 
@@ -30,6 +25,16 @@
     --color-linen: #EDE6D9;
     --color-success: #6B9E6B;
     --color-warning: #C4A265;
+
+    /* Section backgrounds — alternating watercolor tints */
+    --bg-about: #F5EDE0;
+    --bg-team: #FAF7F2;
+    --bg-testimonials: rgba(196,114,127,0.04);
+    --bg-services: rgba(123,167,194,0.04);
+    --bg-gallery: #FAF7F2;
+    --bg-addons: rgba(155,142,196,0.04);
+    --bg-contact: rgba(139,170,125,0.04);
+    --bg-faq: #F5EDE0;
 
     /* Watercolor gradients */
     --gradient-primary: linear-gradient(135deg, #C4727F 0%, #9B8EC4 100%);

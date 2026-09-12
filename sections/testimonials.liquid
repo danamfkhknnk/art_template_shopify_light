@@ -1,12 +1,12 @@
-<section class="relative pt-32 pb-24 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
+<section data-gs-section="testimonials" class="relative py-20 px-4" style="background: var(--bg-testimonials);">
   <div class="relative section-content">
     <div class="text-center mb-16">
-      <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2 justify-center reveal" style="color: var(--color-blush);">
+      <p data-gs="test-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2 justify-center" style="color: var(--color-blush);">
         <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
         {{ section.settings.subheading }}
         <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
       </p>
-      <h2 class="text-heading font-display reveal reveal-delay-1" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+      <h2 data-gs="test-heading" class="text-heading font-display" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
     </div>
 
     <!-- Slider controls -->
@@ -24,11 +24,11 @@
         #testimonial-track::-webkit-scrollbar { display: none; }
       </style>
       {% for block in section.blocks %}
-        <div class="watercolor-card p-8 relative group reveal shrink-0 w-[85vw] md:w-[calc(50%-12px)] snap-center overflow-hidden" style="transition-delay: {{ forloop.index | times: 0.05 }}s;" {{ block.shopify_attributes }}>
+        <div data-gs="test-card" class="watercolor-card p-8 relative group shrink-0 w-[85vw] md:w-[calc(50%-12px)] snap-center overflow-hidden" {{ block.shopify_attributes }}>
           <!-- Watercolor quote accent -->
           <div class="absolute top-0 right-0 w-24 h-24 opacity-30 pointer-events-none" style="background: radial-gradient(circle, rgba(196,114,127,0.15), transparent 70%); border-radius: 50%;"></div>
 
-          <svg class="w-10 h-10 mb-4" style="color: rgba(196,114,127,0.25);" fill="currentColor" viewBox="0 0 24 24">
+          <svg data-gs="test-icon" class="w-10 h-10 mb-4" style="color: rgba(196,114,127,0.25);" fill="currentColor" viewBox="0 0 24 24">
             <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
           </svg>
           <p class="text-body leading-relaxed mb-6 italic" style="color: var(--color-muted);">"{{ block.settings.quote }}"</p>
@@ -38,7 +38,7 @@
             </div>
             <div>
               <p class="text-body-sm font-medium" style="color: var(--color-foreground);">{{ block.settings.author }}</p>
-              <div class="flex items-center gap-1 mt-1">
+              <div data-gs="test-stars" class="flex items-center gap-1 mt-1">
                 {% for i in (1..5) %}
                   {% if i <= block.settings.rating %}
                     <svg class="w-4 h-4" style="color: var(--color-golden);" fill="currentColor" viewBox="0 0 20 20">
@@ -51,9 +51,6 @@
                   {% endif %}
                 {% endfor %}
               </div>
-              {% if block.settings.platform != blank %}
-                <p class="text-caption mt-1" style="color: var(--color-muted);">via {{ block.settings.platform }}</p>
-              {% endif %}
             </div>
           </div>
         </div>
@@ -72,13 +69,13 @@
       "type": "text",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Testimonials"
+      "default": "Happy Review"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "What Clients Say"
+      "default": "What They Say"
     }
   ],
   "blocks": [
@@ -107,12 +104,6 @@
           "step": 1,
           "default": 5
         },
-        {
-          "type": "text",
-          "id": "platform",
-          "label": "Platform",
-          "default": "Twitter"
-        }
       ]
     }
   ],
@@ -126,7 +117,6 @@
             "quote": "The level of detail and creativity is outstanding. My OC has never looked better!",
             "author": "Sarah Chen",
             "rating": 5,
-            "platform": "Twitter"
           }
         },
         {
@@ -135,7 +125,6 @@
             "quote": "Fast delivery, great communication, and the art exceeded my expectations.",
             "author": "Mike Johnson",
             "rating": 5,
-            "platform": "Discord"
           }
         },
         {
@@ -144,7 +133,6 @@
             "quote": "I've commissioned many artists but this was by far the best experience.",
             "author": "Alex Rivera",
             "rating": 5,
-            "platform": "Instagram"
           }
         }
       ]

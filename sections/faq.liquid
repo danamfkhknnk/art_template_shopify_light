@@ -1,18 +1,18 @@
-<section class="relative pt-12 pb-24 px-4" style="background: var(--color-background);">
+<section data-gs-section="faq" class="relative pt-12 pb-24 px-4" style="background: var(--bg-faq);">
   <div class="relative section-content">
     <!-- Split layout: sticky heading left + accordion right -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
       <div class="lg:col-span-1">
-        <div class="lg:sticky lg:top-32">
-          <p class="text-caption tracking-[0.2em] uppercase mb-4 font-semibold inline-flex items-center gap-2 reveal" style="color: var(--color-blush);">
+        <div data-gs="faq-sticky" class="lg:sticky lg:top-32">
+          <p class="text-caption tracking-[0.2em] uppercase mb-4 font-semibold inline-flex items-center gap-2" style="color: var(--color-blush);">
             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z"/></svg>
             {{ section.settings.subheading }}
           </p>
-          <h2 class="text-heading font-display mb-6 reveal reveal-delay-1" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
-          <p class="text-body leading-relaxed mb-8 reveal reveal-delay-2" style="color: var(--color-muted);">
+          <h2 class="text-heading font-display mb-6" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+          <p class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">
             Still have questions? Reach out and I'll get back to you as soon as possible.
           </p>
-          <a href="/#contact" class="btn-secondary inline-flex items-center gap-2 reveal reveal-delay-2">
+          <a href="/#contact" class="btn-secondary inline-flex items-center gap-2">
             <span>Contact Me</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
           </a>
@@ -21,7 +21,7 @@
 
       <div class="lg:col-span-2 space-y-4">
       {% for block in section.blocks %}
-        <div class="watercolor-card overflow-hidden reveal" style="transition-delay: {{ forloop.index | times: 0.05 }}s;" {{ block.shopify_attributes }}>
+        <div data-gs="faq-item" class="watercolor-card overflow-hidden" {{ block.shopify_attributes }}>
           <button class="faq-toggle w-full flex items-center justify-between p-6 text-left transition-colors duration-300" style="background: transparent;">
             <span class="text-body font-medium pr-4" style="color: var(--color-foreground);">{{ block.settings.question }}</span>
             <svg class="w-5 h-5 shrink-0 faq-icon transition-transform duration-300" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,19 +42,21 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.faq-toggle').forEach(toggle => {
-      toggle.addEventListener('click', () => {
-        const content = toggle.nextElementSibling;
-        const icon = toggle.querySelector('.faq-icon');
-        const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+    document.querySelectorAll('.faq-toggle').forEach(function(toggle) {
+      toggle.addEventListener('click', function() {
+        var content = toggle.nextElementSibling;
+        var icon = toggle.querySelector('.faq-icon');
+        var isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
 
-        document.querySelectorAll('.faq-content').forEach(c => {
+        // Close all
+        document.querySelectorAll('.faq-content').forEach(function(c) {
           c.style.maxHeight = '0px';
         });
-        document.querySelectorAll('.faq-icon').forEach(i => {
+        document.querySelectorAll('.faq-icon').forEach(function(i) {
           i.style.transform = 'rotate(0deg)';
         });
 
+        // Open clicked
         if (!isOpen) {
           content.style.maxHeight = content.scrollHeight + 'px';
           icon.style.transform = 'rotate(180deg)';

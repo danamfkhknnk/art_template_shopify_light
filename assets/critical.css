@@ -81,18 +81,18 @@ body::before {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display--family);
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   color: var(--color-foreground);
 }
 
-h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 700; }
-h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
-h3 { font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 600; }
-h4 { font-size: clamp(1.15rem, 2vw, 1.4rem); font-weight: 600; }
-h5 { font-size: 1.1rem; font-weight: 600; }
-h6 { font-size: 1rem; font-weight: 600; }
+h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 400; }
+h2 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400; }
+h3 { font-size: clamp(1.4rem, 2.5vw, 1.8rem); font-weight: 400; }
+h4 { font-size: clamp(1.15rem, 2vw, 1.4rem); font-weight: 400; }
+h5 { font-size: 1.1rem; font-weight: 400; }
+h6 { font-size: 1rem; font-weight: 400; }
 
 a {
   color: inherit;
@@ -209,7 +209,6 @@ button,
 }
 
 .watercolor-card:hover {
-  box-shadow: var(--shadow-card-hover);
   transform: translateY(-4px);
 }
 
@@ -324,22 +323,35 @@ button,
   overflow: hidden;
 }
 
-/* ===== Scroll Reveal ===== */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+/* ===== GSAP Animation Helpers ===== */
+
+/* Word split for hero heading stagger */
+.gsap-word {
+  display: inline-block;
+  overflow: hidden;
+  will-change: transform, opacity;
 }
 
-.reveal.revealed {
+/* Performance hints for GSAP animated elements */
+[data-gs] {
+  will-change: transform, opacity;
+}
+
+/* Ensure elements are visible by default (GSAP will animate them) */
+[data-gs-section] [data-gs] {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
+/* Hero elements start hidden via GSAP.set(), visible as fallback */
+.shopify-section:first-child [data-gs] {
+  opacity: 1;
+}
+
+/* Header elements start hidden via GSAP.set(), visible as fallback */
+header [data-gs] {
+  opacity: 1;
+}
 
 /* ===== Section Layout ===== */
 .shopify-section {

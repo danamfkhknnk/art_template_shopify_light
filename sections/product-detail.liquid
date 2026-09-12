@@ -1,0 +1,469 @@
+<section data-gs-section="product-detail" class="relative pt-36 pb-8 px-4" style="background: var(--color-background);">
+  <!-- Watercolor wash -->
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 30% 20%, rgba(196,114,127,0.03) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(155,142,196,0.02) 0%, transparent 50%);"></div>
+
+  <div class="relative section-content">
+    <!-- Breadcrumb -->
+    <nav class="mb-8 text-caption" style="color: var(--color-muted);">
+      <a href="/" class="hover:underline">{{ section.settings.breadcrumb_home }}</a>
+      <span class="mx-2">/</span>
+      <a href="{{ routes.collections_url }}" class="hover:underline">{{ section.settings.breadcrumb_products }}</a>
+      <span class="mx-2">/</span>
+      <span style="color: var(--color-foreground);">{{ product.title }}</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+      <!-- LEFT: Product Gallery -->
+      <div data-gs="product-gallery">
+        <!-- Main Image -->
+        <div class="relative rounded-2xl overflow-hidden mb-4" style="background: var(--color-cream); aspect-ratio: 1/1;">
+          {% if product.featured_image %}
+            <img
+              id="product-main-image"
+              src="{{ product.featured_image | image_url: width: 1200 }}"
+              alt="{{ product.title }}"
+              class="w-full h-full object-cover transition-transform duration-500"
+              width="1200"
+              height="1200"
+            >
+          {% else %}
+            <div class="w-full h-full flex items-center justify-center">
+              <svg class="w-24 h-24" style="color: var(--color-muted); opacity: 0.2;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+            </div>
+          {% endif %}
+
+          <!-- Sale badge -->
+          {% if product.compare_at_price > product.price %}
+            <div class="absolute top-4 left-4 px-3 py-1 rounded-full text-caption font-semibold" style="background: var(--color-blush); color: white;">
+              {{ section.settings.sale_badge }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Thumbnails -->
+        {% if product.images.size > 1 %}
+          <div class="flex gap-2 overflow-x-auto pb-2">
+            {% for image in product.images %}
+              <button
+                onclick="document.getElementById('product-main-image').src='{{ image | image_url: width: 1200 }}'"
+                class="shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 product-thumb"
+                style="border-color: {% if forloop.first %}var(--color-blush){% else %}transparent{% endif %};"
+                data-index="{{ forloop.index0 }}"
+              >
+                <img src="{{ image | image_url: width: 200 }}" alt="" class="w-full h-full object-cover" loading="lazy">
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT: Product Info -->
+      <div class="flex flex-col">
+        <!-- Subheading -->
+        <p data-gs="product-info" class="text-caption tracking-[0.2em] uppercase mb-3 font-medium" style="color: var(--color-blush);">
+          {% if product.type != blank %}{{ product.type }}{% else %}{{ section.settings.breadcrumb_label_fallback }}{% endif %}
+        </p>
+
+        <!-- Title -->
+        <h1 data-gs="product-info" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1;">
+          {{ product.title }}
+        </h1>
+
+        <!-- Price -->
+        <div data-gs="product-info" class="flex items-center gap-3 mb-6">
+          <span class="text-2xl font-semibold" style="color: var(--color-blush);">{{ product.price | money }}</span>
+          {% if product.compare_at_price > product.price %}
+            <span class="text-lg line-through" style="color: var(--color-muted);">{{ product.compare_at_price | money }}</span>
+            {% assign savings = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
+            <span class="px-2 py-0.5 rounded-full text-caption font-semibold" style="background: rgba(139,170,125,0.1); color: var(--color-sage);">-{{ savings }}%</span>
+          {% endif %}
+        </div>
+
+        <!-- Description -->
+        {% if product.description != blank %}
+          <div data-gs="product-info" class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+        <!-- Add-ons Section -->
+        {% if section.settings.show_addons %}
+          <div data-gs="product-addons" class="mb-8">
+            <h3 class="font-display mb-4" style="color: var(--color-foreground); font-size: 1.2rem;">{{ section.settings.addons_heading }}</h3>
+            <p class="text-body-sm mb-4" style="color: var(--color-muted);">{{ section.settings.addons_intro }}</p>
+
+            <div class="space-y-3" id="product-addons">
+              {% for block in section.blocks %}
+                {% if block.type == 'addon' %}
+                  <label class="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-300 addon-item" style="background: var(--color-surface); border: 1px solid rgba(45,42,38,0.06);" data-price="{{ block.settings.price }}">
+                    <input type="checkbox" name="addon" value="{{ block.settings.title }}" class="addon-checkbox w-5 h-5 rounded" style="accent-color: var(--color-blush);">
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between">
+                        <span class="text-body-sm font-medium" style="color: var(--color-foreground);">{{ block.settings.title }}</span>
+                        <span class="text-body-sm font-semibold" style="color: var(--color-blush);">+{{ block.settings.price }}</span>
+                      </div>
+                      {% if block.settings.description != blank %}
+                        <p class="text-caption mt-1" style="color: var(--color-muted);">{{ block.settings.description }}</p>
+                      {% endif %}
+                    </div>
+                  </label>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Quantity + Add to Cart -->
+        <div data-gs="product-actions" class="flex flex-col gap-4 mb-8">
+          <!-- Quantity -->
+          <div class="flex items-center gap-4">
+            <span class="text-body-sm font-medium" style="color: var(--color-foreground);">{{ section.settings.quantity_label }}</span>
+            <div class="flex items-center rounded-full overflow-hidden" style="border: 1px solid rgba(45,42,38,0.1);">
+              <button onclick="changeQuantity(-1)" class="w-10 h-10 flex items-center justify-center transition-colors" style="background: var(--color-surface);">−</button>
+              <input type="number" id="quantity" name="quantity" value="1" min="1" class="w-14 h-10 text-center text-body-sm font-medium border-0 bg-transparent" style="color: var(--color-foreground);">
+              <button onclick="changeQuantity(1)" class="w-10 h-10 flex items-center justify-center transition-colors" style="background: var(--color-surface);">+</button>
+            </div>
+          </div>
+
+          <!-- Add to Cart -->
+          {% form 'product', product %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            <input type="hidden" id="addon-data" name="properties[Add-ons]" value="">
+            <button type="submit" class="btn-primary w-full flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path>
+              </svg>
+              <span>{{ section.settings.add_to_cart_label }}</span>
+            </button>
+          {% endform %}
+
+          <!-- Buy Now -->
+          <a href="{{ routes.cart_url }}?add={{ product.selected_or_first_available_variant.id }}" class="btn-secondary w-full flex items-center justify-center gap-2">
+            <span>{{ section.settings.buy_now_label }}</span>
+          </a>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="flex flex-wrap gap-4 mb-6">
+          <div class="flex items-center gap-2 text-caption" style="color: var(--color-muted);">
+            <svg class="w-4 h-4" style="color: var(--color-sage);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>{{ section.settings.trust_badge_1 }}</span>
+          </div>
+          <div class="flex items-center gap-2 text-caption" style="color: var(--color-muted);">
+            <svg class="w-4 h-4" style="color: var(--color-sage);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>{{ section.settings.trust_badge_2 }}</span>
+          </div>
+          <div class="flex items-center gap-2 text-caption" style="color: var(--color-muted);">
+            <svg class="w-4 h-4" style="color: var(--color-sage);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span>{{ section.settings.trust_badge_3 }}</span>
+          </div>
+        </div>
+
+        <!-- Share -->
+        <div class="flex items-center gap-3 pt-4" style="border-top: 1px solid rgba(45,42,38,0.06);">
+          <span class="text-caption" style="color: var(--color-muted);">{{ section.settings.share_label }}</span>
+          <a href="https://twitter.com/intent/tweet?url={{ shop.url }}{{ product.url }}" target="_blank" class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
+            <svg class="w-4 h-4" style="color: var(--color-muted);" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ shop.url }}{{ product.url }}" target="_blank" class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
+            <svg class="w-4 h-4" style="color: var(--color-muted);" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Related Products -->
+{% if section.settings.show_related %}
+  {% assign related_collection = collections[section.settings.related_collection] %}
+  {% if related_collection == blank %}
+    {% assign related_collection = product.collections.first %}
+  {% endif %}
+
+  {% if related_collection.products.size > 0 %}
+    <section class="relative py-20 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
+      <div class="relative section-content">
+        <div class="text-center mb-12">
+          <h2 class="font-display" style="color: var(--color-foreground); font-size: clamp(1.8rem, 3vw, 2.5rem);">{{ section.settings.related_heading }}</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          {% for related_product in related_collection.products limit: 4 %}
+            {% unless related_product.id == product.id %}
+              <a href="{{ related_product.url }}" class="group watercolor-card overflow-hidden">
+                <div class="aspect-square overflow-hidden">
+                  {% if related_product.featured_image %}
+                    <img
+                      src="{{ related_product.featured_image | image_url: width: 600 }}"
+                      alt="{{ related_product.title }}"
+                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <div class="w-full h-full flex items-center justify-center" style="background: var(--color-cream);">
+                      <svg class="w-12 h-12" style="color: var(--color-muted); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                      </svg>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="p-4">
+                  <h3 class="text-body-sm font-display truncate" style="color: var(--color-foreground);">{{ related_product.title }}</h3>
+                  <p class="text-body-sm font-semibold mt-1" style="color: var(--color-blush);">{{ related_product.price | money }}</p>
+                </div>
+              </a>
+            {% endunless %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+{% endif %}
+
+<script>
+  function changeQuantity(delta) {
+    var input = document.getElementById('quantity');
+    var val = parseInt(input.value) + delta;
+    if (val >= 1) input.value = val;
+  }
+
+  // Add-on functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    var addonCheckboxes = document.querySelectorAll('.addon-checkbox');
+    var addonData = document.getElementById('addon-data');
+
+    addonCheckboxes.forEach(function(checkbox) {
+      checkbox.addEventListener('change', function() {
+        var selected = [];
+        addonCheckboxes.forEach(function(cb) {
+          if (cb.checked) {
+            selected.push(cb.value);
+          }
+        });
+        addonData.value = selected.join(', ');
+
+        // Visual feedback
+        var item = checkbox.closest('.addon-item');
+        if (checkbox.checked) {
+          item.style.borderColor = 'var(--color-blush)';
+          item.style.background = 'rgba(196,114,127,0.04)';
+        } else {
+          item.style.borderColor = 'rgba(45,42,38,0.06)';
+          item.style.background = 'var(--color-surface)';
+        }
+      });
+    });
+
+    // Thumbnail click
+    document.querySelectorAll('.product-thumb').forEach(function(thumb) {
+      thumb.addEventListener('click', function() {
+        document.querySelectorAll('.product-thumb').forEach(function(t) {
+          t.style.borderColor = 'transparent';
+        });
+        thumb.style.borderColor = 'var(--color-blush)';
+      });
+    });
+  });
+</script>
+
+<style>
+  .addon-item:hover {
+    border-color: rgba(196,114,127,0.2) !important;
+  }
+  .addon-checkbox:checked {
+    accent-color: var(--color-blush);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product Detail",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_addons",
+      "label": "Show Add-ons Section",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_related",
+      "label": "Show Related Products",
+      "default": true
+    },
+    {
+      "type": "collection",
+      "id": "related_collection",
+      "label": "Related Products Collection"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_home",
+      "label": "Breadcrumb: Home",
+      "default": "Home"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_products",
+      "label": "Breadcrumb: Products",
+      "default": "Products"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_label_fallback",
+      "label": "Fallback Label (if no product type)",
+      "default": "Product"
+    },
+    {
+      "type": "text",
+      "id": "sale_badge",
+      "label": "Sale Badge Text",
+      "default": "Sale"
+    },
+    {
+      "type": "text",
+      "id": "addons_heading",
+      "label": "Add-ons Heading",
+      "default": "Add-ons"
+    },
+    {
+      "type": "text",
+      "id": "addons_intro",
+      "label": "Add-ons Intro",
+      "default": "Enhance your commission with optional extras:"
+    },
+    {
+      "type": "text",
+      "id": "quantity_label",
+      "label": "Quantity Label",
+      "default": "Quantity"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to Cart Button",
+      "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "buy_now_label",
+      "label": "Buy Now Button",
+      "default": "Buy Now"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_1",
+      "label": "Trust Badge 1",
+      "default": "Digital Download"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_2",
+      "label": "Trust Badge 2",
+      "default": "Instant Delivery"
+    },
+    {
+      "type": "text",
+      "id": "trust_badge_3",
+      "label": "Trust Badge 3",
+      "default": "Commercial License"
+    },
+    {
+      "type": "text",
+      "id": "share_label",
+      "label": "Share Label",
+      "default": "Share:"
+    },
+    {
+      "type": "text",
+      "id": "related_heading",
+      "label": "Related Products Heading",
+      "default": "You May Also Like"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "addon",
+      "name": "Add-on",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Add-on Name",
+          "default": "Custom Background"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Add a detailed custom background to your illustration"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price",
+          "default": "+$15"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Detail",
+      "blocks": [
+        {
+          "type": "addon",
+          "settings": {
+            "title": "Custom Background",
+            "description": "Add a detailed custom background to your illustration",
+            "price": "+$15"
+          }
+        },
+        {
+          "type": "addon",
+          "settings": {
+            "title": "Express Delivery (24h)",
+            "description": "Get your commission within 24 hours",
+            "price": "+$25"
+          }
+        },
+        {
+          "type": "addon",
+          "settings": {
+            "title": "Commercial License",
+            "description": "Full commercial usage rights for the artwork",
+            "price": "+$20"
+          }
+        },
+        {
+          "type": "addon",
+          "settings": {
+            "title": "Source File (PSD/AI)",
+            "description": "Receive the original editable source file",
+            "price": "+$10"
+          }
+        },
+        {
+          "type": "addon",
+          "settings": {
+            "title": "Extra Revision",
+            "description": "One additional revision round",
+            "price": "+$5"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

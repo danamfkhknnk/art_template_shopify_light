@@ -3,12 +3,9 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "subheading": "Art Commission",
-        "tagline": "Let Me Draw Your Imagination Into Reality",
-        "description": "As an artist, I'm here to bring your ideas to life. Let's create something amazing together.",
-        "button_label": "View All Products",
-        "button_link": "/pages/products",
-        "show_scroll": true
+        "tagline": "We are a team of artists based in Asia, providing budget friendly and high quality Vtuber and illustrations services. As of today, we have created more than 500 Vtuber models, come join our family NOW!!!",
+        "show_scroll": true,
+        "scroll_label": "Scroll"
       }
     },
     "about": {
@@ -28,14 +25,15 @@
       "type": "team",
       "settings": {
         "subheading": "Meet The Artists",
-        "heading": "Our Team"
+        "heading": "Our Team",
+        "collection": "shop.metaobjects.team.values"
       }
     },
     "testimonials": {
       "type": "testimonials",
       "settings": {
-        "subheading": "Testimonials",
-        "heading": "What Clients Say"
+        "subheading": "Happy Review",
+        "heading": "What They Say"
       },
       "blocks": {
         "testimonial-1": {
@@ -43,8 +41,7 @@
           "settings": {
             "quote": "The level of detail and creativity is outstanding. My OC has never looked better!",
             "author": "Sarah Chen",
-            "rating": 5,
-            "platform": "Twitter"
+            "rating": 5
           }
         },
         "testimonial-2": {
@@ -52,8 +49,7 @@
           "settings": {
             "quote": "Fast delivery, great communication, and the art exceeded my expectations.",
             "author": "Mike Johnson",
-            "rating": 5,
-            "platform": "Discord"
+            "rating": 5
           }
         },
         "testimonial-3": {
@@ -61,8 +57,7 @@
           "settings": {
             "quote": "I've commissioned many artists but this was by far the best experience.",
             "author": "Alex Rivera",
-            "rating": 5,
-            "platform": "Instagram"
+            "rating": 5
           }
         },
         "testimonial-4": {
@@ -70,8 +65,7 @@
           "settings": {
             "quote": "The character design was exactly what I envisioned. Will definitely commission again!",
             "author": "Luna Kim",
-            "rating": 5,
-            "platform": "Twitter"
+            "rating": 5
           }
         },
         "testimonial-5": {
@@ -79,8 +73,7 @@
           "settings": {
             "quote": "Professional, talented, and super easy to work with. Highly recommended!",
             "author": "Jordan Park",
-            "rating": 5,
-            "platform": "Discord"
+            "rating": 5
           }
         },
         "testimonial-6": {
@@ -88,8 +81,7 @@
           "settings": {
             "quote": "The illustration captured the mood perfectly. My followers loved it!",
             "author": "Casey Nguyen",
-            "rating": 4,
-            "platform": "Instagram"
+            "rating": 4
           }
         }
       },
@@ -99,9 +91,9 @@
       "type": "contact",
       "settings": {
         "subheading": "Reach Out",
-        "heading": "Get In Touch"
+        "heading": "Ask Me Anything"
       }
-    },
+    }
   },
   "order": [
     "hero",

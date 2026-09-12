@@ -1,5 +1,4 @@
 <footer class="relative">
-  <!-- Watercolor wavy divider -->
   <div class="w-full overflow-hidden" style="height: 60px;">
     <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full" preserveAspectRatio="none">
       <path d="M0 30C120 10 240 50 360 30C480 10 600 50 720 30C840 10 960 50 1080 30C1200 10 1320 50 1440 30V60H0V30Z" fill="#F5EDE0"/>
@@ -9,26 +8,24 @@
   <div style="background: #F5EDE0;">
     <div class="section-content py-16 px-4">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-        <!-- Brand -->
         <div>
-          <h3 class="text-xl font-bold mb-4 lowercase" style="font-family: var(--font-display--family); color: var(--color-foreground);">{{ shop.name }}</h3>
-          <p class="text-body-sm leading-relaxed mb-6" style="color: var(--color-muted);">Bringing imagination to life through art and design. Specializing in character art, illustration, and Shopify templates.</p>
+          <h3 class="text-xl mb-4" style="font-family: var(--font-display--family); font-weight: 400; color: var(--color-foreground);">{{ shop.name }}</h3>
+          <p class="text-body-sm leading-relaxed mb-6" style="color: var(--color-muted);">{{ section.settings.tagline }}</p>
           <div class="flex gap-3">
-            <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
+            <a href="{{ section.settings.social_1_link }}" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
               <svg class="w-5 h-5" style="color: var(--color-muted);" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
-            <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
+            <a href="{{ section.settings.social_2_link }}" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
               <svg class="w-5 h-5" style="color: var(--color-muted);" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
             </a>
-            <a href="#" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
+            <a href="{{ section.settings.social_3_link }}" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.06);">
               <svg class="w-5 h-5" style="color: var(--color-muted);" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"/></svg>
             </a>
           </div>
         </div>
 
-        <!-- Quick Links -->
         <div>
-          <h4 class="text-body font-semibold mb-4" style="color: var(--color-foreground);">Quick Links</h4>
+          <h4 class="text-body font-semibold mb-4" style="color: var(--color-foreground);">{{ section.settings.heading_links }}</h4>
           <ul class="space-y-3">
             {% if section.settings.menu != blank %}
               {% for link in section.settings.menu.links %}
@@ -40,47 +37,47 @@
                 </li>
               {% endfor %}
             {% else %}
-              <li><a href="/" class="text-body-sm transition-colors duration-300 flex items-center gap-2" style="color: var(--color-muted);"><span class="w-1 h-1 rounded-full" style="background: rgba(196,114,127,0.4);"></span>Home</a></li>
-              <li><a href="/pages/gallery" class="text-body-sm transition-colors duration-300 flex items-center gap-2" style="color: var(--color-muted);"><span class="w-1 h-1 rounded-full" style="background: rgba(196,114,127,0.4);"></span>Gallery</a></li>
-              <li><a href="/pages/products" class="text-body-sm transition-colors duration-300 flex items-center gap-2" style="color: var(--color-muted);"><span class="w-1 h-1 rounded-full" style="background: rgba(196,114,127,0.4);"></span>Products</a></li>
-              <li><a href="/#contact" class="text-body-sm transition-colors duration-300 flex items-center gap-2" style="color: var(--color-muted);"><span class="w-1 h-1 rounded-full" style="background: rgba(196,114,127,0.4);"></span>Contact</a></li>
-              <li><a href="/pages/term-of-service" class="text-body-sm transition-colors duration-300 flex items-center gap-2" style="color: var(--color-muted);"><span class="w-1 h-1 rounded-full" style="background: rgba(196,114,127,0.4);"></span>Terms of Service</a></li>
+              {% assign link_rows = section.settings.default_links | newline_to_br | split: "<br />" %}
+              {% for row in link_rows %}
+                {% assign link_parts = row | split: "|" %}
+                {% if link_parts.size >= 2 %}
+                  <li>
+                    <a href="{{ link_parts[1] | strip }}" class="text-body-sm transition-colors duration-300 flex items-center gap-2" style="color: var(--color-muted);">
+                      <span class="w-1 h-1 rounded-full" style="background: rgba(196,114,127,0.4);"></span>
+                      {{ link_parts[0] | strip }}
+                    </a>
+                  </li>
+                {% endif %}
+              {% endfor %}
             {% endif %}
           </ul>
         </div>
 
-        <!-- Contact -->
         <div>
-          <h4 class="text-body font-semibold mb-4" style="color: var(--color-foreground);">Get in Touch</h4>
+          <h4 class="text-body font-semibold mb-4" style="color: var(--color-foreground);">{{ section.settings.heading_contact }}</h4>
           <div class="space-y-3">
             <p class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
-              <svg class="w-4 h-4" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"></path></svg>
-              hello@example.com
+              <svg class="w-4 h-4" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+              {{ section.settings.email }}
             </p>
             <p class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
               <svg class="w-4 h-4" style="color: var(--color-lavender);" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286z"/></svg>
-              Discord: username
+              {{ section.settings.discord_text }}
             </p>
-            <div class="flex items-center gap-2 mt-4">
-              <span class="w-2 h-2 rounded-full animate-pulse" style="background: var(--color-success);"></span>
-              <span class="text-body-sm" style="color: var(--color-muted);">Available for commissions</span>
-            </div>
           </div>
         </div>
       </div>
 
-      <!-- Big wordmark -->
-      <div class="mt-4 mb-10 overflow-hidden">
-        <p class="wordmark font-bold text-center leading-none select-none" style="font-family: var(--font-display--family);">{{ shop.name }}</p>
+      <div class=" overflow-hidden">
+        <p class="wordmark text-center leading-none select-none" style="font-family: var(--font-display--family); font-weight: 400;">{{ shop.name }}</p>
       </div>
 
-      <!-- Bottom bar -->
       <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4" style="border-top: 1px solid rgba(45,42,38,0.06);">
         <p class="text-caption" style="color: var(--color-muted);">
-          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}
         </p>
         <p class="text-caption" style="color: var(--color-muted);">
-          Made with <span class="gradient-text font-medium">passion</span> & <span class="gradient-text font-medium">art</span>
+          {{ section.settings.bottom_text_1 }} <span class="gradient-text font-medium">{{ section.settings.bottom_emphasis_1 }}</span> {{ section.settings.bottom_text_2 }} <span class="gradient-text font-medium">{{ section.settings.bottom_emphasis_2 }}</span>
         </p>
         {% if section.settings.show_payment_icons %}
           <div class="flex gap-2">
@@ -103,6 +100,7 @@
     background-clip: text;
     letter-spacing: -0.02em;
     white-space: nowrap;
+    padding-bottom: 20px;
   }
 </style>
 
@@ -121,6 +119,124 @@
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Bringing imagination to life through art and design. Specializing in character art, illustration, and Shopify templates."
+    },
+    {
+      "type": "text",
+      "id": "social_1_label",
+      "label": "Social Link 1 Label",
+      "default": "Instagram"
+    },
+    {
+      "type": "url",
+      "id": "social_1_link",
+      "label": "Social Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "social_2_label",
+      "label": "Social Link 2 Label",
+      "default": "Twitter"
+    },
+    {
+      "type": "url",
+      "id": "social_2_link",
+      "label": "Social Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "social_3_label",
+      "label": "Social Link 3 Label",
+      "default": "Discord"
+    },
+    {
+      "type": "url",
+      "id": "social_3_link",
+      "label": "Social Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "heading_links",
+      "label": "Heading: Links",
+      "default": "Lest Go!"
+    },
+    {
+      "type": "text",
+      "id": "heading_contact",
+      "label": "Heading: Contact",
+      "default": "Ping Me!"
+    },
+    {
+      "type": "textarea",
+      "id": "default_links",
+      "label": "Default Links (if no menu selected)",
+      "info": "Format: Title|URL per line. Only used when no menu is selected.",
+      "default": "Home|/\nGallery|/pages/gallery\nProducts|/pages/products\nContact|/#contact\nTerms of Service|/pages/term-of-service"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "hello@example.com"
+    },
+    {
+      "type": "text",
+      "id": "discord_text",
+      "label": "Discord Text",
+      "default": "Discord: username"
+    },
+    {
+      "type": "text",
+      "id": "copyright",
+      "label": "Copyright Text",
+      "default": "All rights reserved"
+    },
+    {
+      "type": "text",
+      "id": "bottom_text_1",
+      "label": "Bottom Text 1",
+      "default": "Made with"
+    },
+    {
+      "type": "text",
+      "id": "bottom_emphasis_1",
+      "label": "Bottom Emphasis 1",
+      "default": "passion"
+    },
+    {
+      "type": "text",
+      "id": "bottom_text_2",
+      "label": "Bottom Text 2",
+      "default": "&"
+    },
+    {
+      "type": "text",
+      "id": "bottom_emphasis_2",
+      "label": "Bottom Emphasis 2",
+      "default": "art"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "settings": {
+        "tagline": "Bringing imagination to life through art and design. Specializing in character art, illustration, and Shopify templates.",
+        "heading_links": "Quick Links",
+        "heading_contact": "Get in Touch",
+        "email": "hello@example.com",
+        "discord_text": "Discord: username",
+        "copyright": "All rights reserved",
+        "bottom_text_1": "Made with",
+        "bottom_emphasis_1": "passion",
+        "bottom_text_2": "&",
+        "bottom_emphasis_2": "art",
+        "default_links": "Home|/\nGallery|/pages/gallery\nProducts|/pages/products\nContact|/#contact\nTerms of Service|/pages/term-of-service"
+      }
     }
   ]
 }
