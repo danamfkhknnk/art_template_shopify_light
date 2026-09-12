@@ -6,15 +6,14 @@
     <!-- Page Heading -->
     <div class="text-center mb-16">
       <p data-gs="faq-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
-        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4L12 2z"/></svg>
+        <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-sage));"></span>
         {{ section.settings.subheading }}
+                <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-sage));"></span>
+
       </p>
       <h1 data-gs="faq-heading" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2.2rem, 5vw, 3.5rem); letter-spacing: 0.02em;">
         {{ section.settings.heading }}
       </h1>
-      <p data-gs="faq-heading" class="text-body-lg max-w-lg mx-auto" style="color: var(--color-muted);">
-        {{ section.settings.description }}
-      </p>
     </div>
 
     <!-- Category Groups -->
@@ -24,21 +23,19 @@
           <!-- Category Header -->
           <div data-gs="faq-category" {{ block.shopify_attributes }}>
             <div class="flex items-center gap-4 mb-6">
-              <span class="font-display text-3xl" style="color: var(--color-blush);">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+
               <h2 class="text-subheading font-display" style="color: var(--color-foreground);">{{ block.settings.category_title }}</h2>
               <div class="flex-1 h-px" style="background: linear-gradient(to right, rgba(196,114,127,0.25), transparent);"></div>
             </div>
 
             <!-- FAQ Items in this category -->
             <div class="space-y-3">
-              {% assign faq_number = 0 %}
               {% for inner_block in section.blocks %}
                 {% if inner_block.type == 'question' and inner_block.settings.category == block.settings.category_key %}
-                  {% assign faq_number = faq_number | plus: 1 %}
+
                   <div class="watercolor-card overflow-hidden faq-page-item" {{ inner_block.shopify_attributes }}>
-                    <button class="faq-page-toggle w-full flex items-start justify-between gap-4 p-6 text-left transition-colors duration-300" style="background: transparent;">
-                      <span class="flex items-start gap-4">
-                        <span class="font-display text-body-sm shrink-0 mt-0.5" style="color: var(--color-blush);">{{ faq_number | prepend: '00' | slice: -2, 2 }}</span>
+                    <button class="faq-page-toggle w-full flex items-start justify-between gap-4 p-6 text-left transition-colors duration-300" style="background: transparent;">                        <span class="flex items-start gap-0">
+
                         <span class="text-body font-medium" style="color: var(--color-foreground);">{{ inner_block.settings.question }}</span>
                       </span>
                       <svg class="w-5 h-5 shrink-0 faq-page-icon transition-transform duration-300 mt-0.5" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -46,7 +43,7 @@
                       </svg>
                     </button>
                     <div class="faq-page-content max-h-0 overflow-hidden transition-all duration-500">
-                      <div class="px-6 pb-6 pl-14 text-body-sm leading-relaxed" style="color: var(--color-muted); border-top: 1px solid rgba(45,42,38,0.06); padding-top: 1rem;">
+                      <div class="px-6 pb-6 text-body-sm leading-relaxed" style="color: var(--color-muted); border-top: 1px solid rgba(45,42,38,0.06); padding-top: 1rem;">
                         {{ inner_block.settings.answer }}
                       </div>
                     </div>

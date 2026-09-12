@@ -2,78 +2,46 @@
 
   <!-- Artwork Carousel (full background) -->
   <div class="absolute inset-0" style="background: var(--bg-about);">
-    <!-- Slide 1 -->
-    <div class="hero-slide absolute inset-0 active" data-slide="0">
-      {% if section.settings.image_1 != blank %}
-        <img
-          src="{{ section.settings.image_1 | image_url: width: 1920 }}"
-          alt="{{ section.settings.image_1.alt | default: 'Hero artwork 1' }}"
-          class="w-full h-full object-cover md:object-cover object-fill transition-opacity duration-[1200ms] ease-in-out"
-          loading="eager"
-          width="1920"
-          height="1080"
-        >
-      {% else %}
-        <img
-          src="{{ 'gallery.webp' | asset_url }}"
-          alt="Gallery artwork 1"
-          class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
-          loading="eager"
-          width="1920"
-          height="1080"
-        >
+    {% assign hero_items = shop.metaobjects.hero.values %}
+    {% assign hero_count = 0 %}
+    {% for item in hero_items %}
+      {% if item.image %}
+        {% assign hero_count = hero_count | plus: 1 %}
       {% endif %}
-      <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
-    </div>
-    <!-- Slide 2 -->
-    <div class="hero-slide absolute inset-0" data-slide="1">
-      {% if section.settings.image_2 != blank %}
-        <img
-          src="{{ section.settings.image_2 | image_url: width: 1920 }}"
-          alt="{{ section.settings.image_2.alt | default: 'Hero artwork 2' }}"
-          class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
-          loading="lazy"
-          width="1920"
-          height="1080"
-        >
-      {% else %}
-        <img
-          src="{{ 'gallery2.jpg' | asset_url }}"
-          alt="Gallery artwork 2"
-          class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
-          loading="lazy"
-          width="1920"
-          height="1080"
-        >
-      {% endif %}
-      <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
-    </div>
-    <!-- Slide 3 -->
-    <div class="hero-slide absolute inset-0" data-slide="2">
-      {% if section.settings.image_3 != blank %}
-        <img
-          src="{{ section.settings.image_3 | image_url: width: 1920 }}"
-          alt="{{ section.settings.image_3.alt | default: 'Hero artwork 3' }}"
-          class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
-          loading="lazy"
-          width="1920"
-          height="1080"
-        >
-      {% else %}
-        <img
-          src="{{ 'gallery3.jpg' | asset_url }}"
-          alt="Gallery artwork 3"
-          class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
-          loading="lazy"
-          width="1920"
-          height="1080"
-        >
-      {% endif %}
-      <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
-    </div>
+    {% endfor %}
 
-    <!-- Watercolor wash overlay -->
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 30% 50%, rgba(196,114,127,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(155,142,196,0.04) 0%, transparent 50%);"></div>
+    {% if hero_count > 0 %}
+      {% for item in hero_items %}
+        {% if item.image %}
+          <div class="hero-slide absolute inset-0 {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}">
+            <img
+              src="{{ item.image | image_url: width: 1920 }}"
+              alt="{{ item.image.alt | default: 'Hero artwork' }}"
+              class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              width="1920"
+              height="1080"
+            >
+            <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
+            <!-- Watercolor wash overlay -->
+            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 30% 50%, rgba(196,114,127,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(155,142,196,0.04) 0%, transparent 50%);"></div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      <div class="hero-slide absolute inset-0 active" data-slide="0">
+          <img
+            src="{{ 'hero.avif' | asset_url }}"
+            alt="Hero artwork"
+            class="w-full h-full object-cover"
+            loading="eager"
+            width="1920"
+            height="1080"
+          >
+        <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 30% 50%, rgba(196,114,127,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(155,142,196,0.04) 0%, transparent 50%);"></div>
+      </div>
+    {% endif %}
   </div>
 
   <!-- Hero bottom text box -->
@@ -89,10 +57,10 @@
 
   <!-- Scroll indicator -->
   {% if section.settings.show_scroll %}
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-2 z-10 hidden md:flex">
-      <span class="text-caption tracking-widest uppercase" style="color: var(--color-muted); font-weight: 800;">{{ section.settings.scroll_label }}</span>
-      <div class="w-6 h-10 rounded-full flex justify-center pt-2" style="border: 3px solid rgba(196,114,127,1);">
-        <div class="w-1 h-2 rounded-full" style="background: var(--color-blush); animation: bounce-dot 2s ease infinite;"></div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2 scroll-indicator">
+      <span class="text-caption tracking-widest uppercase" style="color: rgba(250,247,242,0.85); font-weight: 800;">{{ section.settings.scroll_label }}</span>
+      <div class="w-6 h-10 rounded-full flex justify-center pt-2" style="border: 3px solid rgba(250,247,242,0.85);">
+        <div class="w-1 h-2 rounded-full" style="background: rgba(250,247,242,0.85); animation: bounce-dot 2s ease infinite;"></div>
       </div>
     </div>
   {% endif %}
@@ -101,23 +69,25 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var slides = document.querySelectorAll('.hero-slide');
-    var dots = document.querySelectorAll('.hero-dot');
+
+    // Single image (metaobject empty): show it, no slideshow
+    if (slides.length <= 1) {
+      if (slides.length === 1) {
+        slides[0].classList.add('active');
+        slides[0].style.opacity = '1';
+      }
+      return;
+    }
+
+    // Multiple slides: run the autoplay carousel
     var currentIndex = 0;
-    var isPlaying = true;
     var interval;
 
     function goToSlide(index) {
       slides.forEach(function(s) { s.classList.remove('active'); s.style.opacity = '0'; });
-      dots.forEach(function(d) {
-        d.style.background = 'rgba(45,42,38,0.15)';
-        d.classList.remove('active');
-      });
-
       currentIndex = index;
       slides[currentIndex].classList.add('active');
       slides[currentIndex].style.opacity = '1';
-      dots[currentIndex].style.background = 'var(--color-blush)';
-      dots[currentIndex].classList.add('active');
     }
 
     function nextSlide() {
@@ -134,16 +104,6 @@
 
     // Initialize first slide
     goToSlide(0);
-
-    // Dot navigation
-    dots.forEach(function(dot) {
-      dot.addEventListener('click', function() {
-        stopAutoPlay();
-        goToSlide(parseInt(this.dataset.goto));
-        if (isPlaying) startAutoPlay();
-      });
-    });
-
     startAutoPlay();
   });
 </script>
@@ -197,6 +157,17 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
+
+  /* Scroll indicator: frosted glass — nearly invisible bg, blurs whatever is behind it */
+  .scroll-indicator {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 9999px;
+    padding: 0.75rem 1.1rem;
+  }
+  .scroll-indicator span {
+    text-shadow: 0 1px 6px rgba(255,255,255,0.4);
+  }
 </style>
 
 {% schema %}
@@ -209,22 +180,7 @@
       "type": "text",
       "id": "tagline",
       "label": "Heading",
-      "default": "We are a team of artists based in Asia, providing budget friendly and high quality Vtuber and illustrations services. As of today, we have created more than 500 Vtuber models, come join our family NOW!!!",
-    },
-    {
-      "type": "image_picker",
-      "id": "image_1",
-      "label": "Background Image 1"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_2",
-      "label": "Background Image 2"
-    },
-    {
-      "type": "image_picker",
-      "id": "image_3",
-      "label": "Background Image 3"
+      "default": "We are a team of artists based in Asia, providing budget friendly and high quality Vtuber and illustrations services. As of today, we have created more than 500 Vtuber models, come join our family NOW!!!"
     },
     {
       "type": "checkbox",
@@ -236,16 +192,16 @@
       "type": "text",
       "id": "scroll_label",
       "label": "Scroll Label",
-      "default": "Scroll"
+      "default": "Let's Go!"
     }
   ],
   "presets": [
     {
       "name": "Hero",
       "settings": {
-        "tagline": "Every Character Has a Story",
+        "tagline": "We are a team of artists based in Asia, providing budget friendly and high quality Vtuber and illustrations services. As of today, we have created more than 500 Vtuber models, come join our family NOW!!!",
         "show_scroll": true,
-        "scroll_label": "Scroll"
+        "scroll_label": "Let's Go"
       }
     }
   ]
