@@ -49,9 +49,7 @@
                 </div>
               </div>
               <div class="p-6 md:p-8 text-center">
-                {% if product.type != blank %}
-                  <p class="text-caption uppercase tracking-wider mb-2" style="color: var(--color-blush);">{{ product.type }}</p>
-                {% endif %}
+               
                 <h3 class="text-heading font-display mb-2" style="color: var(--color-foreground);">{{ product.title }}</h3>
                 {% if product.description != blank %}
                   <p class="text-body leading-relaxed max-w-2xl mx-auto" style="color: var(--color-muted);">{{ product.description }}</p>
@@ -91,9 +89,6 @@
 
               <!-- Content -->
               <div class="w-full md:w-1/2 flex flex-col justify-center p-6 md:p-10 product-content">
-                {% if product.type != blank %}
-                  <p class="text-caption uppercase tracking-wider mb-2" style="color: var(--color-blush);">{{ product.type }}</p>
-                {% endif %}
                 <h3 class="text-subheading font-display mb-3" style="color: var(--color-foreground);">{{ product.title }}</h3>
                 {% if product.description != blank %}
                   <p class="text-body leading-relaxed mb-6" style="color: var(--color-muted);">{{ product.description }}</p>

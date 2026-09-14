@@ -1,22 +1,22 @@
-<section data-gs-section="hero" class="relative w-full min-h-screen flex flex-col overflow-x-hidden">
+<section data-gs-section="hero" class="relative w-full flex flex-col overflow-x-hidden" style="min-height: 100vh; min-height: 100dvh;">
 
   <!-- Artwork Carousel (full background) -->
-  <div class="absolute inset-0" style="background: var(--bg-about);">
-    {% assign hero_items = shop.metaobjects.hero.values %}
+  <div class="absolute inset-0" style="background: var(--bg-about);">    
+   {% assign hero_items = shop.metaobjects.hero.values %}
     {% assign hero_count = 0 %}
     {% for item in hero_items %}
-      {% if item.image %}
+      {% if item.img %}
         {% assign hero_count = hero_count | plus: 1 %}
       {% endif %}
     {% endfor %}
-
+  
     {% if hero_count > 0 %}
       {% for item in hero_items %}
-        {% if item.image %}
+        {% if item.img %}
           <div class="hero-slide absolute inset-0 {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}">
             <img
-              src="{{ item.image | image_url: width: 1920 }}"
-              alt="{{ item.image.alt | default: 'Hero artwork' }}"
+              src="{{ item.img | image_url: width: 1920 }}"
+              alt="{{ item.img.alt | default: 'Hero artwork' }}"
               class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
               width="1920"
@@ -28,7 +28,7 @@
           </div>
         {% endif %}
       {% endfor %}
-    {% else %}
+    {% else %} 
       <div class="hero-slide absolute inset-0 active" data-slide="0">
           <img
             src="{{ 'hero.avif' | asset_url }}"
@@ -41,14 +41,25 @@
         <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
         <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 30% 50%, rgba(196,114,127,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(155,142,196,0.04) 0%, transparent 50%);"></div>
       </div>
-    {% endif %}
+   {% endif %}
   </div>
 
-  <!-- Hero bottom text box -->
-  <div class="absolute bottom-0 left-0 z-50 flex justify-center px-4 pb-8 md:pb-12">
-    <div class="hero-text-box text-center" style="width: 35vw; background: rgba(0,0,0,0.35); backdrop-filter: blur(1px); padding: 2rem 4rem;">
+  <!-- Hero tagline: mobile (centered) -->
+  <div class="md:hidden absolute inset-0 z-50 flex items-center justify-center px-4">
+    <div class="hero-text-box text-center" style="width: 90vw; background: rgba(0,0,0,0.5); backdrop-filter: blur(1px); padding: 2rem;">
       {% if section.settings.tagline != blank %}
-        <h1 class="font-display leading-snug" style="color: #F5EDE0; font-weight: 500; font-size: clamp(1.3rem, 1vw, 2rem); text-shadow: 0 1px 8px rgba(0,0,0,0.4); text-align: justify;">
+        <h1 class="font-display leading-snug" style="color: #F5EDE0; font-weight: 500; font-size: clamp(1rem, 3vw, 1.5rem); text-shadow: 0 1px 8px rgba(0,0,0,0.4); text-align: center;">
+          {{ section.settings.tagline }}
+        </h1>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Hero tagline: desktop (bottom-left) -->
+  <div class="hidden md:flex absolute bottom-0 left-0 z-50 pb-8 lg:pb-12 pl-4">
+    <div class="hero-text-box py-6 px-8 md:py-8 md:px-8" style="width: min(34vw, 36rem); background: rgba(0,0,0,0.5); backdrop-filter: blur(1px);">
+      {% if section.settings.tagline != blank %}
+        <h1 class="font-display leading-snug" style="color: #F5EDE0; font-weight: 500; font-size: clamp(0.85rem, 1.5vw, 1.1rem); text-shadow: 0 1px 8px rgba(0,0,0,0.4); text-align: justify;">
           {{ section.settings.tagline }}
         </h1>
       {% endif %}
@@ -146,6 +157,13 @@
   .hero-text-box:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  /* Override Tailwind base layer: hero image must fill its container */
+  .hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   /* Scroll indicator: frosted glass — nearly invisible bg, blurs whatever is behind it */
