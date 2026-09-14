@@ -1,4 +1,4 @@
-<section data-gs-section="product-detail" class="relative pt-36 pb-8 px-4" style="background: var(--color-background);">
+<section data-gs-section="product-detail" class="relative pt-36 pb-24 px-4" style="background: var(--color-background);">
   <!-- Watercolor wash -->
   <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 30% 20%, rgba(196,114,127,0.03) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(155,142,196,0.02) 0%, transparent 50%);"></div>
 
@@ -16,7 +16,7 @@
       <!-- LEFT: Product Gallery -->
       <div data-gs="product-gallery">
         <!-- Main Image -->
-        <div class="relative rounded-2xl overflow-hidden mb-4" style="background: var(--color-cream); aspect-ratio: 1/1;">
+        <div class="relative rounded-2xl overflow-hidden mb-4" style="background: var(--color-cream); aspect-ratio: 3/4;">
           {% if product.featured_image %}
             <img
               id="product-main-image"
@@ -24,7 +24,7 @@
               alt="{{ product.title }}"
               class="w-full h-full object-cover transition-transform duration-500"
               width="1200"
-              height="1200"
+              height="1500"
             >
           {% else %}
             <div class="w-full h-full flex items-center justify-center">
@@ -61,11 +61,6 @@
 
       <!-- RIGHT: Product Info -->
       <div class="flex flex-col">
-        <!-- Subheading -->
-        <p data-gs="product-info" class="text-caption tracking-[0.2em] uppercase mb-3 font-medium" style="color: var(--color-blush);">
-          {% if product.type != blank %}{{ product.type }}{% else %}{{ section.settings.breadcrumb_label_fallback }}{% endif %}
-        </p>
-
         <!-- Title -->
         <h1 data-gs="product-info" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1;">
           {{ product.title }}
@@ -73,43 +68,51 @@
 
         <!-- Price -->
         <div data-gs="product-info" class="flex items-center gap-3 mb-6">
-          <span class="text-2xl font-semibold" style="color: var(--color-blush);">{{ product.price | money }}</span>
-          {% if product.compare_at_price > product.price %}
-            <span class="text-lg line-through" style="color: var(--color-muted);">{{ product.compare_at_price | money }}</span>
-            {% assign savings = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price %}
-            <span class="px-2 py-0.5 rounded-full text-caption font-semibold" style="background: rgba(139,170,125,0.1); color: var(--color-sage);">-{{ savings }}%</span>
-          {% endif %}
+          <span id="variant-price" class="text-2xl font-semibold" style="color: var(--color-blush);">{{ product.price | money }}</span>
+          <span id="variant-compare-at-price" class="text-lg line-through" style="color: var(--color-muted); {% unless product.compare_at_price > product.price %}display: none;{% endunless %}">{{ product.compare_at_price | money }}</span>
+          <span id="variant-savings" class="px-2 py-0.5 rounded-full text-caption font-semibold" style="background: rgba(139,170,125,0.1); color: var(--color-sage); {% unless product.compare_at_price > product.price %}display: none;{% endunless %}">
+            {% if product.compare_at_price > product.price %}-{{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}%{% endif %}
+          </span>
         </div>
 
         <!-- Description -->
         {% if product.description != blank %}
-          <div data-gs="product-info" class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">
+          <div data-gs="product-info" class="text-body leading-relaxed mb-6" style="color: var(--color-muted);">
             {{ product.description }}
           </div>
         {% endif %}
 
-        <!-- Add-ons Section -->
-        {% if section.settings.show_addons %}
-          <div data-gs="product-addons" class="mb-8">
-            <h3 class="font-display mb-4" style="color: var(--color-foreground); font-size: 1.2rem;">{{ section.settings.addons_heading }}</h3>
-            <p class="text-body-sm mb-4" style="color: var(--color-muted);">{{ section.settings.addons_intro }}</p>
-
-            <div class="space-y-3" id="product-addons">
-              {% for block in section.blocks %}
-                {% if block.type == 'addon' %}
-                  <label class="flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-300 addon-item" style="background: var(--color-surface); border: 1px solid rgba(45,42,38,0.06);" data-price="{{ block.settings.price }}">
-                    <input type="checkbox" name="addon" value="{{ block.settings.title }}" class="addon-checkbox w-5 h-5 rounded" style="accent-color: var(--color-blush);">
-                    <div class="flex-1">
-                      <div class="flex items-center justify-between">
-                        <span class="text-body-sm font-medium" style="color: var(--color-foreground);">{{ block.settings.title }}</span>
-                        <span class="text-body-sm font-semibold" style="color: var(--color-blush);">+{{ block.settings.price }}</span>
-                      </div>
-                      {% if block.settings.description != blank %}
-                        <p class="text-caption mt-1" style="color: var(--color-muted);">{{ block.settings.description }}</p>
-                      {% endif %}
-                    </div>
-                  </label>
-                {% endif %}
+        <!-- Variant Selector -->
+        {% if product.variants.size > 1 %}
+          <div data-gs="product-variants" class="mb-8">
+            <div class="flex flex-col gap-4">
+              {% for option in product.options_with_values %}
+                {% assign opt_index = forloop.index0 %}
+                <div>
+                  <label class="text-body-sm font-medium block mb-2" style="color: var(--color-foreground);">{{ option.name }}</label>
+                  <div class="flex flex-wrap gap-2">
+                    {% for value in option.values %}
+                      {% assign matched_variant = nil %}
+                      {% for v in product.variants %}
+                        {% if opt_index == 0 and v.option1 == value %}{% assign matched_variant = v %}
+                        {% elsif opt_index == 1 and v.option2 == value %}{% assign matched_variant = v %}
+                        {% elsif opt_index == 2 and v.option3 == value %}{% assign matched_variant = v %}
+                        {% endif %}
+                      {% endfor %}
+                      <button
+                        type="button"
+                        class="variant-btn px-4 py-2 rounded-full text-body-sm font-medium transition-all duration-300"
+                        data-variant-id="{{ matched_variant.id }}"
+                        data-option-name="{{ option.name }}"
+                        data-option-value="{{ value }}"
+                        {% if matched_variant.id == product.selected_or_first_available_variant.id %}data-active="true" style="background: var(--color-blush); color: white; border-color: var(--color-blush);"{% else %}data-active="false" style="background: var(--color-surface); color: var(--color-foreground); border: 1px solid rgba(45,42,38,0.12);"{% endif %}
+                        {% unless matched_variant.available %}disabled style="opacity: 0.4; text-decoration: line-through; background: var(--color-surface); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.08);"{% endunless %}
+                      >
+                        {{ value }}
+                      </button>
+                    {% endfor %}
+                  </div>
+                </div>
               {% endfor %}
             </div>
           </div>
@@ -127,10 +130,11 @@
             </div>
           </div>
 
+          <!-- Variant ID -->
+          <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
+
           <!-- Add to Cart (AJAX) -->
           <form id="product-add-to-cart-form" onsubmit="handleAddToCart(event)">
-            <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
-            <input type="hidden" id="addon-data" name="properties[Add-ons]" value="">
             <button type="submit" id="add-to-cart-btn" class="btn-primary w-full flex items-center justify-center gap-2">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"></path>
@@ -208,53 +212,6 @@
   </div>
 </section>
 
-<!-- Related Products -->
-{% if section.settings.show_related %}
-  {% assign related_collection = collections[section.settings.related_collection] %}
-  {% if related_collection == blank %}
-    {% assign related_collection = product.collections.first %}
-  {% endif %}
-
-  {% if related_collection.products.size > 0 %}
-    <section class="relative py-20 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
-      <div class="relative section-content">
-        <div class="text-center mb-12">
-          <h2 class="font-display" style="color: var(--color-foreground); font-size: clamp(1.8rem, 3vw, 2.5rem);">{{ section.settings.related_heading }}</h2>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {% for related_product in related_collection.products limit: 4 %}
-            {% unless related_product.id == product.id %}
-              <a href="{{ related_product.url }}" class="group watercolor-card overflow-hidden">
-                <div class="aspect-square overflow-hidden">
-                  {% if related_product.featured_image %}
-                    <img
-                      src="{{ related_product.featured_image | image_url: width: 600 }}"
-                      alt="{{ related_product.title }}"
-                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    >
-                  {% else %}
-                    <div class="w-full h-full flex items-center justify-center" style="background: var(--color-cream);">
-                      <svg class="w-12 h-12" style="color: var(--color-muted); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                      </svg>
-                    </div>
-                  {% endif %}
-                </div>
-                <div class="p-4">
-                  <h3 class="text-body-sm font-display truncate" style="color: var(--color-foreground);">{{ related_product.title }}</h3>
-                  <p class="text-body-sm font-semibold mt-1" style="color: var(--color-blush);">{{ related_product.price | money }}</p>
-                </div>
-              </a>
-            {% endunless %}
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-  {% endif %}
-{% endif %}
-
 <script>
   function changeQuantity(delta) {
     var input = document.getElementById('quantity');
@@ -262,29 +219,87 @@
     if (val >= 1) input.value = val;
   }
 
-  // Add-on functionality
   document.addEventListener('DOMContentLoaded', function() {
-    var addonCheckboxes = document.querySelectorAll('.addon-checkbox');
-    var addonData = document.getElementById('addon-data');
+    // Variant selector
+    var variantBtns = document.querySelectorAll('.variant-btn');
+    var variantIdInput = document.getElementById('variant-id');
 
-    addonCheckboxes.forEach(function(checkbox) {
-      checkbox.addEventListener('change', function() {
-        var selected = [];
-        addonCheckboxes.forEach(function(cb) {
-          if (cb.checked) {
-            selected.push(cb.value);
-          }
+    // Group buttons by option name
+    var optionGroups = {};
+    variantBtns.forEach(function(btn) {
+      var optName = btn.dataset.optionName;
+      if (!optionGroups[optName]) optionGroups[optName] = [];
+      optionGroups[optName].push(btn);
+    });
+
+    // Selected options state
+    var selectedOptions = {};
+    variantBtns.forEach(function(btn) {
+      if (btn.dataset.active === 'true') {
+        selectedOptions[btn.dataset.optionName] = btn.dataset.optionValue;
+      }
+    });
+
+    variantBtns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        selectedOptions[btn.dataset.optionName] = btn.dataset.optionValue;
+
+        // Update visual state for this option group
+        optionGroups[btn.dataset.optionName].forEach(function(b) {
+          b.style.background = 'var(--color-surface)';
+          b.style.color = 'var(--color-foreground)';
+          b.style.borderColor = 'rgba(45,42,38,0.12)';
+          b.dataset.active = 'false';
         });
-        addonData.value = selected.join(', ');
+        btn.style.background = 'var(--color-blush)';
+        btn.style.color = 'white';
+        btn.style.borderColor = 'var(--color-blush)';
+        btn.dataset.active = 'true';
 
-        // Visual feedback
-        var item = checkbox.closest('.addon-item');
-        if (checkbox.checked) {
-          item.style.borderColor = 'var(--color-blush)';
-          item.style.background = 'rgba(196,114,127,0.04)';
-        } else {
-          item.style.borderColor = 'rgba(45,42,38,0.06)';
-          item.style.background = 'var(--color-surface)';
+        // Use Shopify's variant JSON for matching
+        var variantData = {{ product.variants | json }};
+        var optionNames = {{ product.options | json }};
+        var matchingVariantId = null;
+        for (var i = 0; i < variantData.length; i++) {
+          var v = variantData[i];
+          var allMatch = true;
+          for (var j = 0; j < optionNames.length; j++) {
+            if (selectedOptions[optionNames[j]] && v.options[j] !== selectedOptions[optionNames[j]]) {
+              allMatch = false;
+              break;
+            }
+          }
+          if (allMatch) {
+            matchingVariantId = v.id;
+            break;
+          }
+        }
+
+        if (matchingVariantId) {
+          variantIdInput.value = matchingVariantId;
+          // Update URL
+          window.history.replaceState({}, '', window.location.pathname + '?variant=' + matchingVariantId);
+
+          // Update price
+          for (var k = 0; k < variantData.length; k++) {
+            if (variantData[k].id === matchingVariantId) {
+              var selVariant = variantData[k];
+              document.getElementById('variant-price').textContent = (selVariant.price / 100).toLocaleString('en-US', {style: 'currency', currency: '{{ shop.currency }}'});
+              var compareEl = document.getElementById('variant-compare-at-price');
+              var savingsEl = document.getElementById('variant-savings');
+              if (selVariant.compare_at_price && selVariant.compare_at_price > selVariant.price) {
+                compareEl.textContent = (selVariant.compare_at_price / 100).toLocaleString('en-US', {style: 'currency', currency: '{{ shop.currency }}'});
+                compareEl.style.display = '';
+                var sav = Math.round((selVariant.compare_at_price - selVariant.price) * 100 / selVariant.compare_at_price);
+                savingsEl.textContent = '-' + sav + '%';
+                savingsEl.style.display = '';
+              } else {
+                compareEl.style.display = 'none';
+                savingsEl.style.display = 'none';
+              }
+              break;
+            }
+          }
         }
       });
     });
@@ -301,14 +316,7 @@
   });
 </script>
 
-<style>
-  .addon-item:hover {
-    border-color: rgba(196,114,127,0.2) !important;
-  }
-  .addon-checkbox:checked {
-    accent-color: var(--color-blush);
-  }
-</style>
+
 
 {% schema %}
 {
@@ -316,12 +324,6 @@
   "tag": "section",
   "class": "shopify-section",
   "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_addons",
-      "label": "Show Add-ons Section",
-      "default": true
-    },
     {
       "type": "checkbox",
       "id": "show_related",
@@ -356,18 +358,6 @@
       "id": "sale_badge",
       "label": "Sale Badge Text",
       "default": "Sale"
-    },
-    {
-      "type": "text",
-      "id": "addons_heading",
-      "label": "Add-ons Heading",
-      "default": "Add-ons"
-    },
-    {
-      "type": "text",
-      "id": "addons_intro",
-      "label": "Add-ons Intro",
-      "default": "Enhance your commission with optional extras:"
     },
     {
       "type": "text",
@@ -411,84 +401,11 @@
       "label": "Share Label",
       "default": "Share:"
     },
-    {
-      "type": "text",
-      "id": "related_heading",
-      "label": "Related Products Heading",
-      "default": "You May Also Like"
-    }
   ],
-  "blocks": [
-    {
-      "type": "addon",
-      "name": "Add-on",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Add-on Name",
-          "default": "Custom Background"
-        },
-        {
-          "type": "text",
-          "id": "description",
-          "label": "Description",
-          "default": "Add a detailed custom background to your illustration"
-        },
-        {
-          "type": "text",
-          "id": "price",
-          "label": "Price",
-          "default": "+$15"
-        }
-      ]
-    }
-  ],
+  "blocks": [],
   "presets": [
     {
-      "name": "Product Detail",
-      "blocks": [
-        {
-          "type": "addon",
-          "settings": {
-            "title": "Custom Background",
-            "description": "Add a detailed custom background to your illustration",
-            "price": "+$15"
-          }
-        },
-        {
-          "type": "addon",
-          "settings": {
-            "title": "Express Delivery (24h)",
-            "description": "Get your commission within 24 hours",
-            "price": "+$25"
-          }
-        },
-        {
-          "type": "addon",
-          "settings": {
-            "title": "Commercial License",
-            "description": "Full commercial usage rights for the artwork",
-            "price": "+$20"
-          }
-        },
-        {
-          "type": "addon",
-          "settings": {
-            "title": "Source File (PSD/AI)",
-            "description": "Receive the original editable source file",
-            "price": "+$10"
-          }
-        },
-        {
-          "type": "addon",
-          "settings": {
-            "title": "Extra Revision",
-            "description": "One additional revision round",
-            "price": "+$5"
-          }
-        }
-      ]
+      "name": "Product Detail"
     }
   ]
 }

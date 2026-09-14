@@ -1,4 +1,4 @@
-<section data-gs-section="faq-page" class="relative pt-32 pb-24 px-4" style="background: var(--color-background);">
+<section data-gs-section="faq-page" class="relative pt-36 pb-24 px-4" style="background: var(--color-background);">
   <!-- Watercolor wash accent -->
   <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 70% 10%, rgba(155,142,196,0.04) 0%, transparent 50%), radial-gradient(ellipse at 20% 70%, rgba(196,114,127,0.03) 0%, transparent 50%);"></div>
 
@@ -6,14 +6,16 @@
     <!-- Page Heading -->
     <div class="text-center mb-16">
       <p data-gs="faq-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
-        <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-sage));"></span>
+        <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
         {{ section.settings.subheading }}
-                <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-sage));"></span>
-
+        <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
       </p>
-      <h1 data-gs="faq-heading" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2.2rem, 5vw, 3.5rem); letter-spacing: 0.02em;">
+      <h1 data-gs="faq-heading" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 0.02em;">
         {{ section.settings.heading }}
       </h1>
+      {% if section.settings.description != blank %}
+        <p data-gs="faq-heading" class="text-body-lg max-w-lg mx-auto" style="color: var(--color-muted);">{{ section.settings.description }}</p>
+      {% endif %}
     </div>
 
     <!-- Category Groups -->
@@ -29,7 +31,7 @@
             </div>
 
             <!-- FAQ Items in this category -->
-            <div class="space-y-3">
+            <div class="flex flex-col gap-3">
               {% for inner_block in section.blocks %}
                 {% if inner_block.type == 'question' and inner_block.settings.category == block.settings.category_key %}
 
@@ -58,7 +60,7 @@
 
     <!-- Bottom CTA -->
     {% if section.settings.cta_label != blank %}
-      <div class="text-center mt-16">
+      <div class="text-center mt-10">
         <p class="text-body mb-6" style="color: var(--color-muted);">{{ section.settings.cta_text }}</p>
         <a href="{{ section.settings.cta_link }}" class="btn-primary inline-flex items-center gap-2">
           <span>{{ section.settings.cta_label }}</span>
@@ -122,7 +124,7 @@
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Frequently asked questions by you:"
+      "default": "Quick answers to get you started."
     },
     {
       "type": "text",

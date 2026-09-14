@@ -1,8 +1,8 @@
-<section data-gs-section="services" class="relative pt-36 pb-24 px-4" style="background: var(--bg-services);">
+<section data-gs-section="services" class="relative pt-36 pb-24" style="background: var(--bg-services);">
   <!-- Watercolor wash accent -->
   <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 20% 30%, rgba(196,114,127,0.04) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(123,167,194,0.03) 0%, transparent 50%);"></div>
 
-  <div class="relative section-content">
+  <div class="relative section-content px-4">
     <!-- Product Hero — Services/Products specific -->
     <div class="mb-16">
       <div class="text-center">
@@ -21,58 +21,95 @@
     </div>
 
     {% if section.settings.collection != blank %}
-      <!-- Gallery-like Grid from Collection — show all products -->
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+      <!-- Collection Products — alternating layout -->
+      <div class="flex flex-col gap-12 md:gap-16">
         {% for product in collections[section.settings.collection].products %}
-          <a data-gs="services-card" href="{{ product.url }}" class="group relative flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-1" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
-            <!-- Product Image -->
-            <div class="relative aspect-square overflow-hidden">
-              {% if product.featured_image %}
-                <img
-                  src="{{ product.featured_image | image_url: width: 800 }}"
-                  alt="{{ product.title }}"
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  width="800"
-                  height="800"
-                >
-              {% else %}
-                <div class="w-full h-full flex items-center justify-center" style="background: var(--color-cream);">
-                  <svg class="w-16 h-16" style="color: var(--color-muted); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
+          {% assign title_lower = product.title | downcase %}{% assign is_banner = false %}{% if title_lower contains 'banner' %}{% assign is_banner = true %}{% endif %}
+
+          {% if is_banner %}
+            <!-- BANNER: full-width, image top, content bottom -->
+            <a data-gs="services-card" href="{{ product.url }}" class="group block overflow-hidden w-[100vw] ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]" style="transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1); will-change: transform;">
+              <div class="relative overflow-hidden" style="aspect-ratio: 21/9;">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 1920 }}"
+                    alt="{{ product.title }}"
+                    class="w-full h-full object-cover banner-img"
+                    loading="lazy"
+                    width="1920"
+                    height="820"
+                  >
+                {% endif %}
+                <div class="absolute inset-0 banner-overlay" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.85) 100%);"></div>
+                <div class="absolute inset-x-0 bottom-0 flex justify-center pb-6 banner-cta">
+                  <span class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-body-sm font-bold" style="background: var(--color-blush); color: white;">
+                    View Product
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  </span>
                 </div>
-              {% endif %}
+              </div>
+              <div class="p-6 md:p-8 text-center">
+                {% if product.type != blank %}
+                  <p class="text-caption uppercase tracking-wider mb-2" style="color: var(--color-blush);">{{ product.type }}</p>
+                {% endif %}
+                <h3 class="text-heading font-display mb-2" style="color: var(--color-foreground);">{{ product.title }}</h3>
+                {% if product.description != blank %}
+                  <p class="text-body leading-relaxed max-w-2xl mx-auto" style="color: var(--color-muted);">{{ product.description }}</p>
+                {% endif %}
+                <div class="mt-4">
+                  <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-bold" style="background: rgba(196,114,127,0.08); color: var(--color-blush);">
+                    Start from {% if product.price_min != product.price_max %}{{ product.price_min | money }}+{% else %}{{ product.price | money }}{% endif %}
+                  </span>
+                </div>
+              </div>
+            </a>
 
-              <!-- Price chip -->
-              <div class="absolute top-3 right-3 md:top-4 md:right-4 px-3 py-1.5 rounded-full" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); border: 1px solid rgba(45,42,38,0.06);">
-                <span class="text-body-sm font-bold" style="color: var(--color-blush);">
-                  Start from {% if product.price_min != product.price_max %}
-                    {{ product.price_min | money }}+
-                  {% else %}
-                    {{ product.price | money }}
-                  {% endif %}
-                </span>
+          {% else %}
+            <!-- REGULAR: alternating image right / image left -->
+            {% assign is_even = forloop.index | modulo: 2 %}
+            <a data-gs="services-card" href="{{ product.url }}" class="group flex flex-col {% unless is_even == 0 %}md:flex-row{% else %}md:flex-row-reverse{% endunless %} overflow-hidden border-b" style="border-color: rgba(45,42,38,0.08); transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1); will-change: transform;">
+              <!-- Image -->
+              <div class="relative w-full md:w-1/2 overflow-hidden services-product-image">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 800 }}"
+                    alt="{{ product.title }}"
+                    class="w-full h-full object-cover product-img"
+                    loading="lazy"
+                    width="800"
+                    height="600"
+                  >
+                {% else %}
+                  <div class="w-full h-full flex items-center justify-center" style="background: var(--color-cream);">
+                    <svg class="w-16 h-16" style="color: var(--color-muted); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>
+                {% endif %}
+                <div class="absolute inset-0 product-overlay" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.85) 100%);"></div>
               </div>
 
-              <!-- Hover overlay -->
-              <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.85) 100%);"></div>
-              <div class="absolute inset-x-0 bottom-0 flex justify-center pb-5 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                <span class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-body-sm font-bold" style="background: var(--color-blush); color: white;">
-                  View Product
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                </span>
+              <!-- Content -->
+              <div class="w-full md:w-1/2 flex flex-col justify-center p-6 md:p-10 product-content">
+                {% if product.type != blank %}
+                  <p class="text-caption uppercase tracking-wider mb-2" style="color: var(--color-blush);">{{ product.type }}</p>
+                {% endif %}
+                <h3 class="text-subheading font-display mb-3" style="color: var(--color-foreground);">{{ product.title }}</h3>
+                {% if product.description != blank %}
+                  <p class="text-body leading-relaxed mb-6" style="color: var(--color-muted);">{{ product.description }}</p>
+                {% endif %}
+                <div class="flex items-center gap-4">
+                  <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-bold" style="background: rgba(196,114,127,0.08); color: var(--color-blush);">
+                    Start from {% if product.price_min != product.price_max %}{{ product.price_min | money }}+{% else %}{{ product.price | money }}{% endif %}
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-body-sm font-bold view-link" style="color: var(--color-blush);">
+                    View Product
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                  </span>
+                </div>
               </div>
-            </div>
-
-            <!-- Product Info -->
-            <div class="p-4 md:p-5">
-              {% if product.type != blank %}
-                <p class="text-caption uppercase tracking-wider mb-1" style="color: var(--color-blush);">{{ product.type }}</p>
-              {% endif %}
-              <h3 class="text-body-lg font-display truncate" style="color: var(--color-foreground);">{{ product.title }}</h3>
-            </div>
-          </a>
+            </a>
+          {% endif %}
         {% endfor %}
       </div>
     {% else %}
@@ -114,6 +151,90 @@
     {% endif %}
   </div>
 </section>
+
+<style>
+  /* Responsive aspect ratio for regular product images */
+  .services-product-image {
+    aspect-ratio: 1/1;
+  }
+  @media (min-width: 768px) {
+    .services-product-image {
+      aspect-ratio: 4/3;
+    }
+  }
+
+  /* Override Tailwind base: images must fill container */
+  [data-gs-section="services"] img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* === Smooth Hover Effects (cubic-bezier: easeOutExpo) === */
+
+  /* Card lift */
+  [data-gs="services-card"] {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  [data-gs="services-card"]:hover {
+    transform: translateY(-3px);
+  }
+
+  /* Banner image zoom */
+  .banner-img {
+    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  [data-gs="services-card"]:hover .banner-img {
+    transform: scale(1.03);
+  }
+  .banner-overlay {
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-gs="services-card"]:hover .banner-overlay {
+    opacity: 1;
+  }
+  .banner-cta {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+  }
+  [data-gs="services-card"]:hover .banner-cta {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Regular product image zoom */
+  .product-img {
+    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  [data-gs="services-card"]:hover .product-img {
+    transform: scale(1.03);
+  }
+  .product-overlay {
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-gs="services-card"]:hover .product-overlay {
+    opacity: 1;
+  }
+  .product-content {
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-gs="services-card"]:hover .product-content {
+    transform: translateX(4px);
+  }
+  .view-link {
+    transition: gap 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  [data-gs="services-card"]:hover .view-link {
+    gap: 0.75rem;
+  }
+</style>
 
 {% schema %}
 {

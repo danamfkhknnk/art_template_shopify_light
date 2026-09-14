@@ -1,4 +1,4 @@
-<section class="relative pt-32 pb-20 px-4" style="background: var(--color-background);">
+<section class="relative pt-36 pb-24 px-4" style="background: var(--color-background);">
   <div class="relative section-content max-w-3xl">
     <!-- TOS Hero — Minimal & Legal specific -->
     <div class="text-center mb-16 reveal">
@@ -10,9 +10,9 @@
       <h1 class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: 0.02em;">
         {{ section.settings.heading }}
       </h1>
-      <p class="text-body-lg max-w-lg mx-auto" style="color: var(--color-muted);">
-        Please read these terms carefully before using our services.
-      </p>
+      {% if section.settings.description != blank %}
+        <p class="text-body-lg max-w-lg mx-auto" style="color: var(--color-muted);">{{ section.settings.description }}</p>
+      {% endif %}
       {% if section.settings.last_updated != blank %}
         <p class="text-caption mt-4" style="color: var(--color-muted);">Last updated: {{ section.settings.last_updated }}</p>
       {% endif %}
@@ -39,6 +39,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "Terms of Service"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Please read these terms carefully before using our services."
     },
     {
       "type": "richtext",
