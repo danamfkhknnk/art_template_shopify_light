@@ -78,35 +78,50 @@
       var hero = document.querySelector('[data-gs-section="hero"]');
       if (!hero) return;
 
-      var tl = gsap.timeline({ delay: 0.4 });
+      var tl = gsap.timeline({ delay: 0.3 });
 
-      /* Stats counter */
-      var stats = hero.querySelectorAll('[data-gs="hero-stat"]');
-      if (stats.length) {
-        gsap.set(stats, { y: 20, opacity: 0 });
-        tl.to(stats, {
-          y: 0, opacity: 1, duration: 0.5, stagger: 0.1,
-          onStart: function () {
-            stats.forEach(function (s) {
-              var target = s.getAttribute('data-counter');
-              if (target) animateCounter(s, target);
-            });
-          }
-        }, '-=0.2');
+      /* Hero title */
+      var title = hero.querySelector('[data-gs="hero-title"]');
+      if (title) {
+        gsap.set(title, { y: 40, opacity: 0 });
+        tl.to(title, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' });
       }
 
-      /* Marquee parallax */
-      var marquee = hero.querySelector('.marquee-track');
-      if (marquee) {
-        gsap.to(marquee, {
-          x: -100, ease: 'none',
-          scrollTrigger: {
-            trigger: hero,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1.5
-          }
-        });
+      /* Hero description */
+      var desc = hero.querySelector('[data-gs="hero-desc"]');
+      if (desc) {
+        gsap.set(desc, { y: 30, opacity: 0 });
+        tl.to(desc, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '-=0.5');
+      }
+
+      /* Hero buttons */
+      var buttons = hero.querySelector('[data-gs="hero-buttons"]');
+      if (buttons) {
+        gsap.set(buttons, { y: 20, opacity: 0 });
+        tl.to(buttons, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, '-=0.4');
+      }
+
+      /* Featured label */
+      var featured = hero.querySelector('[data-gs="hero-featured"]');
+      if (featured) {
+        gsap.set(featured, { x: 30, opacity: 0 });
+        tl.to(featured, { x: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, '-=0.4');
+      }
+
+      /* Cards */
+      var cards = hero.querySelectorAll('[data-gs="hero-card"]');
+      if (cards.length) {
+        gsap.set(cards, { y: 50, opacity: 0, scale: 0.9 });
+        tl.to(cards, {
+          y: 0, opacity: 1, scale: 1, duration: 0.8, stagger: 0.12, ease: 'power3.out'
+        }, '-=0.5');
+      }
+
+      /* Navigation */
+      var nav = hero.querySelector('[data-gs="hero-nav"]');
+      if (nav) {
+        gsap.set(nav, { y: 20, opacity: 0 });
+        tl.to(nav, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }, '-=0.4');
       }
     }
 
@@ -205,10 +220,46 @@
         );
       }
 
-      /* Cards */
+      /* Cards: gather toward the grid's center, then burst out into their
+         real masonry position once the grid scrolls into view. */
+      var grid = section.querySelector('[data-gs="services-grid"]');
       var cards = section.querySelectorAll('[data-gs="services-card"]');
-      var grid = section.querySelector('.grid');
-      if (cards.length) {
+      if (cards.length > 1 && grid) {
+        var cardList = Array.prototype.slice.call(cards);
+        var gridRect = grid.getBoundingClientRect();
+        var centerX = gridRect.width / 2;
+        var centerY = gridRect.height / 2;
+
+        var offsets = cardList.map(function (card) {
+          var cx = card.offsetLeft + card.offsetWidth / 2;
+          var cy = card.offsetTop + card.offsetHeight / 2;
+          return { x: centerX - cx, y: centerY - cy };
+        });
+
+        cardList.forEach(function (card, i) {
+          gsap.set(card, {
+            x: offsets[i].x,
+            y: offsets[i].y,
+            scale: 0.35,
+            opacity: 0,
+            rotation: i % 2 === 0 ? -6 : 6
+          });
+        });
+
+        gsap.to(cardList, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          opacity: 1,
+          rotation: 0,
+          duration: 1.1,
+          ease: 'power3.out',
+          delay: 0.6,
+          stagger: { each: 0.07, from: 'center' },
+          clearProps: 'transform,opacity',
+          scrollTrigger: { trigger: grid, start: 'top 80%', once: true }
+        });
+      } else if (cards.length) {
         gsap.fromTo(cards,
           { y: 60, opacity: 0 },
           {

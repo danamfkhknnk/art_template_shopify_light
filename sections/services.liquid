@@ -21,92 +21,155 @@
     </div>
 
     {% if section.settings.collection != blank %}
-      <!-- Collection Products — alternating layout -->
-      <div class="flex flex-col gap-12 md:gap-16">
-        {% for product in collections[section.settings.collection].products %}
-          {% assign title_lower = product.title | downcase %}{% assign is_banner = false %}{% if title_lower contains 'banner' %}{% assign is_banner = true %}{% endif %}
+      {% assign product_collection = collections[section.settings.collection] %}
 
-          {% if is_banner %}
-            <!-- BANNER: full-width, image top, content bottom -->
-            <a data-gs="services-card" href="{{ product.url }}" class="group block overflow-hidden w-[100vw] ml-[calc(50%-50vw)] mr-[calc(50%-50vw)]" style="transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1); will-change: transform;">
-              <div class="relative overflow-hidden" style="aspect-ratio: 21/9;">
-                {% if product.featured_image %}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 1920 }}"
-                    alt="{{ product.title }}"
-                    class="w-full h-full object-cover banner-img"
-                    loading="lazy"
-                    width="1920"
-                    height="820"
-                  >
-                {% endif %}
-                <div class="absolute inset-0 banner-overlay" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.85) 100%);"></div>
-                <div class="absolute inset-x-0 bottom-0 flex justify-center pb-6 banner-cta">
-                  <span class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-body-sm font-bold" style="background: var(--color-blush); color: white;">
-                    View Product
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                  </span>
-                </div>
-              </div>
-              <div class="p-6 md:p-8 text-center">
-               
-                <h3 class="text-heading font-display mb-2" style="color: var(--color-foreground);">{{ product.title }}</h3>
-                {% if product.description != blank %}
-                  <p class="text-body leading-relaxed max-w-2xl mx-auto" style="color: var(--color-muted);">{{ product.description }}</p>
-                {% endif %}
-                <div class="mt-4">
-                  <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-bold" style="background: rgba(196,114,127,0.08); color: var(--color-blush);">
-                    Start from {% if product.price_min != product.price_max %}{{ product.price_min | money }}+{% else %}{{ product.price | money }}{% endif %}
-                  </span>
-                </div>
-              </div>
-            </a>
+      <!-- Tag filter bubbles — every tag used across the collection's products -->
+      {% if product_collection.all_tags.size > 0 %}
+        <div class="mb-12 flex flex-wrap justify-center gap-3">
+          <button data-gs="services-tab" data-filter="all" class="filter-tab active px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: var(--color-blush); color: white; border: 1px solid rgba(45,42,38,0.06);">All</button>
+          {% for tag in product_collection.all_tags %}
+            <button data-gs="services-tab" data-filter="{{ tag | strip | downcase }}" class="filter-tab px-5 py-2 rounded-full text-body-sm font-medium transition-all duration-300" style="background: rgba(255,255,255,0.6); color: var(--color-muted); border: 1px solid rgba(45,42,38,0.06);">{{ tag }}</button>
+          {% endfor %}
+        </div>
+      {% endif %}
 
+      <!-- Collection Products — Pinterest-style masonry, sized from each product's real image aspect ratio -->
+      <div data-gs="services-grid" class="columns-1 gap-6 sm:columns-2 lg:columns-3">
+        {% for product in product_collection.products %}
+          {% assign featured_image = product.featured_image %}
+          {% assign image_ratio = featured_image.aspect_ratio | default: 1.0 %}
+          {% if image_ratio > 1.15 %}
+            {% assign orientation = 'Landscape' %}
+          {% elsif image_ratio < 0.85 %}
+            {% assign orientation = 'Portrait' %}
           {% else %}
-            <!-- REGULAR: alternating image right / image left -->
-            {% assign is_even = forloop.index | modulo: 2 %}
-            <a data-gs="services-card" href="{{ product.url }}" class="group flex flex-col {% unless is_even == 0 %}md:flex-row{% else %}md:flex-row-reverse{% endunless %} overflow-hidden border-b" style="border-color: rgba(45,42,38,0.08); transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1); will-change: transform;">
-              <!-- Image -->
-              <div class="relative w-full md:w-1/2 overflow-hidden services-product-image">
-                {% if product.featured_image %}
-                  <img
-                    src="{{ product.featured_image | image_url: width: 800 }}"
-                    alt="{{ product.title }}"
-                    class="w-full h-full object-cover product-img"
-                    loading="lazy"
-                    width="800"
-                    height="600"
-                  >
-                {% else %}
-                  <div class="w-full h-full flex items-center justify-center" style="background: var(--color-cream);">
-                    <svg class="w-16 h-16" style="color: var(--color-muted); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                  </div>
-                {% endif %}
-                <div class="absolute inset-0 product-overlay" style="background: linear-gradient(180deg, transparent 40%, rgba(250,247,242,0.85) 100%);"></div>
-              </div>
-
-              <!-- Content -->
-              <div class="w-full md:w-1/2 flex flex-col justify-center p-6 md:p-10 product-content">
-                <h3 class="text-subheading font-display mb-3" style="color: var(--color-foreground);">{{ product.title }}</h3>
-                {% if product.description != blank %}
-                  <p class="text-body leading-relaxed mb-6" style="color: var(--color-muted);">{{ product.description }}</p>
-                {% endif %}
-                <div class="flex items-center gap-4">
-                  <span class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-body-sm font-bold" style="background: rgba(196,114,127,0.08); color: var(--color-blush);">
-                    Start from {% if product.price_min != product.price_max %}{{ product.price_min | money }}+{% else %}{{ product.price | money }}{% endif %}
-                  </span>
-                  <span class="inline-flex items-center gap-1.5 text-body-sm font-bold view-link" style="color: var(--color-blush);">
-                    View Product
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                  </span>
-                </div>
-              </div>
-            </a>
+            {% assign orientation = 'Square' %}
           {% endif %}
+
+          {% capture product_tag_list %}{% for tag in product.tags %}{{ tag | strip | downcase }}|{% endfor %}{% endcapture %}
+
+          <a
+            data-gs="services-card"
+            data-tags="{{ product_tag_list }}"
+            href="{{ product.url }}"
+            class="services-card group mb-6 block break-inside-avoid overflow-hidden rounded-2xl"
+            style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.06);"
+          >
+            <div class="relative overflow-hidden">
+              {% if product.images.size > 1 %}
+                <div data-slideshow class="relative w-full" style="aspect-ratio: {{ featured_image.width }} / {{ featured_image.height }};">
+                  {% for image in product.images %}
+                    <img
+                      data-slide
+                      src="{{ image | image_url: width: 800 }}"
+                      alt="{{ product.title }}"
+                      class="product-slide product-img absolute inset-0 h-full w-full object-cover{% if forloop.first %} is-active{% endif %}"
+                      loading="lazy"
+                      width="{{ image.width }}"
+                      height="{{ image.height }}"
+                    >
+                  {% endfor %}
+                </div>
+              {% elsif featured_image %}
+                <img
+                  src="{{ featured_image | image_url: width: 800 }}"
+                  alt="{{ product.title }}"
+                  class="product-img block h-auto w-full"
+                  loading="lazy"
+                  width="{{ featured_image.width }}"
+                  height="{{ featured_image.height }}"
+                >
+              {% else %}
+                <div class="flex aspect-square w-full items-center justify-center" style="background: var(--color-cream);">
+                  <svg class="h-16 w-16" style="color: var(--color-muted); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="p-5">
+              {% if product.tags.size > 0 %}
+                <p class="mb-2 flex flex-wrap gap-2 text-caption font-medium" style="color: var(--color-blush);">
+                  {% for tag in product.tags %}<span>#{{ tag }}</span>{% endfor %}
+                </p>
+              {% endif %}
+              <h3 class="text-subheading font-display mb-1" style="color: var(--color-foreground);">{{ product.title }}</h3>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-body font-bold" style="color: var(--color-foreground);">
+                  {% if product.price_varies %}Start from {{ product.price_min | money }}{% else %}{{ product.price | money }}{% endif %}
+                </span>
+                <span class="view-link inline-flex items-center gap-1.5 text-body-sm font-bold" style="color: var(--color-blush);">
+                  View Detail
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </span>
+              </div>
+            </div>
+          </a>
         {% endfor %}
       </div>
+      <script>
+        (function () {
+          var section = document.currentScript.closest('[data-gs-section="services"]');
+          if (!section) return;
+
+          var slideshows = section.querySelectorAll('[data-slideshow]');
+          slideshows.forEach(function (el) {
+            var slides = Array.prototype.slice.call(el.querySelectorAll('[data-slide]'));
+            if (slides.length < 2) return;
+
+            var current = 0;
+            setInterval(function () {
+              slides[current].classList.remove('is-active');
+              current = (current + 1) % slides.length;
+              slides[current].classList.add('is-active');
+            }, 3200);
+          });
+
+          /* Tag filter bubbles */
+          var tabs = Array.prototype.slice.call(section.querySelectorAll('[data-gs="services-tab"]'));
+          var cards = Array.prototype.slice.call(section.querySelectorAll('[data-gs="services-card"]'));
+          tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+              var filter = tab.dataset.filter;
+
+              tabs.forEach(function (t) {
+                t.classList.remove('active');
+                t.style.background = 'rgba(255,255,255,0.6)';
+                t.style.color = 'var(--color-muted)';
+                t.style.border = '1px solid rgba(45,42,38,0.06)';
+              });
+              tab.classList.add('active');
+              tab.style.background = 'var(--color-blush)';
+              tab.style.color = 'white';
+              tab.style.border = 'none';
+
+              cards.forEach(function (card) {
+                var tags = (card.dataset.tags || '').split('|');
+                var matches = filter === 'all' || tags.indexOf(filter) !== -1;
+
+                /* GSAP loads at the end of <body>, after this inline script,
+                   so its availability is only checked here (at click time,
+                   long after it has loaded) rather than at setup time. */
+                if (typeof gsap === 'undefined') {
+                  card.style.display = matches ? 'block' : 'none';
+                  return;
+                }
+
+                if (matches) {
+                  card.style.display = 'block';
+                  gsap.to(card, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' });
+                } else {
+                  gsap.to(card, {
+                    opacity: 0, scale: 0.95, duration: 0.3, ease: 'power2.in',
+                    onComplete: function () { card.style.display = 'none'; }
+                  });
+                }
+              });
+            });
+          });
+        })();
+      </script>
     {% else %}
       <!-- Fallback: Service cards -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-{{ section.settings.columns }} gap-6">
@@ -148,83 +211,41 @@
 </section>
 
 <style>
-  /* Responsive aspect ratio for regular product images */
-  .services-product-image {
-    aspect-ratio: 1/1;
-  }
-  @media (min-width: 768px) {
-    .services-product-image {
-      aspect-ratio: 4/3;
-    }
-  }
+  /* === Smooth Hover Effects (cubic-bezier: easeOutExpo, unified across the card) === */
 
-  /* Override Tailwind base: images must fill container */
-  [data-gs-section="services"] img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* === Smooth Hover Effects (cubic-bezier: easeOutExpo) === */
-
-  /* Card lift */
+  /* Card lift + shadow grow */
   [data-gs="services-card"] {
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 1s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
   [data-gs="services-card"]:hover {
-    transform: translateY(-3px);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
   }
 
-  /* Banner image zoom */
-  .banner-img {
-    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-  }
-  [data-gs="services-card"]:hover .banner-img {
-    transform: scale(1.03);
-  }
-  .banner-overlay {
-    opacity: 0;
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  [data-gs="services-card"]:hover .banner-overlay {
-    opacity: 1;
-  }
-  .banner-cta {
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s,
-                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
-  }
-  [data-gs="services-card"]:hover .banner-cta {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* Regular product image zoom */
+  /* Masonry product image zoom (kept at its natural aspect ratio, not cropped) */
   .product-img {
-    transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
   [data-gs="services-card"]:hover .product-img {
-    transform: scale(1.03);
+    transform: scale(1.06);
   }
-  .product-overlay {
+
+  /* Multi-image products: auto-cycle by crossfading — the current photo
+     fades out while the next fades in over it, replacing it in place.
+     Not a slider: nothing moves horizontally. */
+  .product-slide {
     opacity: 0;
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  [data-gs="services-card"]:hover .product-overlay {
+  .product-slide.is-active {
     opacity: 1;
   }
-  .product-content {
-    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  [data-gs="services-card"]:hover .product-content {
-    transform: translateX(4px);
-  }
+
   .view-link {
-    transition: gap 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: gap 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
   [data-gs="services-card"]:hover .view-link {
     gap: 0.75rem;

@@ -15,19 +15,21 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
       <!-- LEFT: Product Gallery -->
       <div data-gs="product-gallery">
-        <!-- Main Image -->
-        <div class="relative rounded-2xl overflow-hidden mb-4" style="background: var(--color-cream); aspect-ratio: 3/4;">
+        <!-- Main Image: kept at its real aspect ratio (no crop) rather than
+             forced into a fixed box, so portrait/square/landscape artwork
+             all display uncropped. -->
+        <div class="relative rounded-2xl overflow-hidden mb-4" style="background: var(--color-cream);">
           {% if product.featured_image %}
             <img
               id="product-main-image"
               src="{{ product.featured_image | image_url: width: 1200 }}"
               alt="{{ product.title }}"
-              class="w-full h-full object-cover transition-transform duration-500"
-              width="1200"
-              height="1500"
+              class="block w-full h-auto transition-transform duration-500"
+              width="{{ product.featured_image.width }}"
+              height="{{ product.featured_image.height }}"
             >
           {% else %}
-            <div class="w-full h-full flex items-center justify-center">
+            <div class="w-full aspect-square flex items-center justify-center">
               <svg class="w-24 h-24" style="color: var(--color-muted); opacity: 0.2;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
               </svg>
@@ -47,10 +49,13 @@
           <div class="flex gap-2 overflow-x-auto pb-2">
             {% for image in product.images %}
               <button
-                onclick="document.getElementById('product-main-image').src='{{ image | image_url: width: 1200 }}'"
+                type="button"
                 class="shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 product-thumb"
                 style="border-color: {% if forloop.first %}var(--color-blush){% else %}transparent{% endif %};"
                 data-index="{{ forloop.index0 }}"
+                data-src="{{ image | image_url: width: 1200 }}"
+                data-width="{{ image.width }}"
+                data-height="{{ image.height }}"
               >
                 <img src="{{ image | image_url: width: 200 }}" alt="" class="w-full h-full object-cover" loading="lazy">
               </button>
@@ -142,12 +147,6 @@
               <span>{{ section.settings.add_to_cart_label }}</span>
             </button>
           </form>
-
-          <!-- Buy Now -->
-          <a href="{{ routes.cart_url }}" class="btn-secondary w-full flex items-center justify-center gap-2">
-            <span>{{ section.settings.buy_now_label }}</span>
-          </a>
-
           <script>
             async function handleAddToCart(e) {
               e.preventDefault();
@@ -304,13 +303,22 @@
       });
     });
 
-    // Thumbnail click
+    // Thumbnail click: swap the main image's src plus its real width/height
+    // together, so the container reflows to that image's own aspect ratio
+    // immediately instead of waiting on the new image to decode.
+    var mainImage = document.getElementById('product-main-image');
     document.querySelectorAll('.product-thumb').forEach(function(thumb) {
       thumb.addEventListener('click', function() {
         document.querySelectorAll('.product-thumb').forEach(function(t) {
           t.style.borderColor = 'transparent';
         });
         thumb.style.borderColor = 'var(--color-blush)';
+
+        if (mainImage && thumb.dataset.src) {
+          mainImage.src = thumb.dataset.src;
+          mainImage.width = thumb.dataset.width;
+          mainImage.height = thumb.dataset.height;
+        }
       });
     });
   });

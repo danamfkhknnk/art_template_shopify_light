@@ -22,3 +22,8 @@ session-*.md
 ## Release files
 release
 *.zip
+
+screenshots/
+reference/
+diffs/
+visual-report/

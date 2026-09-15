@@ -1,181 +1,262 @@
-<section data-gs-section="hero" class="relative w-full flex flex-col overflow-x-hidden" style="min-height: 100vh; min-height: 100dvh;">
+<section data-gs-section="hero" class="relative w-full overflow-hidden min-h-[100vh] min-h-[100dvh] bg-[var(--color-foreground)]">
 
-  <!-- Artwork Carousel (full background) -->
-  <div class="absolute inset-0" style="background: var(--bg-about);">    
-   {% assign hero_items = shop.metaobjects.hero.values %}
-    {% assign hero_count = 0 %}
-    {% for item in hero_items %}
-      {% if item.img %}
-        {% assign hero_count = hero_count | plus: 1 %}
-      {% endif %}
-    {% endfor %}
-  
+  {% assign hero_items = shop.metaobjects.hero.values %}
+  {% assign hero_count = 0 %}
+  {% for item in hero_items %}
+    {% if item.img %}
+      {% assign hero_count = hero_count | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+
+  <!-- Background artwork (crossfades between active Hero Metaobjects) -->
+  <div class="absolute inset-0">
     {% if hero_count > 0 %}
       {% for item in hero_items %}
         {% if item.img %}
-          <div class="hero-slide absolute inset-0 {% if forloop.first %}active{% endif %}" data-slide="{{ forloop.index0 }}">
+          <div class="hero-bg-slide absolute inset-0 opacity-0 transition-opacity duration-[1100ms] ease-in-out{% if forloop.first %} opacity-100{% endif %}" data-hero-index="{{ forloop.index0 }}">
             <img
               src="{{ item.img | image_url: width: 1920 }}"
-              alt="{{ item.img.alt | default: 'Hero artwork' }}"
-              class="w-full h-full object-cover transition-opacity duration-[1200ms] ease-in-out"
+              alt="{{ item.img.alt | default: item.title | default: 'Hero artwork' }}"
+              class="w-full h-full object-cover"
               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
               width="1920"
               height="1080"
             >
-            <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
-            <!-- Watercolor wash overlay -->
-            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 30% 50%, rgba(196,114,127,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(155,142,196,0.04) 0%, transparent 50%);"></div>
           </div>
         {% endif %}
       {% endfor %}
-    {% else %} 
-      <div class="hero-slide absolute inset-0 active" data-slide="0">
-          <img
-            src="{{ 'hero.avif' | asset_url }}"
-            alt="Hero artwork"
-            class="w-full h-full object-cover"
-            loading="eager"
-            width="1920"
-            height="1080"
-          >
-        <div class="absolute inset-0" style="background: rgba(255,255,255,0.2);"></div>
-        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 30% 50%, rgba(196,114,127,0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(155,142,196,0.04) 0%, transparent 50%);"></div>
+    {% else %}
+      <div class="hero-bg-slide absolute inset-0 opacity-100 transition-opacity duration-[1100ms] ease-in-out" data-hero-index="0">
+        <img
+          src="{{ 'hero.avif' | asset_url }}"
+          alt="Hero artwork"
+          class="w-full h-full object-cover"
+          loading="eager"
+          width="1920"
+          height="1080"
+        >
       </div>
-   {% endif %}
+    {% endif %}
+
+    <!-- Readability + watercolor-brand overlay (warm, matches site palette rather than the cool reference tones) -->
+    <div class="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(45,42,38,.15)_0%,rgba(45,42,38,.35)_55%,rgba(45,42,38,.85)_100%),linear-gradient(90deg,rgba(45,42,38,.75)_0%,rgba(45,42,38,.25)_45%,rgba(45,42,38,.1)_100%)]"></div>
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_25%_60%,rgba(196,114,127,.14)_0%,transparent_55%),radial-gradient(ellipse_at_75%_20%,rgba(155,142,196,.12)_0%,transparent_55%)]"></div>
   </div>
 
-  <!-- Hero tagline: mobile (centered) -->
-  <div class="md:hidden absolute inset-0 z-50 flex items-center justify-center px-4">
-    <div class="hero-text-box text-center" style="width: 90vw; background: rgba(0,0,0,0.5); backdrop-filter: blur(1px); padding: 2rem;">
-      {% if section.settings.tagline != blank %}
-        <h1 class="font-display leading-snug" style="color: #F5EDE0; font-weight: 500; font-size: clamp(1rem, 3vw, 1.5rem); text-shadow: 0 1px 8px rgba(0,0,0,0.4); text-align: center;">
-          {{ section.settings.tagline }}
-        </h1>
-      {% endif %}
-    </div>
-  </div>
+  <!-- Foreground content -->
+  <div class="relative z-10 flex min-h-[100vh] min-h-[100dvh] flex-col justify-end px-4 pb-8 sm:px-6 lg:px-16 lg:pb-12">
+    <div class="mx-auto flex w-full max-w-[1440px] flex-1 flex-col justify-end">
 
-  <!-- Hero tagline: desktop (bottom-left) -->
-  <div class="hidden md:flex absolute bottom-0 left-0 z-50 pb-8 lg:pb-12 pl-4">
-    <div class="hero-text-box py-6 px-8 md:py-8 md:px-8" style="width: min(34vw, 36rem); background: rgba(0,0,0,0.5); backdrop-filter: blur(1px);">
-      {% if section.settings.tagline != blank %}
-        <h1 class="font-display leading-snug" style="color: #F5EDE0; font-weight: 500; font-size: clamp(0.85rem, 1.5vw, 1.1rem); text-shadow: 0 1px 8px rgba(0,0,0,0.4); text-align: justify;">
-          {{ section.settings.tagline }}
-        </h1>
+      <div class="mb-10 flex flex-col gap-10 lg:mb-14 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+
+        <!-- LEFT CONTENT -->
+        <div class="max-w-xl">
+          {% if hero_count > 0 %}
+            {% for item in hero_items %}
+              {% if item.img %}
+                <div class="hero-content-slide{% unless forloop.first %} hidden{% endunless %}" data-hero-index="{{ forloop.index0 }}">
+                  {% if item.title != blank %}
+                    <h1 data-gs="hero-title" class="font-display mb-5 uppercase font-extrabold leading-[0.95] break-words text-[var(--color-cream)] text-[clamp(2.25rem,5.5vw,4.5rem)] [text-shadow:0_4px_30px_rgba(0,0,0,.35)]">
+                      {{ item.title | newline_to_br }}
+                    </h1>
+                  {% endif %}
+                  {% if item.desc != blank %}
+                    <div data-gs="hero-desc" class="text-body leading-relaxed text-[rgba(245,237,224,.85)] max-w-[30rem]">
+                      {{ item.desc }}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
+          <div data-gs="hero-buttons" class="mt-8 flex items-center gap-4">
+            <div class="relative">
+              <button
+                type="button"
+                class="hero-bookmark-btn flex h-12 w-12 shrink-0 items-center justify-center rounded-full transition-all duration-300 border-[1.5px] border-[rgba(245,237,224,.4)] bg-[rgba(45,42,38,.15)] text-[var(--color-cream)] backdrop-blur-[2px] hover:border-[var(--color-cream)] hover:bg-[rgba(45,42,38,.3)] hover:-translate-y-0.5 aria-pressed:bg-[var(--color-cream)] aria-pressed:border-[var(--color-cream)] aria-pressed:text-[var(--color-foreground)] [&>svg]:w-[18px] [&>svg]:h-[25px]"
+                aria-label="Bookmark this page"
+                aria-pressed="false"
+              >
+                {{ 'bookmark-icon.svg' | inline_asset_content }}
+              </button>
+              <span
+                class="hero-bookmark-hint absolute bottom-[calc(100%+12px)] left-1/2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-[var(--color-foreground)] px-3.5 py-2 text-[0.8rem] font-medium text-[var(--color-cream)] shadow-[0_8px_24px_rgba(45,42,38,.3)] opacity-0 pointer-events-none z-20 transition-[opacity,translate] duration-200 ease-out after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-[5px] after:border-transparent after:border-t-[var(--color-foreground)]"
+                role="status"
+                aria-live="polite"
+              ></span>
+            </div>
+            <a href="{{ section.settings.explore_link | default: '#team' }}" class="btn-primary inline-flex items-center gap-2">
+              <span>{{ section.settings.explore_label }}</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- FEATURED CARDS: every Hero Metaobject rendered as a clickable card via its own `card` image -->
+        {% if hero_count > 1 %}
+          <div class="w-full lg:w-auto">
+            <p data-gs="hero-featured" class="mb-4 inline-flex items-center gap-2 text-caption font-medium uppercase tracking-[0.2em] text-[rgba(245,237,224,.75)]">
+              {{ section.settings.featured_label | default: 'Featured' }}
+              <span class="hero-featured-dot h-2 w-2 rounded-full bg-[var(--color-sage)] animate-pulse"></span>
+            </p>
+
+            <div class="flex gap-3 overflow-x-auto no-scrollbar sm:gap-4 lg:overflow-visible">
+              {% for item in hero_items %}
+                {% if item.img %}
+                  <button
+                    type="button"
+                    data-gs="hero-card"
+                    class="hero-card group relative shrink-0 w-[clamp(6.5rem,9vw,8.5rem)] aspect-[3/4] overflow-hidden rounded-2xl transition-all duration-300 shadow-[0_8px_30px_rgba(45,42,38,.25)] outline outline-2 outline-offset-2 outline-transparent hover:-translate-y-1 aria-[current=true]:outline-[var(--color-cream)]"
+                    data-hero-index="{{ forloop.index0 }}"
+                    aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                  >
+                    {% assign card_image = item.card | default: item.img %}
+                    {% if card_image %}
+                      <img src="{{ card_image | image_url: width: 400 }}" alt="{{ item.title | default: 'Featured card' }}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                    {% endif %}
+                    <div class="absolute inset-0 bg-[linear-gradient(180deg,transparent_45%,rgba(45,42,38,.85)_100%)]"></div>
+                    {% if item.title != blank %}
+                      <span class="absolute bottom-3 left-3 right-3 truncate text-left text-body-sm font-bold uppercase text-[var(--color-cream)]">{{ item.title }}</span>
+                    {% endif %}
+                  </button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- BOTTOM NAVIGATION -->
+      {% if hero_count > 1 %}
+        <div data-gs="hero-nav" class="flex items-center gap-4">
+          <button type="button" class="hero-prev hero-nav-btn flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-all duration-300 border-[1.5px] border-[rgba(245,237,224,.4)] bg-[rgba(45,42,38,.15)] text-[var(--color-cream)] backdrop-blur-[2px] hover:border-[var(--color-cream)] hover:bg-[rgba(45,42,38,.3)] hover:-translate-y-0.5" aria-label="Previous slide">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button type="button" class="hero-next hero-nav-btn flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-all duration-300 border-[1.5px] border-[rgba(245,237,224,.4)] bg-[rgba(45,42,38,.15)] text-[var(--color-cream)] backdrop-blur-[2px] hover:border-[var(--color-cream)] hover:bg-[rgba(45,42,38,.3)] hover:-translate-y-0.5" aria-label="Next slide">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+          <div class="hero-progress-track relative h-px flex-1 overflow-hidden rounded-full bg-[rgba(245,237,224,.25)]">
+            <div class="hero-progress-fill absolute inset-y-0 left-0 rounded-full bg-[var(--color-cream)] transition-[width] duration-500 ease-out" style="width: {{ 100.0 | divided_by: hero_count }}%;"></div>
+          </div>
+          <span class="hero-index shrink-0 font-display text-2xl font-bold tabular-nums text-[var(--color-cream)]">01</span>
+        </div>
       {% endif %}
     </div>
   </div>
 </section>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var slides = document.querySelectorAll('.hero-slide');
+  document.addEventListener('DOMContentLoaded', function () {
+    var section = document.querySelector('[data-gs-section="hero"]');
+    if (!section) return;
 
-    // Single image (metaobject empty): show it, no slideshow
-    if (slides.length <= 1) {
-      if (slides.length === 1) {
-        slides[0].classList.add('active');
-        slides[0].style.opacity = '1';
+    // Bookmark button: browsers stopped letting scripts open the native
+    // "add bookmark" dialog years ago (Chrome/Safari never allowed it,
+    // Firefox/IE removed their APIs). We try those legacy APIs for the rare
+    // browser that still has them, then fall back to showing the keyboard
+    // shortcut so the user can bookmark the page themselves.
+    section.querySelectorAll('.hero-bookmark-btn').forEach(function (btn) {
+      var hint = btn.parentElement.querySelector('.hero-bookmark-hint');
+      var hintTimeout;
+
+      function showHint(message) {
+        if (!hint) return;
+        clearTimeout(hintTimeout);
+        hint.textContent = message;
+        hint.classList.remove('opacity-0', 'translate-y-1');
+        hint.classList.add('opacity-100', 'translate-y-0');
+        hintTimeout = setTimeout(function () {
+          hint.classList.remove('opacity-100', 'translate-y-0');
+          hint.classList.add('opacity-0', 'translate-y-1');
+        }, 3200);
       }
-      return;
+
+      btn.addEventListener('click', function () {
+        var title = document.title;
+        var url = window.location.href;
+
+        if (window.sidebar && typeof window.sidebar.addPanel === 'function') {
+          // Old Firefox (<23)
+          window.sidebar.addPanel(title, url, '');
+        } else if (window.external && typeof window.external.AddFavorite === 'function') {
+          // Old Internet Explorer
+          window.external.AddFavorite(url, title);
+        } else {
+          var isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform);
+          showHint('Press ' + (isMac ? 'Cmd + D' : 'Ctrl + D') + ' to bookmark this page');
+        }
+
+        var isPressed = btn.getAttribute('aria-pressed') === 'true';
+        btn.setAttribute('aria-pressed', String(!isPressed));
+      });
+    });
+
+    var bgSlides = Array.prototype.slice.call(section.querySelectorAll('.hero-bg-slide'));
+    var contentSlides = Array.prototype.slice.call(section.querySelectorAll('.hero-content-slide'));
+    var cards = Array.prototype.slice.call(section.querySelectorAll('[data-gs="hero-card"]'));
+    var total = bgSlides.length;
+    if (total <= 1) return;
+
+    var indexEl = section.querySelector('.hero-index');
+    var progressFill = section.querySelector('.hero-progress-fill');
+    var current = 0;
+    var autoplayInterval;
+
+    function pad(n) {
+      return n < 9 ? '0' + (n + 1) : String(n + 1);
     }
 
-    // Multiple slides: run the autoplay carousel
-    var currentIndex = 0;
-    var interval;
+    function setActive(index) {
+      current = ((index % total) + total) % total;
 
-    function goToSlide(index) {
-      slides.forEach(function(s) { s.classList.remove('active'); s.style.opacity = '0'; });
-      currentIndex = index;
-      slides[currentIndex].classList.add('active');
-      slides[currentIndex].style.opacity = '1';
+      bgSlides.forEach(function (el) {
+        var isActive = Number(el.dataset.heroIndex) === current;
+        el.classList.toggle('opacity-100', isActive);
+        el.classList.toggle('opacity-0', !isActive);
+      });
+      contentSlides.forEach(function (el) {
+        el.classList.toggle('hidden', Number(el.dataset.heroIndex) !== current);
+      });
+      cards.forEach(function (el) {
+        var isActive = Number(el.dataset.heroIndex) === current;
+        el.setAttribute('aria-current', isActive ? 'true' : 'false');
+      });
+      if (indexEl) indexEl.textContent = pad(current);
+      if (progressFill) progressFill.style.width = ((current + 1) / total * 100) + '%';
     }
 
-    function nextSlide() {
-      goToSlide((currentIndex + 1) % slides.length);
+    function stopAutoplay() {
+      clearInterval(autoplayInterval);
     }
 
-    function startAutoPlay() {
-      interval = setInterval(nextSlide, 4000);
+    function startAutoplay() {
+      stopAutoplay();
+      autoplayInterval = setInterval(function () { setActive(current + 1); }, 6000);
     }
 
-    function stopAutoPlay() {
-      clearInterval(interval);
-    }
+    section.querySelectorAll('.hero-prev').forEach(function (btn) {
+      btn.addEventListener('click', function () { setActive(current - 1); startAutoplay(); });
+    });
+    section.querySelectorAll('.hero-next').forEach(function (btn) {
+      btn.addEventListener('click', function () { setActive(current + 1); startAutoplay(); });
+    });
 
-    // Initialize first slide
-    goToSlide(0);
-    startAutoPlay();
+    cards.forEach(function (card) {
+      card.addEventListener('click', function () {
+        setActive(Number(card.dataset.heroIndex));
+        startAutoplay();
+      });
+    });
+
+    setActive(0);
+    startAutoplay();
   });
 </script>
 
 <style>
-  /* Slide transitions */
-  .hero-slide {
-    opacity: 0;
-    transition: opacity 1.2s ease-in-out;
-  }
-  .hero-slide.active {
-    opacity: 1;
-  }
-
-  /* Marquee */
-  .marquee-track {
-    display: flex;
-    white-space: nowrap;
-    animation: marquee-scroll 40s linear infinite;
-    width: max-content;
-  }
-  .marquee-item {
-    font-family: var(--font-display--family);
-    font-size: clamp(0.85rem, 2vw, 1.2rem);
-    font-weight: 600;
-    font-style: italic;
-    letter-spacing: -0.01em;
-    flex-shrink: 0;
-    background: linear-gradient(135deg, var(--color-blush) 0%, var(--color-lavender) 50%, var(--color-sky) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    opacity: 0.35;
-  }
-
-  @keyframes bounce-dot {
-    0%, 100% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(12px); opacity: 0.3; }
-  }
-
-  /* GSAP word split */
-  .gsap-word {
-    display: inline-block;
-  }
-
-  /* Hero text box */
-  .hero-text-box {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .hero-text-box:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  }
-
-  /* Override Tailwind base layer: hero image must fill its container */
-  .hero-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Scroll indicator: frosted glass — nearly invisible bg, blurs whatever is behind it */
-  .scroll-indicator {
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    border-radius: 9999px;
-    padding: 0.75rem 1.1rem;
-  }
-  .scroll-indicator span {
-    text-shadow: 0 1px 6px rgba(255,255,255,0.4);
-  }
+  /* Tailwind has no utility to hide scrollbars cross-browser. */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
 {% schema %}
@@ -186,30 +267,29 @@
   "settings": [
     {
       "type": "text",
-      "id": "tagline",
-      "label": "Heading",
-      "default": "We are a team of artists based in Asia, providing budget friendly and high quality Vtuber and illustrations services. As of today, we have created more than 500 Vtuber models, come join our family NOW!!!"
+      "id": "explore_label",
+      "label": "CTA button label",
+      "default": "See Our Team"
     },
     {
-      "type": "checkbox",
-      "id": "show_scroll",
-      "label": "Show Scroll Indicator",
-      "default": true
+      "type": "url",
+      "id": "explore_link",
+      "label": "CTA button link",
+      "info": "Defaults to the Our Team section (#team) when left blank."
     },
     {
       "type": "text",
-      "id": "scroll_label",
-      "label": "Scroll Label",
-      "default": "Let's Go!"
+      "id": "featured_label",
+      "label": "Featured cards label",
+      "default": "Featured"
     }
   ],
   "presets": [
     {
       "name": "Hero",
       "settings": {
-        "tagline": "We are a team of artists based in Asia, providing budget friendly and high quality Vtuber and illustrations services. As of today, we have created more than 500 Vtuber models, come join our family NOW!!!",
-        "show_scroll": true,
-        "scroll_label": "Let's Go"
+        "explore_label": "See Our Team",
+        "featured_label": "Featured"
       }
     }
   ]

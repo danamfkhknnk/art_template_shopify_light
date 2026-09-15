@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 right-0 z-50" style="color: var(--color-foreground);">
+<header class="group fixed top-0 left-0 right-0 z-50" style="color: var(--color-foreground);">
   <nav class="transition-all duration-500" style="background: rgba(250,247,242,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(45,42,38,0.04);">
     <div class="section-content px-4">
       <!-- Main row: Logo center, icons right -->
@@ -17,11 +17,11 @@
 
         <!-- Right: Hamburger (mobile) + Icons (desktop) -->
         <div class="flex-1 flex items-center justify-end gap-3">
-          <!-- Hamburger (mobile only) -->
+          <!-- Hamburger (mobile only): morphs into an X while the drawer is open -->
           <label for="mobile-menu-toggle" class="md:hidden cursor-pointer w-8 h-8 flex flex-col items-center justify-center gap-1.5 relative z-50">
-            <span class="block w-5 h-0.5 transition-all duration-300" style="background: var(--color-foreground);"></span>
-            <span class="block w-5 h-0.5 transition-all duration-300" style="background: var(--color-foreground);"></span>
-            <span class="block w-5 h-0.5 transition-all duration-300" style="background: var(--color-foreground);"></span>
+            <span class="block w-5 h-0.5 transition-all duration-300 group-has-[#mobile-menu-toggle:checked]:translate-y-2 group-has-[#mobile-menu-toggle:checked]:rotate-45" style="background: var(--color-foreground);"></span>
+            <span class="block w-5 h-0.5 transition-all duration-300 group-has-[#mobile-menu-toggle:checked]:opacity-0" style="background: var(--color-foreground);"></span>
+            <span class="block w-5 h-0.5 transition-all duration-300 group-has-[#mobile-menu-toggle:checked]:-translate-y-2 group-has-[#mobile-menu-toggle:checked]:-rotate-45" style="background: var(--color-foreground);"></span>
           </label>
 
           <!-- Desktop icons -->
@@ -62,16 +62,24 @@
   <!-- Mobile menu -->
   <input type="checkbox" id="mobile-menu-toggle" class="hidden peer" aria-hidden="true">
 
-  <!-- Mobile menu overlay -->
-  <div class="hidden peer-checked:flex md:hidden fixed inset-0 flex-col items-center justify-center py-8 gap-2 transition-all duration-300 z-40" style="background: rgba(250,247,242,0.97); backdrop-filter: blur(20px);">
+  <!-- Backdrop: dims the page behind the drawer, tap to close -->
+  <label for="mobile-menu-toggle" aria-hidden="true" class="md:hidden fixed inset-0 z-40 opacity-0 pointer-events-none peer-checked:opacity-100 peer-checked:pointer-events-auto transition-opacity duration-300" style="background: rgba(20,18,15,0.35);"></label>
+
+  <!-- Drawer: slides in from the right instead of covering the full screen -->
+  <div class="md:hidden fixed top-0 right-0 z-50 flex h-full w-[78vw] max-w-xs translate-x-full flex-col gap-1 overflow-y-auto px-6 py-8 pointer-events-none peer-checked:pointer-events-auto peer-checked:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="background: rgba(250,247,242,0.98); backdrop-filter: blur(20px); box-shadow: -12px 0 40px rgba(45,42,38,0.12);">
+    <!-- Close -->
+    <label for="mobile-menu-toggle" class="self-end -mr-2 mb-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full transition-colors duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Close menu">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </label>
+
     {% for link in section.settings.menu.links %}
-      <a href="{{ link.url }}" class="w-56 text-center py-3 rounded-full text-lg font-semibold transition-colors" style="color: var(--color-foreground);">
+      <a href="{{ link.url }}" class="w-full py-3 text-lg font-semibold transition-colors" style="color: var(--color-foreground);">
         {{ link.title }}
       </a>
     {% endfor %}
 
     <!-- Mobile icons -->
-    <div class="flex items-center gap-4 mt-6">
+    <div class="flex items-center gap-4 mt-6 pt-6" style="border-top: 1px solid rgba(45,42,38,0.08);">
       {% if shop.customer_accounts_enabled %}
         <shopify-account menu="{{ section.settings.customer_account_menu }}">
           <span class="block w-6 h-6 opacity-50">{{ 'icon-account.svg' | inline_asset_content }}</span>

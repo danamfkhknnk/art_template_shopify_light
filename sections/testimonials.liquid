@@ -1,23 +1,40 @@
 <section data-gs-section="testimonials" class="relative py-20 px-4 overflow-x-hidden" style="background: var(--bg-testimonials);">
   <div class="relative section-content">
-    <div class="text-center mb-16">
-      <p data-gs="test-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2 justify-center" style="color: var(--color-blush);">
-        <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
-        {{ section.settings.subheading }}
-        <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
-      </p>
-      <h2 data-gs="test-heading" class="text-heading font-display" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
-    </div>
+    {% assign testimonial_count = section.blocks.size %}
 
-    <!-- Slider controls -->
-    <div class="flex justify-end gap-2 mb-6">
-      <button onclick="document.getElementById('testimonial-track').scrollBy({ left: -400, behavior: 'smooth' })" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-      </button>
-      <button onclick="document.getElementById('testimonial-track').scrollBy({ left: 400, behavior: 'smooth' })" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    {% if testimonial_count > 2 %}
+      <!-- More than 2 testimonials: heading sits beside the prev/next controls
+           rather than centered, since the track actually needs scrolling. -->
+      <div class="flex flex-wrap items-end justify-between gap-6 mb-16">
+        <div>
+          <p data-gs="test-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+            <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+            {{ section.settings.subheading }}
+          </p>
+          <h2 data-gs="test-heading" class="text-heading font-display" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+        </div>
+
+        <!-- Slider controls -->
+        <div class="flex gap-2">
+          <button onclick="document.getElementById('testimonial-track').scrollBy({ left: -400, behavior: 'smooth' })" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button onclick="document.getElementById('testimonial-track').scrollBy({ left: 400, behavior: 'smooth' })" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    {% else %}
+      <!-- 2 or fewer: everything already fits, no need to scroll -->
+      <div class="text-center mb-16">
+        <p data-gs="test-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2 justify-center" style="color: var(--color-blush);">
+          <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+          {{ section.settings.subheading }}
+          <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
+        </p>
+        <h2 data-gs="test-heading" class="text-heading font-display" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+      </div>
+    {% endif %}
 
     <div id="testimonial-track" class="flex gap-6 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory pb-4 -mx-4 px-4 max-h-[420px]" style="-ms-overflow-style:none; scrollbar-width:none;">
       <style>

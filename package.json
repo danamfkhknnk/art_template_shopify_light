@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "tailwind:build": "npx @tailwindcss/cli -i src/tailwind.css -o assets/tailwind.css --minify",
-    "tailwind:watch": "npx @tailwindcss/cli -i src/tailwind.css -o assets/tailwind.css --watch"
+    "tailwind:watch": "npx @tailwindcss/cli -i src/tailwind.css -o assets/tailwind.css --watch",
+    "ui:screenshot": "node scripts/visual/screenshot.mjs",
+    "ui:compare": "node scripts/visual/compare.mjs",
+    "ui:check": "npm run ui:screenshot && npm run ui:compare"
   },
   "repository": {
     "type": "git",
@@ -20,7 +23,10 @@
   },
   "homepage": "https://github.com/danamfkhknnk/art_template#readme",
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/cli": "^4.3.3",
+    "pixelmatch": "^7.2.0",
+    "pngjs": "^7.0.0",
     "tailwindcss": "^4.3.3"
   }
 }
