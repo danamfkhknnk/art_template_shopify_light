@@ -53,6 +53,7 @@
     <!-- Smooth Scroll for Anchor Links -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        // Handle anchor links (#contact, #faq, etc.)
         document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
           anchor.addEventListener('click', function(e) {
             var href = this.getAttribute('href');
@@ -64,6 +65,38 @@
             }
           });
         });
+
+        // Handle cross-page anchor links (e.g. /#contact from other pages)
+        document.querySelectorAll('a[href$="#contact"], a[href$="#faq"], a[href$="#gallery"]').forEach(function(anchor) {
+          anchor.addEventListener('click', function(e) {
+            var href = this.getAttribute('href');
+            var hashIndex = href.indexOf('#');
+            var hash = href.substring(hashIndex);
+            var target = document.querySelector(hash);
+            
+            if (target) {
+              // We're on the same page (homepage), just scroll
+              e.preventDefault();
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (hashIndex === 0 || href.startsWith('/') || href.startsWith('{{ routes.root_url }}')) {
+              // We're on a different page, let browser navigate then scroll
+              // Add a scroll restoration flag
+              sessionStorage.setItem('scrollToAnchor', hash);
+            }
+          });
+        });
+
+        // Check for anchor to scroll to on page load (from cross-page navigation)
+        var scrollToAnchor = sessionStorage.getItem('scrollToAnchor');
+        if (scrollToAnchor) {
+          sessionStorage.removeItem('scrollToAnchor');
+          var target = document.querySelector(scrollToAnchor);
+          if (target) {
+            setTimeout(function() {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+          }
+        }
 
         // Header background on scroll
         var header = document.querySelector('header');
