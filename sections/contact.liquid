@@ -50,13 +50,6 @@
     </div>
   </div>
 
-  <!-- Toast notification (shown after AJAX submit, no page reload) -->
-  <div
-    id="contact-toast"
-    role="status"
-    aria-live="polite"
-    class="fixed left-1/2 bottom-6 z-[9999] w-[92%] max-w-sm -translate-x-1/2 translate-y-24 opacity-0 pointer-events-none transition-all duration-400 ease-out rounded-xl px-5 py-4 text-body-sm text-center shadow-card"
-  ></div>
 </section>
 
 <script>
@@ -67,67 +60,11 @@
     var form = section.querySelector('form');
     var submitBtn = section.querySelector('[data-gs="contact-submit"]');
     var submitLabel = submitBtn ? submitBtn.querySelector('span') : null;
-    var toast = document.getElementById('contact-toast');
-    if (!form || !toast) return;
+    if (!form) return;
 
-    var originalLabel = submitLabel ? submitLabel.textContent : '';
-    var toastTimeout;
-
-    function showToast(message, type) {
-      clearTimeout(toastTimeout);
-      toast.textContent = message;
-      if (type === 'success') {
-        toast.style.background = 'rgba(107,158,107,0.97)';
-        toast.style.border = '1px solid rgba(107,158,107,0.25)';
-        toast.style.color = '#ffffff';
-      } else {
-        toast.style.background = 'rgba(196,114,127,0.97)';
-        toast.style.border = '1px solid rgba(196,114,127,0.25)';
-        toast.style.color = '#ffffff';
-      }
-      toast.classList.remove('opacity-0', 'translate-y-24');
-      toast.classList.add('opacity-100', 'translate-y-0');
-
-      toastTimeout = setTimeout(function () {
-        toast.classList.remove('opacity-100', 'translate-y-0');
-        toast.classList.add('opacity-0', 'translate-y-24');
-      }, 4500);
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
+    form.addEventListener('submit', function () {
       if (submitBtn) submitBtn.disabled = true;
       if (submitLabel) submitLabel.textContent = 'Sending...';
-
-      var formData = new FormData(form);
-
-      fetch(form.action || window.location.pathname, {
-        method: 'POST',
-        body: formData,
-      })
-        .then(function (res) { return res.text(); })
-        .then(function (html) {
-          var doc = new DOMParser().parseFromString(html, 'text/html');
-          var successEl = doc.querySelector('[data-contact-result="success"]');
-          var errorEl = doc.querySelector('[data-contact-result="error"]');
-
-          if (successEl) {
-            showToast(successEl.textContent.trim(), 'success');
-            form.reset();
-          } else if (errorEl) {
-            showToast(errorEl.textContent.trim(), 'error');
-          } else {
-            showToast('Something went wrong. Please try again.', 'error');
-          }
-        })
-        .catch(function () {
-          showToast('Network error. Please try again.', 'error');
-        })
-        .finally(function () {
-          if (submitBtn) submitBtn.disabled = false;
-          if (submitLabel) submitLabel.textContent = originalLabel;
-        });
     });
   })();
 </script>
@@ -221,7 +158,7 @@
       "id": "discord_name",
       "label": "Discord Name",
       "default": "username"
-    },
+    }
   ],
   "presets": [
     {
@@ -237,7 +174,7 @@
         "placeholder_email": "john@example.com",
         "label_message": "Your Message",
         "placeholder_message": "Tell me about your project, timeline, and any ideas you have in mind...",
-        "button_label": "Send Message",
+        "button_label": "Send Message"
       }
     }
   ]

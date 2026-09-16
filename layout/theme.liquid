@@ -52,64 +52,86 @@
 
     <!-- Smooth Scroll for Anchor Links -->
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Handle anchor links (#contact, #faq, etc.)
-        document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-          anchor.addEventListener('click', function(e) {
-            var href = this.getAttribute('href');
-            if (href === '#') return;
-            var target = document.querySelector(href);
-            if (target) {
-              e.preventDefault();
-              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          });
-        });
-
-        // Handle cross-page anchor links (e.g. /#contact from other pages)
-        document.querySelectorAll('a[href$="#contact"], a[href$="#faq"], a[href$="#gallery"]').forEach(function(anchor) {
-          anchor.addEventListener('click', function(e) {
-            var href = this.getAttribute('href');
-            var hashIndex = href.indexOf('#');
-            var hash = href.substring(hashIndex);
-            var target = document.querySelector(hash);
-            
-            if (target) {
-              // We're on the same page (homepage), just scroll
-              e.preventDefault();
-              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else if (hashIndex === 0 || href.startsWith('/') || href.startsWith('{{ routes.root_url }}')) {
-              // We're on a different page, let browser navigate then scroll
-              // Add a scroll restoration flag
-              sessionStorage.setItem('scrollToAnchor', hash);
-            }
-          });
-        });
-
-        // Check for anchor to scroll to on page load (from cross-page navigation)
-        var scrollToAnchor = sessionStorage.getItem('scrollToAnchor');
-        if (scrollToAnchor) {
-          sessionStorage.removeItem('scrollToAnchor');
-          var target = document.querySelector(scrollToAnchor);
+      // Use event delegation - check all anchor clicks
+      document.addEventListener('click', function(e) {
+        var anchor = e.target.closest('a');
+        if (!anchor) return;
+        
+        var href = anchor.getAttribute('href');
+        if (!href) return;
+        
+        // Check for cross-page anchor links (/#contact, /#faq, /#gallery)
+        var isCrossPageAnchor = href.includes('#contact') || href.includes('#faq') || href.includes('#gallery');
+        if (isCrossPageAnchor) {
+          var hashIndex = href.indexOf('#');
+          var hash = href.substring(hashIndex);
+          var target = document.querySelector(hash);
+          
           if (target) {
-            setTimeout(function() {
-              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+            // We're on the same page (homepage), just scroll
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else if (hashIndex === 0 || href.startsWith('/') || href.startsWith('{{ routes.root_url }}')) {
+            // We're on a different page, let browser navigate then scroll
+            sessionStorage.setItem('scrollToAnchor', hash);
           }
         }
-
-        // Header background on scroll
-        var header = document.querySelector('header');
-        if (header) {
-          window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-              header.classList.add('scrolled');
-            } else {
-              header.classList.remove('scrolled');
-            }
-          });
+        
+        // Handle same-page anchor links (#contact, #faq, etc.)
+        if (href.startsWith('#') && href !== '#') {
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
         }
       });
+
+      // Check for anchor to scroll to on page load (from cross-page navigation)
+      function attemptScrollToAnchor() {
+        var scrollToAnchor = sessionStorage.getItem('scrollToAnchor');
+        if (!scrollToAnchor) return;
+        
+        sessionStorage.removeItem('scrollToAnchor');
+        
+        var tryScroll = function(attempts) {
+          var target = document.querySelector(scrollToAnchor);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else if (attempts > 0) {
+            setTimeout(function() { tryScroll(attempts - 1); }, 200);
+          }
+        };
+        
+        // Start with 10 attempts (2 seconds total)
+        setTimeout(function() { tryScroll(10); }, 300);
+      }
+
+      // Run on DOMContentLoaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attemptScrollToAnchor);
+      } else {
+        attemptScrollToAnchor();
+      }
+
+      // Also run on pageshow (for bfcache)
+      window.addEventListener('pageshow', function(e) {
+        if (e.persisted) {
+          attemptScrollToAnchor();
+        }
+      });
+
+      // Header background on scroll
+      var header = document.querySelector('header');
+      if (header) {
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+          } else {
+            header.classList.remove('scrolled');
+          }
+        });
+      }
     </script>
   </body>
 </html>

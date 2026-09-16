@@ -18,6 +18,16 @@
         {% if section.settings.description != blank %}
           <p class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">{{ section.settings.description }}</p>
         {% endif %}
+      {% if section.settings.cta_label != blank %}
+
+        <a href="{{ section.settings.cta_link | default: '#' }}" class="hidden btn-primary lg:inline-flex items-center gap-2">
+            <span>{{ section.settings.cta_label }}</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+            {% endif %}
+
       </div>
 
       <!-- Accordion -->
