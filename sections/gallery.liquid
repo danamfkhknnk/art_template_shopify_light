@@ -1,4 +1,4 @@
-<section data-gs-section="gallery" class="relative pt-36 pb-24 px-4" style="background: linear-gradient(180deg, var(--color-background) 0%, #F5EDE0 50%, var(--color-background) 100%);">
+<section data-gs-section="gallery" class="relative pt-36 pb-24 px-4" style="background: var-(--bg-contact)"> 
   <!-- Watercolor wash background -->
   <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 70% 20%, rgba(155,142,196,0.04) 0%, transparent 50%), radial-gradient(ellipse at 30% 80%, rgba(196,162,101,0.03) 0%, transparent 50%);"></div>
 
@@ -37,11 +37,12 @@
     {% if section.settings.collection != blank %}
       {% assign product_collection = collections[section.settings.collection] %}
     {% endif %}
-    <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
+
+    <div class="columns-1 gap-4 columns-2 lg:columns-3" id="gallery-masonry">
       {% for item in hero_items %}
         {% if item.img %}
           <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ item.category | default: 'all' }}">
-            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-2xl transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
               <img
                 src="{{ item.img | image_url: width: 800 }}"
                 alt="{{ item.img.alt | default: 'Gallery artwork' }}"
@@ -58,7 +59,7 @@
       {% for item in gallery_items %}
         {% if item.img %}
           <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ item.category | default: 'all' }}">
-            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-2xl transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
               <img
                 src="{{ item.img | image_url: width: 800 }}"
                 alt="{{ item.title | default: 'Gallery artwork' | escape }}"
@@ -75,7 +76,7 @@
           {% assign product_category = product.type | default: 'all' | strip | downcase %}
           {% for image in product.images %}
             <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ product_category }}">
-              <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-2xl transition-all duration-500" data-title="{{ product.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+              <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ product.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
                 <img
                   src="{{ image | image_url: width: 800 }}"
                   alt="{{ image.alt | default: product.title | escape }}"
@@ -94,17 +95,17 @@
 
   <!-- Lightbox -->
   <div id="gallery-lightbox" class="fixed inset-0 z-[10000] hidden items-center justify-center p-4" style="background: rgba(250,247,242,0.95); backdrop-filter: blur(12px); opacity:0;transition:opacity .3s ease;" role="dialog" aria-modal="true">
-    <button id="lightbox-close" class="absolute top-4 right-4 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Close">
-      <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <button id="lightbox-close" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);" aria-label="Close">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
-    <button id="lightbox-prev" class="absolute left-2 md:left-4 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Previous">
-      <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    <button id="lightbox-prev" class="absolute left-2 md:left-4 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);" aria-label="Previous">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
     </button>
-    <button id="lightbox-next" class="absolute right-2 md:right-4 z-10 w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Next">
-      <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+    <button id="lightbox-next" class="absolute right-2 md:right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);" aria-label="Next">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
     </button>
     <figure id="lightbox-figure" class="flex flex-col items-center max-w-[92vw] md:max-w-4xl translate-y-16 scale-95 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)]">
-      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[75vh] object-contain rounded-2xl" style="box-shadow: 0 16px 64px rgba(45,42,38,0.12); border: 1px solid rgba(45,42,38,0.06);">
+      <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[75vh] object-contain rounded-md" style="box-shadow: 0 16px 64px rgba(45,42,38,0.12); border: 1px solid rgba(45,42,38,0.06);">
       <figcaption class="mt-4 text-center">
         <p id="lightbox-category" class="text-caption uppercase tracking-wider" style="color: var(--color-blush);"></p>
         <h3 id="lightbox-title" class="text-subheading font-display mt-1" style="color: var(--color-foreground);"></h3>
@@ -122,9 +123,21 @@
     var lightboxCategory = document.getElementById('lightbox-category');
     var tabs = document.querySelectorAll('.filter-tab');
     var items = document.querySelectorAll('.gallery-item');
+    var masonry = document.getElementById('gallery-masonry');
     var visibleItems = [];
     var currentIndex = 0;
     var lightboxOpen = false;
+
+    // Shuffle gallery items for varied ordering
+    if (masonry) {
+      var galleryItems = Array.from(items);
+      for (var i = galleryItems.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        masonry.appendChild(galleryItems[j]);
+      }
+      // Re-query items after shuffle
+      items = document.querySelectorAll('.gallery-item');
+    }
 
     var getVisibleItems = function() {
       return Array.prototype.filter.call(items, function(item) { return item.style.display !== 'none'; });

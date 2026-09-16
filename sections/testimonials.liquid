@@ -5,7 +5,7 @@
     {% if testimonial_count > 2 %}
       <!-- More than 2 testimonials: heading sits beside the prev/next controls
            rather than centered, since the track actually needs scrolling. -->
-      <div class="flex flex-wrap items-end justify-between gap-6 mb-16">
+      <div class="flex flex-wrap items-end gap-2 justify-between mb-16">
         <div>
           <p data-gs="test-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
             <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
@@ -15,7 +15,7 @@
         </div>
 
         <!-- Slider controls -->
-        <div class="flex gap-2">
+        <div class="flex gap-1">
           <button onclick="document.getElementById('testimonial-track').scrollBy({ left: -400, behavior: 'smooth' })" class="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300" style="background: rgba(255,255,255,0.6); border: 1px solid rgba(45,42,38,0.08); color: var(--color-muted);">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
           </button>

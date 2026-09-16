@@ -7,21 +7,16 @@
 
       <!-- Sticky heading -->
       <div data-gs="faq-sticky" class="lg:sticky lg:top-28 lg:self-start">
-        <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
-          <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
-          {{ section.settings.subheading }}
-        </p>
-        <h2 class="text-heading font-display mb-4" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+        <div>
+          <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+            <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+            {{ section.settings.subheading }}
+          </p>
+          <h2 class="text-heading font-display mb-4" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+        </div>
+
         {% if section.settings.description != blank %}
           <p class="text-body leading-relaxed mb-8" style="color: var(--color-muted);">{{ section.settings.description }}</p>
-        {% endif %}
-        {% if section.settings.cta_label != blank %}
-          <a href="{{ section.settings.cta_link | default: '#' }}" class="btn-secondary inline-flex items-center gap-2">
-            <span>{{ section.settings.cta_label }}</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
-          </a>
         {% endif %}
       </div>
 
@@ -43,6 +38,17 @@
           </div>
         {% endfor %}
       </div>
+
+      {% if section.settings.cta_label != blank %}
+        <div class="lg:hidden mt-8 text-center">
+          <a href="{{ section.settings.cta_link | default: '#' }}" class="btn-primary inline-flex items-center gap-2">
+            <span>{{ section.settings.cta_label }}</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+        </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -101,13 +107,13 @@
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Here are answers to the questions I get asked the most. Can't find what you're looking for? Reach out anytime."
+      "default": "Can't find what you're looking for? Reach out anytime."
     },
     {
       "type": "text",
       "id": "cta_label",
       "label": "CTA button label",
-      "default": "View All FAQs"
+      "default": "View All"
     },
     {
       "type": "url",

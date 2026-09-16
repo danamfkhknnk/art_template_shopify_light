@@ -4,16 +4,16 @@
 
   <div class="relative section-content">
     <!-- Diagonal Split Layout -->
-    <div class="relative grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[500px] lg:min-h-[600px]">
+    <div class="relative grid grid-cols-1 sm:grid-cols-2 gap-0 items-stretch min-h-[500px] lg:min-h-[600px]">
 
       <!-- LEFT: Photo with diagonal cut -->
-      <div data-gs="about-photo" class="relative" style="min-height: 300px; lg:min-height: 400px;">
+      <div data-gs="about-photo" class="relative aspect-square sm:aspect-auto">
         <!-- Photo container with diagonal clip -->
-        <div class="absolute inset-0 lg:inset-0" style="clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);">
+        <div class="absolute inset-0 lg:inset-0 flex items-center" style="clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);">
           <img
             src="{{ 'about.webp' | asset_url }}"
             alt="{{ section.settings.heading }}"
-            class="w-full object-cover h-auto"
+            class="w-full h-auto"
             loading="lazy"
             width="800"
             height="600"

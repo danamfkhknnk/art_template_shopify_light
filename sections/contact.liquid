@@ -17,12 +17,12 @@
     <div data-gs="contact-form" class="watercolor-card p-8 md:p-10">
       {% form 'contact' %}
         {% if form.posted_successfully? %}
-          <div class="p-4 rounded-xl mb-6 text-body-sm text-center" style="background: rgba(107,158,107,0.08); border: 1px solid rgba(107,158,107,0.15); color: var(--color-success);">
+          <div data-contact-result="success" class="p-4 rounded-xl mb-6 text-body-sm text-center" style="background: rgba(107,158,107,0.08); border: 1px solid rgba(107,158,107,0.15); color: var(--color-success);">
             {{ section.settings.success_message }}
           </div>
         {% endif %}
         {% if form.errors %}
-          <div class="p-4 rounded-xl mb-6 text-body-sm" style="background: rgba(196,114,127,0.06); border: 1px solid rgba(196,114,127,0.12); color: var(--color-blush);">
+          <div data-contact-result="error" class="p-4 rounded-xl mb-6 text-body-sm" style="background: rgba(196,114,127,0.06); border: 1px solid rgba(196,114,127,0.12); color: var(--color-blush);">
             {{ form.errors | default_errors }}
           </div>
         {% endif %}
@@ -49,7 +49,88 @@
       {% endform %}
     </div>
   </div>
+
+  <!-- Toast notification (shown after AJAX submit, no page reload) -->
+  <div
+    id="contact-toast"
+    role="status"
+    aria-live="polite"
+    class="fixed left-1/2 bottom-6 z-[9999] w-[92%] max-w-sm -translate-x-1/2 translate-y-24 opacity-0 pointer-events-none transition-all duration-400 ease-out rounded-xl px-5 py-4 text-body-sm text-center shadow-card"
+  ></div>
 </section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var section = document.querySelector('[data-gs-section="contact"]');
+    if (!section) return;
+
+    var form = section.querySelector('form');
+    var submitBtn = section.querySelector('[data-gs="contact-submit"]');
+    var submitLabel = submitBtn ? submitBtn.querySelector('span') : null;
+    var toast = document.getElementById('contact-toast');
+    if (!form || !toast) return;
+
+    var originalLabel = submitLabel ? submitLabel.textContent : '';
+    var toastTimeout;
+
+    function showToast(message, type) {
+      clearTimeout(toastTimeout);
+      toast.textContent = message;
+      if (type === 'success') {
+        toast.style.background = 'rgba(107,158,107,0.97)';
+        toast.style.border = '1px solid rgba(107,158,107,0.25)';
+        toast.style.color = '#ffffff';
+      } else {
+        toast.style.background = 'rgba(196,114,127,0.97)';
+        toast.style.border = '1px solid rgba(196,114,127,0.25)';
+        toast.style.color = '#ffffff';
+      }
+      toast.classList.remove('opacity-0', 'translate-y-24');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      toastTimeout = setTimeout(function () {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-24');
+      }, 4500);
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitLabel) submitLabel.textContent = 'Sending...';
+
+      var formData = new FormData(form);
+
+      fetch(form.action || window.location.pathname, {
+        method: 'POST',
+        body: formData,
+      })
+        .then(function (res) { return res.text(); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var successEl = doc.querySelector('[data-contact-result="success"]');
+          var errorEl = doc.querySelector('[data-contact-result="error"]');
+
+          if (successEl) {
+            showToast(successEl.textContent.trim(), 'success');
+            form.reset();
+          } else if (errorEl) {
+            showToast(errorEl.textContent.trim(), 'error');
+          } else {
+            showToast('Something went wrong. Please try again.', 'error');
+          }
+        })
+        .catch(function () {
+          showToast('Network error. Please try again.', 'error');
+        })
+        .finally(function () {
+          if (submitBtn) submitBtn.disabled = false;
+          if (submitLabel) submitLabel.textContent = originalLabel;
+        });
+    });
+  });
+</script>
 
 {% schema %}
 {

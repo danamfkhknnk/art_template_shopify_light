@@ -15,6 +15,18 @@ html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
   overflow: hidden;
 }
 
+/* Clip horizontal overflow (off-canvas drawer, full-bleed sections) via a
+   real stylesheet rule rather than an inline style — third-party web
+   components (e.g. shopify-account) set `documentElement.style.overflow`
+   directly for their own scroll lock, and since `overflow` is the shorthand
+   for `overflow-x`/`overflow-y`, that silently wipes any inline
+   `overflow-x: hidden` the moment it's set, with no way to restore it once
+   their panel closes. A stylesheet rule isn't touched by that. */
+html,
+body {
+  overflow-x: hidden;
+}
+
 
 picture,
 video,

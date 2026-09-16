@@ -8,10 +8,32 @@
   {% assign team_count = team_members | size %}
 
   {% if team_count > 0 %}
-    <div class="team-showcase relative mx-auto max-w-[1440px] flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-0 px-4 sm:px-6 lg:px-0 py-10 lg:py-6 lg:h-screen lg:max-h-[1024px]">
+    <div class="team-showcase relative mx-auto max-w-[1440px] flex flex-col lg:flex-row lg:items-stretch gap-6 lg:gap-0 w-[90%] lg:w-full lg:px-0 py-20 lg:py-6 lg:h-screen lg:max-h-[1024px]">
+
+      <!-- Mobile/tablet-only: heading + subheading (matches Testimonials' heading pattern), paired with arrow nav in one full-width row -->
+      <div class="flex lg:hidden w-full items-end justify-between gap-4">
+        <div>
+          <p data-gs="team-text" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+            <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+            {{ section.settings.subheading }}
+          </p>
+          <h2 class="text-heading font-display" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
+        </div>
+
+        {% if team_count > 1 %}
+          <div class="team-nav flex items-center gap-1 shrink-0">
+            <button type="button" class="team-prev team-nav-btn flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-300" aria-label="Previous artist">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" class="team-next team-nav-btn flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-300" aria-label="Next artist">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        {% endif %}
+      </div>
 
       <!-- Artwork -->
-      <div class="team-artwork order-1 lg:order-2 relative w-full mx-auto max-w-md lg:max-w-none lg:mx-0 lg:w-[520px] lg:shrink-0 aspect-[3/4] lg:aspect-auto lg:h-full lg:my-auto overflow-hidden">
+      <div class="team-artwork order-1 lg:order-2 relative w-full mx-auto max-w-md lg:max-w-none lg:mx-0 lg:w-[520px] lg:shrink-0 aspect-[3/4] lg:aspect-auto lg:h-full lg:my-auto overflow-hidden rounded-2xl">
         {% for member in team_members %}
           {% if member.photo %}
             <img
@@ -25,10 +47,22 @@
             >
           {% endif %}
         {% endfor %}
+
+        <!-- Mobile/tablet-only: name + description overlaid on the artwork -->
+        <div class="lg:hidden absolute inset-x-0 bottom-0 p-5 pt-24 bg-[linear-gradient(180deg,transparent_0%,rgba(45,42,38,.55)_40%,rgba(45,42,38,.95)_100%)]">
+          {% for member in team_members %}
+            <div class="team-slide-content-mobile{% unless forloop.first %} hidden{% endunless %}" data-team-index="{{ forloop.index0 }}">
+              <h3 class=" uppercase leading-[0.95] mb-2 break-words text-[var(--color-cream)]" style="font-size: clamp(1.5rem, 6vw, 2.25rem); font-weight: 400;">{{ member.name }}</h3>
+              <div class="text-body-sm leading-relaxed text-[rgba(245,237,224,.85)]">
+                {{ member.description }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       </div>
 
       <!-- Thumbnail nav -->
-      <div class="team-thumbs order-2 lg:order-1 flex lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto lg:w-[78px] lg:ml-[93px] lg:mr-16 lg:my-auto no-scrollbar">
+      <div class="team-thumbs order-2 lg:order-1 flex justify-center lg:justify-start lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto lg:w-[78px] lg:ml-[93px] lg:mr-16 lg:my-auto no-scrollbar">
         {% for member in team_members %}
           <button
             type="button"
@@ -46,21 +80,21 @@
 
       <!-- Content -->
       <div class="team-content order-3 flex flex-col justify-center lg:pl-16 lg:w-[529px] lg:my-auto">
-        <!-- Subheading (section marker, matches About's eyebrow label) -->
-        <p data-gs="team-text" class="text-caption tracking-[0.2em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+        <!-- Subheading (desktop only — mobile/tablet version is in the top row) -->
+        <p class="hidden lg:inline-flex text-caption tracking-[0.2em] uppercase mb-4 font-medium items-center gap-2" style="color: var(--color-blush);">
           <span class="w-6 h-px" style="background: var(--color-blush);"></span>
           {{ section.settings.subheading }}
         </p>
 
         {% for member in team_members %}
           <div class="team-slide-content{% unless forloop.first %} hidden{% endunless %}" data-team-index="{{ forloop.index0 }}">
-            <h3 class="team-title font-display uppercase leading-[0.95] mb-6 break-words" style="color: var(--color-foreground); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400;">{{ member.name }}</h3>
-            <div class="h-2 w-full max-w-[390px]" style="background: #10b981; margin-bottom: 2rem;"></div>
-            <div class="text-base lg:text-lg leading-relaxed mb-10" style="color: var(--color-muted);">
+            <h3 class="hidden lg:block team-title font-display uppercase leading-[0.95] mb-6 break-words" style="color: var(--color-foreground); font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 400;">{{ member.name }}</h3>
+            <div class="hidden lg:block h-2 w-full max-w-[390px]" style="background: var(--gradient-primary); margin-bottom: 2rem;"></div>
+            <div class="hidden lg:block text-base lg:text-lg leading-relaxed mb-10" style="color: var(--color-muted);">
               {{ member.description }}
             </div>
-            <a href="{{ section.settings.cta_link | default: '/pages/product' }}" class="btn-primary inline-flex items-center gap-2">
-              <span>{{ section.settings.cta_label | default: 'Check My Art' }}</span>
+            <a href="{{ section.settings.cta_link | default: '/pages/product' }}" class="hidden lg:inline-flex btn-primary items-center gap-2">
+              <span>{{ section.settings.cta_label | default: 'What i Can' }}</span>
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
               </svg>
@@ -69,11 +103,11 @@
         {% endfor %}
 
         {% if team_count > 1 %}
-          <div class="team-nav flex items-center gap-3 mt-16">
-            <button type="button" class="team-prev team-nav-btn flex h-12 w-12 items-center justify-center transition-colors duration-300" aria-label="Previous artist">
+          <div class="team-nav hidden lg:flex items-center gap-3 mt-16">
+            <button type="button" class="team-prev team-nav-btn flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300" aria-label="Previous artist">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
-            <button type="button" class="team-next team-nav-btn team-nav-btn--active flex h-12 w-12 items-center justify-center transition-colors duration-300" aria-label="Next artist">
+            <button type="button" class="team-next team-nav-btn flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300" aria-label="Next artist">
               <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
           </div>
@@ -89,6 +123,7 @@
         var thumbs = Array.prototype.slice.call(section.querySelectorAll('.team-thumb'));
         var images = Array.prototype.slice.call(section.querySelectorAll('.team-slide-image'));
         var contents = Array.prototype.slice.call(section.querySelectorAll('.team-slide-content'));
+        var mobileContents = Array.prototype.slice.call(section.querySelectorAll('.team-slide-content-mobile'));
         var total = thumbs.length;
         if (!total) return;
 
@@ -114,6 +149,11 @@
             var isActive = Number(el.dataset.teamIndex) === current;
             el.classList.toggle('hidden', !isActive);
           });
+
+          mobileContents.forEach(function (el) {
+            var isActive = Number(el.dataset.teamIndex) === current;
+            el.classList.toggle('hidden', !isActive);
+          });
         }
 
         thumbs.forEach(function (el) {
@@ -122,10 +162,14 @@
           });
         });
 
-        var prevBtn = section.querySelector('.team-prev');
-        var nextBtn = section.querySelector('.team-next');
-        if (prevBtn) prevBtn.addEventListener('click', function () { setActive(current - 1); });
-        if (nextBtn) nextBtn.addEventListener('click', function () { setActive(current + 1); });
+        var prevBtns = Array.prototype.slice.call(section.querySelectorAll('.team-prev'));
+        var nextBtns = Array.prototype.slice.call(section.querySelectorAll('.team-next'));
+        prevBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () { setActive(current - 1); });
+        });
+        nextBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () { setActive(current + 1); });
+        });
       })();
     </script>
   {% endif %}
@@ -136,13 +180,9 @@
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
   #team .team-nav-btn {
-    border: 1px solid rgba(45, 42, 38, 0.15);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(45, 42, 38, 0.08);
     color: var(--color-muted);
-  }
-  #team .team-nav-btn:hover,
-  #team .team-nav-btn--active {
-    border-color: rgba(45, 42, 38, 0.5);
-    color: var(--color-foreground);
   }
 </style>
 
@@ -156,19 +196,19 @@
       "type": "text",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Meet The Artists"
+      "default": "Our Team"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Our Team"
+      "default": "Meet The Artists"
     },
     {
       "type": "text",
       "id": "cta_label",
       "label": "CTA Button Label",
-      "default": "Check My Arts"
+      "default": "What I Can"
     },
     {
       "type": "url",

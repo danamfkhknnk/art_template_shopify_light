@@ -26,8 +26,8 @@
     "team": {
       "type": "team",
       "settings": {
-        "subheading": "Meet The Artists",
-        "heading": "Our Team"
+        "subheading": "Our Team",
+        "heading": "Meet The Artists"
       }
     },
     "testimonials": {
@@ -93,8 +93,8 @@
       "settings": {
         "subheading": "FAQ",
         "heading": "Got Questions?",
-        "description": "Here are answers to the questions I get asked the most. Can't find what you're looking for? Reach out anytime.",
-        "cta_label": "View All FAQs",
+        "description": "Can't find what you're looking for? Reach out anytime.",
+        "cta_label": "View All",
         "cta_link": "/pages/faq"
       },
       "blocks": {

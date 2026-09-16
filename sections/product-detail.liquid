@@ -161,18 +161,51 @@
                   body: JSON.stringify({ id: parseInt(variantId), quantity: parseInt(document.getElementById('quantity').value || 1) })
                 });
                 if (res.ok) {
-                  openCartDrawer();
+                  var cart = await (await fetch('/cart.js')).json();
+                  document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+                  showAddToCartToast('{{ section.settings.add_to_cart_success | default: "Added to cart!" }}', 'success');
                 } else {
-                  alert('Could not add item to cart.');
+                  var errorData = await res.json();
+                  showAddToCartToast(errorData.description || 'Could not add item to cart.', 'error');
                 }
               } catch (err) {
                 console.error('Add to cart error:', err);
+                showAddToCartToast('Network error. Please try again.', 'error');
               }
               btn.disabled = false;
               btn.querySelector('span').textContent = '{{ section.settings.add_to_cart_label }}';
             }
+
+            function showAddToCartToast(message, type) {
+              var toast = document.getElementById('add-to-cart-toast');
+              if (!toast) return;
+              clearTimeout(toast._hideTimeout);
+              toast.textContent = message;
+              if (type === 'success') {
+                toast.style.background = 'rgba(107,158,107,0.97)';
+                toast.style.border = '1px solid rgba(107,158,107,0.25)';
+              } else {
+                toast.style.background = 'rgba(196,114,127,0.97)';
+                toast.style.border = '1px solid rgba(196,114,127,0.25)';
+              }
+              toast.style.color = '#ffffff';
+              toast.classList.remove('opacity-0', 'translate-y-24');
+              toast.classList.add('opacity-100', 'translate-y-0');
+              toast._hideTimeout = setTimeout(function () {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-24');
+              }, 3500);
+            }
           </script>
         </div>
+
+        <!-- Toast notification (add to cart feedback) -->
+        <div
+          id="add-to-cart-toast"
+          role="status"
+          aria-live="polite"
+          class="fixed left-1/2 bottom-6 z-9999 w-[92%] max-w-sm -translate-x-1/2 translate-y-24 opacity-0 pointer-events-none transition-all duration-400 ease-out rounded-xl px-5 py-4 text-body-sm text-center shadow-card"
+        ></div>
 
         <!-- Trust badges -->
         <div class="flex flex-wrap gap-4 mb-6">
@@ -378,6 +411,12 @@
       "id": "add_to_cart_label",
       "label": "Add to Cart Button",
       "default": "Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_success",
+      "label": "Add to Cart Success Toast",
+      "default": "Added to cart!"
     },
     {
       "type": "text",
