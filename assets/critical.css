@@ -482,7 +482,6 @@ html {
 .shopify-challenge__container {
   padding-top: 144px !important;
   min-height: 100vh;
-  display: flex;
   align-items: flex-start;
   justify-content: center;
   box-sizing: border-box;
