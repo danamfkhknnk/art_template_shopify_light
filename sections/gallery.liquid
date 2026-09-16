@@ -29,9 +29,14 @@
     <!-- Masonry board (VGen-style): card height follows each artwork's real
          aspect ratio instead of a fixed crop, so tall/wide/square pieces all
          sit naturally and the board reads as an organic, varied wall.
-         Data source: Hero Metaobjects, as a placeholder until a dedicated
-         showcase/portfolio metaobject exists. -->
+         Data sources: Hero Metaobjects + Gallery Metaobjects (curated
+         artwork) plus every image of every product in the chosen
+         collection, so real product artwork fills out the gallery too. -->
     {% assign hero_items = shop.metaobjects.hero.values %}
+    {% assign gallery_items = shop.metaobjects.gallery.values %}
+    {% if section.settings.collection != blank %}
+      {% assign product_collection = collections[section.settings.collection] %}
+    {% endif %}
     <div class="columns-1 gap-4 sm:columns-2 lg:columns-3">
       {% for item in hero_items %}
         {% if item.img %}
@@ -49,6 +54,41 @@
           </div>
         {% endif %}
       {% endfor %}
+
+      {% for item in gallery_items %}
+        {% if item.img %}
+          <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ item.category | default: 'all' }}">
+            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-2xl transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+              <img
+                src="{{ item.img | image_url: width: 800 }}"
+                alt="{{ item.title | default: 'Gallery artwork' | escape }}"
+                class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              >
+            </button>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% if product_collection %}
+        {% for product in product_collection.products %}
+          {% assign product_category = product.type | default: 'all' | strip | downcase %}
+          {% for image in product.images %}
+            <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ product_category }}">
+              <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-2xl transition-all duration-500" data-title="{{ product.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+                <img
+                  src="{{ image | image_url: width: 800 }}"
+                  alt="{{ image.alt | default: product.title | escape }}"
+                  class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                  width="{{ image.width }}"
+                  height="{{ image.height }}"
+                >
+              </button>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      {% endif %}
     </div>
   </div>
 
@@ -202,6 +242,12 @@
       "label": "Filter Tabs (comma-separated)",
       "info": "Tab labels separated by commas. First tab is active by default. Example: All, Portrait, Character, Illustration",
       "default": "All,Portrait,Character,Illustration"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Product Collection",
+      "info": "Every image from every product in this collection is added to the gallery, alongside the placeholder artwork above."
     }
   ],
   "presets": [

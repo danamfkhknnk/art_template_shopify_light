@@ -4,7 +4,8 @@
       "type": "gallery",
       "settings": {
         "subheading": "Portfolio",
-        "heading": "Showcase"
+        "heading": "Showcase",
+        "collection": "digital-art"
       }
     }
   },
