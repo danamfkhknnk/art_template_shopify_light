@@ -1,23 +1,63 @@
-{% comment %}
-  This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
+<section data-gs-section="404" id="404" class="relative min-h-screen flex items-center justify-center px-4 py-24" style="background: var(--bg-contact);">
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 50% 30%, rgba(196,114,127,0.04) 0%, transparent 50%), radial-gradient(ellipse at 80% 80%, rgba(155,142,196,0.03) 0%, transparent 50%);"></div>
 
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/404
-{% endcomment %}
-
-<h1>{{ '404.title' | t }}</h1>
-
-<p>
-  {{ '404.not_found' | t }}
-</p>
-
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+  <div class="relative section-content max-w-md mx-auto text-center">
+    <div data-gs="404-heading" class="mb-10">
+      <p class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+        <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+        Page Not Found
+        <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
+      </p>
+      <h1 class="font-display mb-6" style="color: var(--color-foreground); font-size: clamp(6rem, 15vw, 12rem); font-weight: 400; line-height: 1; letter-spacing: -0.03em;">
+        404
+      </h1>
+      <h2 class="text-heading font-display mb-4" style="color: var(--color-foreground);">Oops! Page not found</h2>
+      <p class="text-body-lg max-w-lg mx-auto" style="color: var(--color-muted);">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
-  "name": "t:general.404",
-  "settings": []
+  "name": "404 Page",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Oops! Page not found"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "The page you're looking for doesn't exist or has been moved. Let's get you back on track."
+    },
+    {
+      "type": "text",
+      "id": "btn_home",
+      "label": "Home Button Label",
+      "default": "Back to Home"
+    },
+    {
+      "type": "text",
+      "id": "btn_browse",
+      "label": "Browse Button Label",
+      "default": "Browse Artwork"
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 Page",
+      "settings": {
+        "heading": "Oops! Page not found",
+        "description": "The page you're looking for doesn't exist or has been moved. Let's get you back on track."
+      }
+    }
+  ]
 }
 {% endschema %}

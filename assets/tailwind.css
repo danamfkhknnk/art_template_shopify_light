@@ -537,6 +537,9 @@
   .min-h-\[500px\] {
     min-height: 500px;
   }
+  .min-h-screen {
+    min-height: 100vh;
+  }
   .w-1 {
     width: var(--spacing);
   }
@@ -993,6 +996,9 @@
   .py-20 {
     padding-block: calc(var(--spacing) * 20);
   }
+  .py-24 {
+    padding-block: calc(var(--spacing) * 24);
+  }
   .py-36 {
     padding-block: calc(var(--spacing) * 36);
   }
@@ -1180,6 +1186,9 @@
   .opacity-50 {
     opacity: 50%;
   }
+  .opacity-60 {
+    opacity: 60%;
+  }
   .opacity-100 {
     opacity: 100%;
   }
@@ -1346,6 +1355,9 @@
     .hover\:bg-\[rgba\(45\,42\,38\,\.3\)\]:hover {
       background-color: rgba(45,42,38,.3);
     }
+    .hover\:no-underline:hover {
+      text-decoration-line: none;
+    }
     .hover\:underline:hover {
       text-decoration-line: underline;
     }
@@ -1368,6 +1380,9 @@
     }
     .sm\:grid-cols-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .sm\:flex-row {
+      flex-direction: row;
     }
     .sm\:gap-4 {
       gap: calc(var(--spacing) * 4);
