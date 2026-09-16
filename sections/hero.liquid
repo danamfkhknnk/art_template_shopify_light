@@ -17,7 +17,7 @@
             <img
               src="{{ item.img | image_url: width: 1920 }}"
               alt="{{ item.img.alt | default: item.title | default: 'Hero artwork' }}"
-              class="w-full h-full object-cover"
+              class="w-full h-full object-cover object-right"
               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
               width="1920"
               height="1080"
