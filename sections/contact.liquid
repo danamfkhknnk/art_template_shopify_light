@@ -60,7 +60,7 @@
 </section>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
+  (function () {
     var section = document.querySelector('[data-gs-section="contact"]');
     if (!section) return;
 
@@ -129,7 +129,7 @@
           if (submitLabel) submitLabel.textContent = originalLabel;
         });
     });
-  });
+  })();
 </script>
 
 {% schema %}
