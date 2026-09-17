@@ -33,8 +33,11 @@
         </div>
       {% endif %}
 
-      <!-- Collection Products — Pinterest-style masonry, sized from each product's real image aspect ratio -->
-      <div data-gs="services-grid" class="columns-1 gap-6 sm:columns-2 lg:columns-3">
+      <!-- Collection Products — Pinterest-style masonry, sized from each product's real image aspect ratio.
+           Positioned with JS (see script below) rather than CSS `columns`, so
+           consecutive same-ratio product images can't stack directly on top
+           of each other in a column, the same fix applied to the gallery. -->
+      <div data-gs="services-grid" class="relative">
         {% for product in product_collection.products %}
           {% assign featured_image = product.featured_image %}
           {% assign image_ratio = featured_image.aspect_ratio | default: 1.0 %}
@@ -51,8 +54,9 @@
           <a
             data-gs="services-card"
             data-tags="{{ product_tag_list }}"
+            data-ratio="{{ image_ratio }}"
             href="{{ product.url }}"
-            class="services-card group mb-6 block break-inside-avoid overflow-hidden rounded-2xl"
+            class="services-card group absolute top-0 left-0 block overflow-hidden rounded-2xl"
             style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.06);"
           >
             <div class="relative overflow-hidden">
@@ -113,6 +117,91 @@
           var section = document.currentScript.closest('[data-gs-section="services"]');
           if (!section) return;
 
+          /* Pinterest-style masonry, JS-positioned instead of CSS `columns`.
+             Same fix as the gallery section: CSS column balancing can't be
+             controlled or inspected, so it can (and did) stack two
+             similar-ratio product images directly on top of each other in a
+             column. Card order is left untouched (it's a real product
+             listing, not a randomized wall) — only which column each card
+             lands in is chosen to avoid that. */
+          var GRID_GAP = 24; // matches the previous gap-6
+          var grid = section.querySelector('[data-gs="services-grid"]');
+          var allCards = Array.prototype.slice.call(section.querySelectorAll('[data-gs="services-card"]'));
+
+          var ratiosLookSimilar = function (a, b) {
+            if (!a || !b) return false;
+            return Math.abs(a - b) / Math.max(a, b) < 0.15;
+          };
+
+          var getColumnCount = function (width) {
+            if (width < 640) return 1;
+            if (width < 1024) return 2;
+            return 3;
+          };
+
+          var layoutServicesMasonry = function (cards) {
+            if (!grid || !cards.length) return;
+            var containerWidth = grid.clientWidth;
+            var columnCount = getColumnCount(window.innerWidth);
+            var columnWidth = (containerWidth - GRID_GAP * (columnCount - 1)) / columnCount;
+
+            // Width must be set before measuring height: each card's real
+            // height (image + title/price/tags) depends on it.
+            cards.forEach(function (card) { card.style.width = columnWidth + 'px'; });
+
+            var columnHeights = new Array(columnCount).fill(0);
+            var columnLastRatio = new Array(columnCount).fill(null);
+
+            cards.forEach(function (card) {
+              var ratio = parseFloat(card.dataset.ratio) || 1;
+
+              var targetCol = 0;
+              for (var c = 1; c < columnCount; c++) {
+                if (columnHeights[c] < columnHeights[targetCol]) targetCol = c;
+              }
+
+              if (ratiosLookSimilar(ratio, columnLastRatio[targetCol])) {
+                var altCol = -1;
+                for (var c2 = 0; c2 < columnCount; c2++) {
+                  if (c2 === targetCol || ratiosLookSimilar(ratio, columnLastRatio[c2])) continue;
+                  if (altCol === -1 || columnHeights[c2] < columnHeights[altCol]) altCol = c2;
+                }
+                if (altCol !== -1 && (columnHeights[altCol] - columnHeights[targetCol]) < columnWidth) {
+                  targetCol = altCol;
+                }
+              }
+
+              var x = targetCol * (columnWidth + GRID_GAP);
+              var y = columnHeights[targetCol];
+              // Real measured height (image + text block), not just the
+              // image's aspect ratio — cards carry a title/price/tags block
+              // of varying height below the image.
+              var itemHeight = card.offsetHeight;
+
+              card.style.left = x + 'px';
+              card.style.top = y + 'px';
+
+              columnHeights[targetCol] = y + itemHeight + GRID_GAP;
+              columnLastRatio[targetCol] = ratio;
+            });
+
+            grid.style.height = (Math.max.apply(Math, columnHeights) - GRID_GAP) + 'px';
+          };
+
+          var getVisibleCards = function () {
+            return allCards.filter(function (card) { return card.style.display !== 'none'; });
+          };
+
+          if (allCards.length) {
+            layoutServicesMasonry(allCards);
+
+            var resizeTimer;
+            window.addEventListener('resize', function () {
+              clearTimeout(resizeTimer);
+              resizeTimer = setTimeout(function () { layoutServicesMasonry(getVisibleCards()); }, 150);
+            });
+          }
+
           var slideshows = section.querySelectorAll('[data-slideshow]');
           slideshows.forEach(function (el) {
             var slides = Array.prototype.slice.call(el.querySelectorAll('[data-slide]'));
@@ -166,6 +255,10 @@
                   });
                 }
               });
+
+              // Re-flow the masonry for whichever cards are now visible,
+              // once the show/hide fades (0.3s) have settled.
+              setTimeout(function () { layoutServicesMasonry(getVisibleCards()); }, 320);
             });
           });
         })();

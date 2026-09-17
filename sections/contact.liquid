@@ -1,4 +1,4 @@
-<section data-gs-section="contact" id="contact" class="relative py-36 px-4" style="background: var(--bg-contact); scroll-margin-top: 120px;">
+<section data-gs-section="contact" id="contact" class="relative py-10 bg-[--bg-contact] lg:py-20 px-4" style=" scroll-margin-top: 120px;">
   <div id="contact_form" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 50% 30%, rgba(196,114,127,0.04) 0%, transparent 50%);"></div>
 
   <div class="relative section-content max-w-3xl mx-auto">
@@ -14,43 +14,85 @@
       </p>
     </div>
 
-    <div data-gs="contact-form" class="watercolor-card p-8 md:p-10">
-      {% form 'contact' %}
-        {% if form.posted_successfully? %}
-          <div data-contact-result="success" class="p-4 rounded-xl mb-6 text-body-sm text-center" style="background: rgba(107,158,107,0.08); border: 1px solid rgba(107,158,107,0.15); color: var(--color-success);">
-            {{ section.settings.success_message }}
+    {% assign contact_items = shop.metaobjects.contactpage.values %}
+    {% assign contact_img = blank %}
+    {% assign contact_img_title = blank %}
+    {% for entry in contact_items limit: 1 %}
+      {% assign contact_img = entry.img %}
+      {% assign contact_img_title = entry.title %}
+    {% endfor %}
+    <div data-gs="contact-form" class="bg-[--bg-contact] watercolor-card">
+      <div class="grid grid-cols-1 md:grid-cols-3">
+        <!-- Image: left side, md and up only, no backdrop — a direct
+             metaobject image (shop.metaobjects.contactpage.values, same
+             pattern as the gallery's hero/gallery metaobjects), just the
+             first entry. -->
+        {% if contact_img %}
+          <div class="hidden md:block relative md:col-span-1 rounded-2xl md:order-1">
+            <img
+              src="{{ contact_img | image_url: width: 900 }}"
+              alt="{{ contact_img_title | default: section.settings.heading | escape }}"
+              class="absolute inset-0 h-full w-full object-cover "
+              loading="lazy"
+            >
           </div>
         {% endif %}
-        {% if form.errors %}
-          <div data-contact-result="error" class="p-4 rounded-xl mb-6 text-body-sm" style="background: rgba(196,114,127,0.06); border: 1px solid rgba(196,114,127,0.12); color: var(--color-blush);">
-            {{ form.errors | default_errors }}
-          </div>
-        {% endif %}
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div data-gs="contact-field">
-            <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">{{ section.settings.label_name }}</label>
-            <input type="text" name="contact[name]" placeholder="{{ section.settings.placeholder_name }}" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required>
-          </div>
-          <div data-gs="contact-field">
-            <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">{{ section.settings.label_email }}</label>
-            <input type="email" name="contact[email]" placeholder="{{ section.settings.placeholder_email }}" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required>
+        <div class="{% if contact_img %}md:col-span-2{% else %}md:col-span-3{% endif %} rounded-2xl p-8 md:p-10 md:order-2 relative overflow-hidden">
+          <div class="relative z-10">
+            {% form 'contact' %}
+              {% if form.posted_successfully? %}
+                <div data-contact-result="success" class="p-4 rounded-xl mb-6 text-body-sm text-center" style="background: rgba(107,158,107,0.08); border: 1px solid rgba(107,158,107,0.15); color: var(--color-success);">
+                  {{ section.settings.success_message }}
+                </div>
+              {% endif %}
+              {% if form.errors %}
+                <div data-contact-result="error" class="p-4 rounded-xl mb-6 text-body-sm" style="background: rgba(196,114,127,0.06); border: 1px solid rgba(196,114,127,0.12); color: var(--color-blush);">
+                  {{ form.errors | default_errors }}
+                </div>
+              {% endif %}
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div data-gs="contact-field">
+                  <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">{{ section.settings.label_name }}</label>
+                  <input type="text" name="contact[name]" placeholder="{{ section.settings.placeholder_name }}" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required>
+                </div>
+                <div data-gs="contact-field">
+                  <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">{{ section.settings.label_email }}</label>
+                  <input type="email" name="contact[email]" placeholder="{{ section.settings.placeholder_email }}" class="w-full px-4 py-3 rounded-xl text-body-sm" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required>
+                </div>
+              </div>
+
+              <div data-gs="contact-field" class="mb-6">
+                <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">{{ section.settings.label_message }}</label>
+                <textarea name="contact[body]" placeholder="{{ section.settings.placeholder_message }}" rows="5" class="w-full px-4 py-3 rounded-xl text-body-sm resize-none" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required></textarea>
+              </div>
+              <div class="flex w-full justify-end">
+                <button data-gs="contact-submit" type="submit" class="btn-primary w-full md:w-auto">
+                  <span>{{ section.settings.button_label }}</span>
+                </button>
+              </div>
+            {% endform %}
           </div>
         </div>
-
-        <div data-gs="contact-field" class="mb-6">
-          <label class="block text-caption font-medium mb-2 uppercase tracking-wider" style="color: var(--color-muted);">{{ section.settings.label_message }}</label>
-          <textarea name="contact[body]" placeholder="{{ section.settings.placeholder_message }}" rows="5" class="w-full px-4 py-3 rounded-xl text-body-sm resize-none" style="background: var(--color-cream); border: 1px solid rgba(45,42,38,0.08); color: var(--color-foreground); transition: all 0.3s ease;" required></textarea>
-        </div>
-
-        <button data-gs="contact-submit" type="submit" class="btn-primary w-full md:w-auto">
-          <span>{{ section.settings.button_label }}</span>
-        </button>
-      {% endform %}
+      </div>
     </div>
   </div>
 
 </section>
+
+<style>
+  /* The contact card goes edge-to-edge with its image panel — drop the
+     shared watercolor-card padding and the top-right decorative blob
+     (::after), which would otherwise sit on top of the image. */
+  .contact-card {
+    padding: 0;
+    overflow: hidden;
+  }
+  .contact-card::after {
+    display: none;
+  }
+</style>
 
 <script>
   (function () {

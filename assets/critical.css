@@ -187,7 +187,6 @@ button,
 
 /* ===== Watercolor Card ===== */
 .watercolor-card {
-  background: var(--color-surface);
   border-radius: var(--radius-2xl);
   position: relative;
   overflow: hidden;

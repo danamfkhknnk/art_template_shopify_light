@@ -1,13 +1,13 @@
 <header class="group fixed top-0 left-0 right-0 z-50" style="color: var(--color-foreground);">
   <nav class="transition-all duration-500" style="background: rgba(250,247,242,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(45,42,38,0.04);">
-    <div class="section-content px-4">
+    <div class="section-content lg:px-4">
       <!-- Main row: Logo center, icons right -->
-      <div class="flex items-center h-16 md:h-20 lg:h-24">
-        <!-- Left spacer -->
-        <div class="flex-1"></div>
+      <div class="hdr-main-row flex items-center h-16 md:h-20 lg:h-24">
+        <!-- Left spacer: negligible flex-basis, drops out of the 3-column split once scrolled -->
+        <div class="hdr-left-spacer flex-1"></div>
 
-        <!-- Center: Logo -->
-        <div class="flex-none text-center">
+        <!-- Logo: centered column at top; becomes the left column once scrolled -->
+        <div class="hdr-logo flex-none text-center">
           <a data-gs="header-logo" href="{{ routes.root_url }}" class="block">
             <h1 class="leading-none select-none whitespace-nowrap" style="font-family: var(--font-display--family); font-size: clamp(1.3rem, 3vw, 2rem); font-weight: 400; letter-spacing: 0.02em; color: var(--color-foreground);">
               {{ shop.name }}
@@ -15,8 +15,20 @@
           </a>
         </div>
 
+        <!-- Compact nav: hidden at top; becomes the centered column once scrolled -->
+        <nav class="hdr-nav-inline hidden items-center justify-center lg:gap-2">
+          {% for link in section.settings.menu.links %}
+            <a data-gs="header-nav" href="{{ link.url }}" class="nav-link px-3 py-1 text-[0.75rem] tracking-[0.06em] uppercase font-medium transition-all duration-300 rounded-full whitespace-nowrap" style="color: var(--color-muted);">
+              {{ link.title }}
+            </a>
+            {% unless forloop.last %}
+              <span class="text-[0.45rem] opacity-30" style="color: var(--color-muted);">✦</span>
+            {% endunless %}
+          {% endfor %}
+        </nav>
+
         <!-- Right: Hamburger (mobile) + Icons (desktop) -->
-        <div class="flex-1 flex items-center justify-end gap-3">
+        <div class="hdr-icons flex-1 flex items-center justify-end gap-3">
           <!-- Hamburger (mobile only): morphs into an X while the drawer is open -->
           <label for="mobile-menu-toggle" class="md:hidden cursor-pointer w-8 h-8 flex flex-col items-center justify-center gap-1.5 relative z-50">
             <span class="block w-5 h-0.5 transition-all duration-300 group-has-[#mobile-menu-toggle:checked]:translate-y-2 group-has-[#mobile-menu-toggle:checked]:rotate-45" style="background: var(--color-foreground);"></span>
@@ -40,8 +52,8 @@
         </div>
       </div>
 
-      <!-- Bottom row: Nav items centered (desktop only) -->
-      <div class="hidden md:flex items-center justify-center gap-2 pb-3 -mt-1">
+      <!-- Bottom row: Nav items centered (desktop only, collapses once scrolled) -->
+      <div class="hdr-bottom-nav hidden md:flex items-center justify-center gap-2 pb-3 -mt-1">
         {% for link in section.settings.menu.links %}
           <a data-gs="header-nav" href="{{ link.url }}" class="nav-link px-3 py-1 text-[0.8rem] tracking-[0.08em] uppercase font-medium transition-all duration-300 rounded-full" style="color: var(--color-muted);">
             {{ link.title }}
@@ -66,7 +78,7 @@
   <!-- Drawer: slides in from the right instead of covering the full screen -->
   <div class="md:hidden fixed top-0 right-0 z-50 flex h-full w-[78vw] max-w-xs translate-x-full flex-col gap-1 overflow-y-auto px-6 py-8 pointer-events-none peer-checked:pointer-events-auto peer-checked:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" style="background: rgba(250,247,242,0.98); backdrop-filter: blur(20px); box-shadow: -12px 0 40px rgba(45,42,38,0.12);">
     <!-- Close -->
-    <label for="mobile-menu-toggle" class="self-end -mr-2 mb-6 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full transition-colors duration-300" style="background: rgba(45,42,38,0.06); color: var(--color-foreground);" aria-label="Close menu">
+    <label for="mobile-menu-toggle" class="self-end -mr-2 mb-6 flex h-9 w-9 cursor-pointer items-center justify-center transition-colors duration-300" style="color: var(--color-foreground);" aria-label="Close menu">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </label>
 
@@ -124,15 +136,81 @@
       width: 100% !important;
     }
     header.scrolled nav {
-      background: rgba(250,247,242,0.95) !important;
+      {% comment %} background: rgba(250,247,242,0.95) !important;
       backdrop-filter: blur(20px) !important;
-      box-shadow: 0 2px 20px rgba(45,42,38,0.06);
+      box-shadow: 0 2px 20px rgba(45,42,38,0.06); {% endcomment %}
     }
     header.scrolled nav .hidden.md\:flex.items-center.gap-2 {
       padding-bottom: 0;
     }
     header.scrolled .hidden.md\:block.w-full.h-px {
       opacity: 0.5;
+    }
+
+    /* Logo: centered by default; becomes the left column of an even
+       3-column split (logo / nav / icons) once scrolled */
+    .hdr-left-spacer {
+      flex-grow: 1;
+      opacity: 1;
+      transition: flex-grow 0.4s ease, opacity 0.3s ease;
+    }
+    .hdr-logo {
+      transition: flex-grow 0.4s ease;
+    }
+    header.scrolled .hdr-left-spacer {
+      flex-grow: 0;
+      opacity: 0;
+    }
+    header.scrolled .hdr-logo {
+      flex: 1 1 0%;
+      text-align: left;
+    }
+    .hdr-logo h1 {
+      transition: font-size 0.4s ease;
+    }
+
+    /* Main row: compacts in height once scrolled */
+    .hdr-main-row {
+      height: 4rem;
+      transition: height 0.4s ease;
+    }
+    @media (min-width: 768px) {
+      .hdr-main-row { height: 5rem; }
+    }
+    @media (min-width: 1024px) {
+      .hdr-main-row { height: 6rem; }
+    }
+    header.scrolled .hdr-main-row {
+      height: 3.5rem;
+    }
+    @media (min-width: 768px) {
+      header.scrolled .hdr-main-row { height: 3.75rem; }
+    }
+    @media (min-width: 1024px) {
+      header.scrolled .hdr-main-row { height: 4rem; }
+    }
+    header.scrolled .hdr-logo h1 {
+      font-size: clamp(1.1rem, 2vw, 1.4rem) !important;
+    }
+
+    /* Compact nav: joins the row once scrolled as the centered middle
+       column, replacing the bottom nav row (which collapses away). Store
+       name (left) / nav links (center) / account+cart (right) then form an
+       even 3-column "space-between" row. */
+    .hdr-nav-inline {
+      display: none;
+    }
+    .hdr-bottom-nav {
+      transition: opacity 0.3s ease;
+    }
+    @media (min-width: 768px) {
+      header.scrolled .hdr-nav-inline {
+        display: flex;
+        flex: 1 1 0%;
+      }
+      header.scrolled .hdr-bottom-nav {
+        display: none;
+      }
     }
   </style>
 </header>
@@ -145,6 +223,19 @@
       badge.classList.toggle('hidden', count === 0);
     });
   });
+
+  (function () {
+    var header = document.querySelector('header.group');
+    if (!header) return;
+    var threshold = 40;
+
+    function updateScrolledState() {
+      header.classList.toggle('scrolled', window.scrollY > threshold);
+    }
+
+    updateScrolledState();
+    window.addEventListener('scroll', updateScrolledState, { passive: true });
+  })();
 </script>
 
 {% schema %}

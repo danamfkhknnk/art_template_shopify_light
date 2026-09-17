@@ -38,18 +38,20 @@
       {% assign product_collection = collections[section.settings.collection] %}
     {% endif %}
 
-    <div class="columns-1 gap-4 columns-2 lg:columns-3" id="gallery-masonry">
+    <div class="relative" id="gallery-masonry">
       {% for item in hero_items %}
         {% if item.img %}
-          <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ item.category | default: 'all' }}">
+          {% assign item_ratio = item.img.aspect_ratio | default: item.img.preview_image.aspect_ratio %}
+          {% assign item_width = item.img.width | default: item.img.preview_image.width %}
+          {% assign item_height = item.img.height | default: item.img.preview_image.height %}
+          <div data-gs="gallery-item" class="gallery-item absolute top-0 left-0" data-category="{{ item.category | default: 'all' }}" data-ratio="{{ item_ratio }}">
             <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
               <img
                 src="{{ item.img | image_url: width: 800 }}"
                 alt="{{ item.img.alt | default: 'Gallery artwork' }}"
                 class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-                width="{{ item.img.width }}"
-                height="{{ item.img.height }}"
+                width="{{ item_width }}"
+                height="{{ item_height }}"
               >
             </button>
           </div>
@@ -58,13 +60,13 @@
 
       {% for item in gallery_items %}
         {% if item.img %}
-          <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ item.category | default: 'all' }}">
+          {% assign item_ratio = item.img.aspect_ratio | default: item.img.preview_image.aspect_ratio %}
+          <div data-gs="gallery-item" class="gallery-item absolute top-0 left-0" data-category="{{ item.category | default: 'all' }}" data-ratio="{{ item_ratio }}">
             <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
               <img
                 src="{{ item.img | image_url: width: 800 }}"
                 alt="{{ item.title | default: 'Gallery artwork' | escape }}"
                 class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
               >
             </button>
           </div>
@@ -75,13 +77,12 @@
         {% for product in product_collection.products %}
           {% assign product_category = product.type | default: 'all' | strip | downcase %}
           {% for image in product.images %}
-            <div data-gs="gallery-item" class="gallery-item mb-4 break-inside-avoid" data-category="{{ product_category }}">
+            <div data-gs="gallery-item" class="gallery-item absolute top-0 left-0" data-category="{{ product_category }}" data-ratio="{{ image.aspect_ratio }}">
               <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ product.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
                 <img
                   src="{{ image | image_url: width: 800 }}"
                   alt="{{ image.alt | default: product.title | escape }}"
                   class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
                   width="{{ image.width }}"
                   height="{{ image.height }}"
                 >
@@ -128,15 +129,177 @@
     var currentIndex = 0;
     var lightboxOpen = false;
 
-    // Shuffle gallery items for varied ordering
+    // True JS-driven masonry: each item is absolutely positioned into the
+    // shortest column, like a real masonry wall, instead of relying on the
+    // CSS `columns` balancing algorithm. That's necessary because CSS column
+    // balancing doesn't let us see or control which items end up stacked
+    // directly on top of each other in a column — it can (and did) put two
+    // images of near-identical size/shape back to back, which reads as a
+    // repeated, un-random block instead of an organic wall.
+    var GAP = 16; // matches the previous gap-4
+
+    // Two ratios "look the same" if they're within 15% of each other —
+    // finer than a broad portrait/landscape/square bucket, since e.g. two
+    // different 16:9-ish landscape images can still both read as
+    // "landscape" yet look distinctly different in practice, while two
+    // near-identical ratios (like a product's front/back shots) are what
+    // actually reads as a repeated, un-random block when stacked.
+    var ratiosLookSimilar = function(a, b) {
+      if (!a || !b) return false;
+      return Math.abs(a - b) / Math.max(a, b) < 0.15;
+    };
+
+    // Resolve each item's real aspect ratio. Liquid can supply it up front
+    // (product images), but some sources don't expose width/height in
+    // Liquid, so fall back to the image's actual natural size once loaded —
+    // that's always correct regardless of the data source.
+    var resolveRatio = function(item) {
+      var stored = parseFloat(item.dataset.ratio);
+      if (stored && !isNaN(stored)) return Promise.resolve(stored);
+
+      var img = item.querySelector('img');
+      if (!img) return Promise.resolve(1);
+
+      return new Promise(function(resolve) {
+        var finish = function() {
+          var ratio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
+          item.dataset.ratio = ratio;
+          resolve(ratio);
+        };
+        if (img.complete && img.naturalWidth) {
+          finish();
+        } else {
+          img.addEventListener('load', finish, { once: true });
+          img.addEventListener('error', function() { item.dataset.ratio = 1; resolve(1); }, { once: true });
+        }
+      });
+    };
+
+    var getColumnCount = function(width) {
+      if (width < 640) return 1;
+      if (width < 1024) return 2;
+      return 3;
+    };
+
+    // Some sources supply several images with near-identical ratios (e.g.
+    // multiple wide banner crops). Column-fill alone can still run out of
+    // "different-shaped" columns to route them into when too many similar
+    // items land close together in the sequence, so first spread
+    // similar-ratio items at least `lookback` slots apart in the order —
+    // that's roughly one full pass across the columns — before handing the
+    // sequence to the column-fill placer.
+    var spreadBySimilarRatio = function(itemsArr, lookback) {
+      var pool = itemsArr.slice();
+      var result = [];
+      while (pool.length) {
+        var order = pool.map(function(_, idx) { return idx; });
+        for (var oi = order.length - 1; oi > 0; oi--) {
+          var oj = Math.floor(Math.random() * (oi + 1));
+          var t = order[oi]; order[oi] = order[oj]; order[oj] = t;
+        }
+        var placed = false;
+        for (var oi2 = 0; oi2 < order.length; oi2++) {
+          var idx = order[oi2];
+          var ratio = parseFloat(pool[idx].dataset.ratio) || 1;
+          var conflict = false;
+          for (var back = 1; back <= lookback && back <= result.length; back++) {
+            var prevRatio = parseFloat(result[result.length - back].dataset.ratio) || 1;
+            if (ratiosLookSimilar(ratio, prevRatio)) { conflict = true; break; }
+          }
+          if (!conflict) {
+            result.push(pool[idx]);
+            pool.splice(idx, 1);
+            placed = true;
+            break;
+          }
+        }
+        if (!placed) {
+          var idxRand = Math.floor(Math.random() * pool.length);
+          result.push(pool[idxRand]);
+          pool.splice(idxRand, 1);
+        }
+      }
+      return result;
+    };
+
+    // Places items one-by-one into the shortest column, but when the
+    // shortest column's last item shares this item's ratio bucket, prefers
+    // another comparably-short column with a different last bucket instead —
+    // that's what stops same-shaped tiles from stacking directly on top of
+    // one another.
+    var layoutMasonry = function(orderedItems) {
+      if (!masonry || !orderedItems.length) return;
+      var containerWidth = masonry.clientWidth;
+      var columnCount = getColumnCount(window.innerWidth);
+      var columnWidth = (containerWidth - GAP * (columnCount - 1)) / columnCount;
+      var columnHeights = new Array(columnCount).fill(0);
+      var columnLastRatio = new Array(columnCount).fill(null);
+
+      orderedItems.forEach(function(item) {
+        var ratio = parseFloat(item.dataset.ratio) || 1;
+
+        var targetCol = 0;
+        for (var c = 1; c < columnCount; c++) {
+          if (columnHeights[c] < columnHeights[targetCol]) targetCol = c;
+        }
+
+        if (ratiosLookSimilar(ratio, columnLastRatio[targetCol])) {
+          var altCol = -1;
+          for (var c2 = 0; c2 < columnCount; c2++) {
+            if (c2 === targetCol || ratiosLookSimilar(ratio, columnLastRatio[c2])) continue;
+            if (altCol === -1 || columnHeights[c2] < columnHeights[altCol]) altCol = c2;
+          }
+          // Only take the alternate column if it won't unbalance the wall.
+          if (altCol !== -1 && (columnHeights[altCol] - columnHeights[targetCol]) < columnWidth) {
+            targetCol = altCol;
+          }
+        }
+
+        var itemHeight = columnWidth / ratio;
+        var x = targetCol * (columnWidth + GAP);
+        var y = columnHeights[targetCol];
+
+        // Position with top/left rather than `transform`: the gallery's
+        // scroll-reveal animation (assets/gsap-init.js, targets
+        // [data-gs="gallery-item"]) animates each item's `y` transform for
+        // its fade/slide-in, which would otherwise fight with — and reset —
+        // a transform used for masonry placement.
+        item.style.width = columnWidth + 'px';
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+
+        columnHeights[targetCol] = y + itemHeight + GAP;
+        columnLastRatio[targetCol] = ratio;
+      });
+
+      masonry.style.height = (Math.max.apply(Math, columnHeights) - GAP) + 'px';
+    };
+
+    var masonryOrder = [];
+
     if (masonry) {
       var galleryItems = Array.from(items);
+
+      // Fisher-Yates shuffle for base randomness.
       for (var i = galleryItems.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
-        masonry.appendChild(galleryItems[j]);
+        var tmp = galleryItems[i];
+        galleryItems[i] = galleryItems[j];
+        galleryItems[j] = tmp;
       }
-      // Re-query items after shuffle
-      items = document.querySelectorAll('.gallery-item');
+
+      masonryOrder = galleryItems;
+
+      Promise.all(galleryItems.map(resolveRatio)).then(function() {
+        masonryOrder = spreadBySimilarRatio(galleryItems, 3);
+        layoutMasonry(masonryOrder);
+      });
+
+      var resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() { layoutMasonry(masonryOrder); }, 150);
+      });
     }
 
     var getVisibleItems = function() {
