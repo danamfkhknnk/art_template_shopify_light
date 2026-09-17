@@ -190,7 +190,6 @@ button,
   border-radius: var(--radius-2xl);
   position: relative;
   overflow: hidden;
-  box-shadow: var(--shadow-card);
   border: 1px solid rgba(45, 42, 38, 0.05);
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -220,10 +219,6 @@ button,
 
 .watercolor-card:hover::before {
   opacity: 1;
-}
-
-.watercolor-card:hover {
-  transform: translateY(-4px);
 }
 
 /* Watercolor splash accent — top right corner blob */
