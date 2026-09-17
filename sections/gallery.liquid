@@ -45,7 +45,7 @@
           {% assign item_width = item.img.width | default: item.img.preview_image.width %}
           {% assign item_height = item.img.height | default: item.img.preview_image.height %}
           <div data-gs="gallery-item" class="gallery-item absolute top-0 left-0" data-category="{{ item.category | default: 'all' }}" data-ratio="{{ item_ratio }}">
-            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
               <img
                 src="{{ item.img | image_url: width: 800 }}"
                 alt="{{ item.img.alt | default: 'Gallery artwork' }}"
@@ -62,7 +62,7 @@
         {% if item.img %}
           {% assign item_ratio = item.img.aspect_ratio | default: item.img.preview_image.aspect_ratio %}
           <div data-gs="gallery-item" class="gallery-item absolute top-0 left-0" data-category="{{ item.category | default: 'all' }}" data-ratio="{{ item_ratio }}">
-            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+            <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ item.title | escape }}" style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
               <img
                 src="{{ item.img | image_url: width: 800 }}"
                 alt="{{ item.title | default: 'Gallery artwork' | escape }}"
@@ -78,7 +78,7 @@
           {% assign product_category = product.type | default: 'all' | strip | downcase %}
           {% for image in product.images %}
             <div data-gs="gallery-item" class="gallery-item absolute top-0 left-0" data-category="{{ product_category }}" data-ratio="{{ image.aspect_ratio }}">
-              <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ product.title | escape }}" style="background: white; box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
+              <button type="button" class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500" data-title="{{ product.title | escape }}" style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);">
                 <img
                   src="{{ image | image_url: width: 800 }}"
                   alt="{{ image.alt | default: product.title | escape }}"
