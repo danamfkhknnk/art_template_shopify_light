@@ -1581,11 +1581,29 @@
     .lg\:my-auto {
       margin-block: auto;
     }
+    .lg\:mr-10 {
+      margin-right: calc(var(--spacing) * 10);
+    }
+    .lg\:mr-12 {
+      margin-right: calc(var(--spacing) * 12);
+    }
     .lg\:mr-16 {
       margin-right: calc(var(--spacing) * 16);
     }
     .lg\:mb-14 {
       margin-bottom: calc(var(--spacing) * 14);
+    }
+    .lg\:ml-\[70px\] {
+      margin-left: 70px;
+    }
+    .lg\:ml-\[72px\] {
+      margin-left: 72px;
+    }
+    .lg\:ml-\[76px\] {
+      margin-left: 76px;
+    }
+    .lg\:ml-\[80px\] {
+      margin-left: 80px;
     }
     .lg\:ml-\[93px\] {
       margin-left: 93px;
@@ -1628,6 +1646,15 @@
     }
     .lg\:w-\[78px\] {
       width: 78px;
+    }
+    .lg\:w-\[88px\] {
+      width: 88px;
+    }
+    .lg\:w-\[90px\] {
+      width: 90px;
+    }
+    .lg\:w-\[100px\] {
+      width: 100px;
     }
     .lg\:w-\[520px\] {
       width: 520px;
@@ -1731,8 +1758,23 @@
     }
   }
   @media (width >= 80rem) {
+    .xl\:mr-12 {
+      margin-right: calc(var(--spacing) * 12);
+    }
+    .xl\:mr-16 {
+      margin-right: calc(var(--spacing) * 16);
+    }
+    .xl\:ml-\[80px\] {
+      margin-left: 80px;
+    }
+    .xl\:ml-\[93px\] {
+      margin-left: 93px;
+    }
     .xl\:h-10 {
       height: calc(var(--spacing) * 10);
+    }
+    .xl\:w-\[78px\] {
+      width: 78px;
     }
   }
   .\[\&\:\:-webkit-scrollbar\]\:hidden::-webkit-scrollbar {

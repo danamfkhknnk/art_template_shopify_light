@@ -10,26 +10,16 @@
   {% if team_count > 0 %}
     <div class="team-showcase relative mx-auto max-w-[1440px] flex flex-col lg:flex-row lg:items-stretch gap-6 lg:gap-0 w-[90%] lg:w-full lg:px-0 py-20 lg:py-6 lg:h-screen lg:max-h-[1024px]">
 
-      <!-- Mobile/tablet-only: heading + subheading (matches Testimonials' heading pattern), paired with arrow nav in one full-width row -->
-      <div class="flex lg:hidden w-full items-end justify-between gap-4">
+      <!-- Mobile/tablet-only: heading + subheading (centered) -->
+      <div class="flex lg:hidden w-full flex-col items-center text-center gap-4">
         <div>
           <p data-gs="team-text" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
             <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
             {{ section.settings.subheading }}
+            <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
           </p>
           <h2 class="text-heading font-display" style="color: var(--color-foreground);">{{ section.settings.heading }}</h2>
         </div>
-
-        {% if team_count > 1 %}
-          <div class="team-nav flex items-center gap-1 shrink-0">
-            <button type="button" class="team-prev team-nav-btn flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-300" aria-label="Previous artist">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            </button>
-            <button type="button" class="team-next team-nav-btn flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-all duration-300" aria-label="Next artist">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-        {% endif %}
       </div>
 
       <!-- Artwork -->
@@ -62,7 +52,7 @@
       </div>
 
       <!-- Thumbnail nav -->
-      <div class="team-thumbs order-2 lg:order-1 flex justify-center lg:justify-start lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto lg:w-[78px] lg:ml-[93px] lg:mr-16 lg:my-auto no-scrollbar">
+      <div class="team-thumbs order-2 lg:order-1 flex justify-center lg:justify-start lg:flex-col gap-4 lg:gap-6 overflow-x-auto lg:overflow-x-visible lg:overflow-y-auto lg:w-[100px] xl:w-[78px] xl:ml-[93px] lg:ml-[70px] xl:mr-16 lg:mr-10 lg:my-auto no-scrollbar">
         {% for member in team_members %}
           <button
             type="button"
@@ -102,16 +92,7 @@
           </div>
         {% endfor %}
 
-        {% if team_count > 1 %}
-          <div class="team-nav hidden lg:flex items-center gap-3 mt-16">
-            <button type="button" class="team-prev team-nav-btn flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300" aria-label="Previous artist">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            </button>
-            <button type="button" class="team-next team-nav-btn flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300" aria-label="Next artist">
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </button>
-          </div>
-        {% endif %}
+        
       </div>
     </div>
 
@@ -128,6 +109,8 @@
         if (!total) return;
 
         var current = 0;
+        var autoSlideInterval;
+        var autoSlideDelay = 3000; // 5 seconds
 
         function setActive(index) {
           current = ((index % total) + total) % total;
@@ -156,20 +139,35 @@
           });
         }
 
+        function nextSlide() {
+          setActive(current + 1);
+        }
+
+        function startAutoSlide() {
+          autoSlideInterval = setInterval(nextSlide, autoSlideDelay);
+        }
+
+        function stopAutoSlide() {
+          clearInterval(autoSlideInterval);
+        }
+
         thumbs.forEach(function (el) {
           el.addEventListener('click', function () {
             setActive(Number(el.dataset.teamIndex));
+            stopAutoSlide();
+            startAutoSlide(); // Reset timer on manual interaction
           });
         });
 
-        var prevBtns = Array.prototype.slice.call(section.querySelectorAll('.team-prev'));
-        var nextBtns = Array.prototype.slice.call(section.querySelectorAll('.team-next'));
-        prevBtns.forEach(function (btn) {
-          btn.addEventListener('click', function () { setActive(current - 1); });
-        });
-        nextBtns.forEach(function (btn) {
-          btn.addEventListener('click', function () { setActive(current + 1); });
-        });
+        // Pause auto-slide on hover
+        var showcase = section.querySelector('.team-showcase');
+        if (showcase) {
+          showcase.addEventListener('mouseenter', stopAutoSlide);
+          showcase.addEventListener('mouseleave', startAutoSlide);
+        }
+
+        // Start auto-slide
+        startAutoSlide();
       })();
     </script>
   {% endif %}
