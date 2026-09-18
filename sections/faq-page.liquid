@@ -35,10 +35,10 @@
               {% for inner_block in section.blocks %}
                 {% if inner_block.type == 'question' and inner_block.settings.category == block.settings.category_key %}
 
-{% assign is_open = section.settings.open_by_default %}
+                  {% assign is_open = section.settings.open_by_default %}
                    <div class="watercolor-card overflow-hidden faq-page-item" {{ inner_block.shopify_attributes }}>
-                     <button class="faq-page-toggle w-full flex items-start justify-between gap-4 p-6 text-left transition-colors duration-300" style="background: transparent;">                        <span class="flex items-start gap-0">
-
+                     <button class="faq-page-toggle w-full flex items-start justify-between gap-4 p-6 text-left transition-colors duration-300" style="background: transparent;">                        
+                      <span class="flex items-start gap-0">
                          <span class="text-body font-medium" style="color: var(--color-foreground);">{{ inner_block.settings.question }}</span>
                        </span>
                        <svg class="w-5 h-5 shrink-0 faq-page-icon transition-transform duration-300 mt-0.5 {% if is_open %}rotate-180{% endif %}" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24">

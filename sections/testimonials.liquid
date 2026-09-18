@@ -40,8 +40,19 @@
       display: none;
     }
     .testimonial-track {
-      cursor: ew-resize;
+      cursor: grab;
       scroll-behavior: auto;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .testimonial-track:active {
+      cursor: grabbing;
+    }
+    .testimonial-track .watercolor-card {
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
     }
   </style>
 </section>
@@ -51,16 +62,20 @@
     var tracks = document.querySelectorAll('.testimonial-track');
     if (!tracks.length) return;
 
-    var SPEED = 0.6; // px per frame
+    var SPEED = 0.6;
 
     tracks.forEach(function (track) {
       var direction = Number(track.dataset.direction) || 1;
       var paused = false;
       var half = 0;
+      var resumeTimer = null;
+
+      // Drag state
+      var dragging = false;
+      var startX = 0;
+      var scrollStart = 0;
 
       function measure() {
-        // Content is rendered twice, so half the scroll width is exactly
-        // one full loop of the real testimonials.
         half = track.scrollWidth / 2;
         if (direction < 0) {
           track.scrollLeft = half;
@@ -68,7 +83,7 @@
       }
 
       function tick() {
-        if (!paused && half > 0) {
+        if (!paused && !dragging && half > 0) {
           track.scrollLeft += direction * SPEED;
 
           if (direction > 0 && track.scrollLeft >= half) {
@@ -82,18 +97,52 @@
 
       function pause() {
         paused = true;
+        clearTimeout(resumeTimer);
       }
       function resume() {
-        paused = false;
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(function () {
+          paused = false;
+        }, 300);
       }
 
+      // --- Pointer-based drag (works for both mouse & touch) ---
+      track.addEventListener('pointerdown', function (e) {
+        if (e.button && e.button !== 0) return;
+        dragging = true;
+        startX = e.clientX;
+        scrollStart = track.scrollLeft;
+        track.setPointerCapture(e.pointerId);
+        pause();
+      });
+
+      track.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        var dx = e.clientX - startX;
+        track.scrollLeft = scrollStart - dx;
+      });
+
+      track.addEventListener('pointerup', function () {
+        if (!dragging) return;
+        dragging = false;
+        resume();
+      });
+      track.addEventListener('pointercancel', function () {
+        if (!dragging) return;
+        dragging = false;
+        resume();
+      });
+
+      // Prevent text selection & native scroll gestures on touch
+      track.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 1) e.preventDefault();
+      }, { passive: false });
+
+      // Hover pause (desktop)
       track.addEventListener('mouseenter', pause);
-      track.addEventListener('mouseleave', resume);
-      track.addEventListener('pointerdown', pause);
-      track.addEventListener('pointerup', resume);
-      track.addEventListener('pointercancel', resume);
-      track.addEventListener('touchstart', pause, { passive: true });
-      track.addEventListener('touchend', resume);
+      track.addEventListener('mouseleave', function () {
+        if (!dragging) resume();
+      });
 
       if (document.fonts && document.fonts.ready) {
         document.fonts.ready.then(measure);

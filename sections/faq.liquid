@@ -72,20 +72,19 @@
     section.querySelectorAll('.faq-toggle').forEach(function (toggle) {
       var content = toggle.nextElementSibling;
       var icon = toggle.querySelector('.faq-icon');
-      var isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
-      if (isOpen) {
-        icon.style.transform = 'rotate(180deg)';
-      }
+      var isOpen = content.classList.contains('max-h-[1000px]');
 
       toggle.addEventListener('click', function () {
-        isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+        isOpen = content.classList.contains('max-h-[1000px]');
 
-        if (!isOpen) {
-          content.style.maxHeight = content.scrollHeight + 'px';
-          icon.style.transform = 'rotate(180deg)';
+        if (isOpen) {
+          content.classList.remove('max-h-[1000px]');
+          content.classList.add('max-h-0');
+          icon.classList.remove('rotate-180');
         } else {
-          content.style.maxHeight = '0px';
-          icon.style.transform = 'rotate(0deg)';
+          content.classList.remove('max-h-0');
+          content.classList.add('max-h-[1000px]');
+          icon.classList.add('rotate-180');
         }
       });
     });
