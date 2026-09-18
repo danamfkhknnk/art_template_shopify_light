@@ -3,7 +3,8 @@
     <div class="section-content">
       <h1 style="font-size: 1.8rem; font-weight: 600; text-align: center; margin-bottom: 2rem; color: var(--color-contact);">Shopping Cart</h1>
 
-      <form action="{{ routes.cart_url }}" method="post" style="max-width: 700px; margin: 0 auto;">
+      <form action="{{ routes.cart_url }}" method="post" id="cart-form" style="max-width: 700px; margin: 0 auto;">
+        <input type="hidden" name="form_type" value="cart">
         {% if cart.item_count > 0 %}
           <table style="width: 100%; border-collapse: collapse;">
             <thead>
@@ -25,8 +26,14 @@
                       {% endif %}
                       <div>
                         <p style="font-size: 0.85rem; font-weight: 500; margin: 0; color: var(--color-foreground);">{{ item.product.title }}</p>
-                        {% if item.variant_title %}
+                        {% if item.variant_title and item.variant_title != 'Default Title' %}
                           <p style="font-size: 0.72rem; margin: 2px 0 0; color: var(--color-muted);">{{ item.variant_title }}</p>
+                        {% else %}
+                          {% for option in item.variant.options %}
+                            {% if option.value != 'Default Title' %}
+                              <p style="font-size: 0.72rem; margin: 2px 0 0; color: var(--color-muted);">{{ option.name }}: {{ option.value }}</p>
+                            {% endif %}
+                          {% endfor %}
                         {% endif %}
                         <a href="{{ item.url_to_remove }}" style="font-size: 0.72rem; color: var(--color-blush); text-decoration: none; opacity: 0.7;">Remove</a>
                       </div>
@@ -34,7 +41,8 @@
                   </td>
                   <td style="text-align: center; padding: 16px 0;">
                     <input type="number" name="updates[]" value="{{ item.quantity }}" min="0"
-                      style="width: 56px; text-align: center; padding: 6px; border-radius: 8px; border: 1px solid rgba(45,42,38,0.1); font-size: 0.85rem; background: white;">
+                      style="width: 56px; text-align: center; padding: 6px; border-radius: 8px; border: 1px solid rgba(45,42,38,0.1); font-size: 0.85rem; background: white;"
+                      class="cart-qty-input" data-index="{{ forloop.index0 }}">
                   </td>
                   <td style="text-align: right; padding: 16px 0; font-size: 0.9rem; font-weight: 500; color: var(--color-foreground);">
                     {{ item.final_line_price | money }}
@@ -45,8 +53,7 @@
           </table>
 
           <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(45,42,38,0.08);">
-            <input type="submit" name="update" value="Update Cart"
-              style="padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(45,42,38,0.1); background: white; font-size: 0.8rem; cursor: pointer; color: var(--color-foreground);">
+            <div id="cart-update-status" style="font-size: 0.75rem; color: var(--color-muted); min-height: 1.2em;" aria-live="polite"></div>
             <div style="text-align: right;">
               <p style="font-size: 0.8rem; color: var(--color-muted); margin: 0;">Subtotal</p>
               <p style="font-size: 1.2rem; font-weight: 600; margin: 4px 0 0; color: var(--color-foreground);">{{ cart.total_price | money }}</p>
@@ -68,6 +75,60 @@
     </div>
   </section>
 </main>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('cart-form');
+    const statusEl = document.getElementById('cart-update-status');
+    let updateTimeout;
+
+    form.querySelectorAll('.cart-qty-input').forEach(function(input) {
+      let originalValue = input.value;
+
+      function triggerUpdate() {
+        const newValue = parseInt(input.value, 10);
+        if (isNaN(newValue) || newValue < 0) {
+          input.value = originalValue;
+          return;
+        }
+        if (newValue === originalValue) return;
+
+        clearTimeout(updateTimeout);
+        statusEl.textContent = 'Updating...';
+
+        updateTimeout = setTimeout(function() {
+          const submitBtn = document.createElement('input');
+          submitBtn.type = 'submit';
+          submitBtn.name = 'update';
+          submitBtn.style.display = 'none';
+          form.appendChild(submitBtn);
+          form.submit();
+        }, 300);
+      }
+
+      // Change event (fires on blur after value change)
+      input.addEventListener('change', triggerUpdate);
+
+      // Input event (fires immediately on spinner/arrow changes) - debounced
+      input.addEventListener('input', function() {
+        clearTimeout(updateTimeout);
+        updateTimeout = setTimeout(triggerUpdate, 500);
+      });
+
+      // Enter key
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          triggerUpdate();
+        }
+      });
+
+      input.addEventListener('focus', function() {
+        originalValue = this.value;
+      });
+    });
+  });
+</script>
 
 {% schema %}
 {

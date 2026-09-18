@@ -14,10 +14,14 @@
       {% for item in hero_items %}
         {% if item.img %}
           <div class="hero-bg-slide absolute inset-0 opacity-0 transition-opacity duration-[1100ms] ease-in-out{% if forloop.first %} opacity-100{% endif %}" data-hero-index="{{ forloop.index0 }}">
+            {% assign focal_point = item.img.presentation.focal_point | default: '85% 50%' %}
+            <!-- debug: {{ item.img.presentation | json }} / {{ item.img.src }} -->
+
             <img
               src="{{ item.img | image_url: width: 1920 }}"
               alt="{{ item.img.alt | default: item.title | default: 'Hero artwork' }}"
-              class="w-full h-full object-cover object-right"
+              class="w-full h-full object-cover"
+              style="object-position: {{ focal_point }};"
               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
               width="1920"
               height="1080"
@@ -37,6 +41,7 @@
         >
       </div>
     {% endif %}
+            <p>{{focal_point}}</p>
 
     <!-- Readability + watercolor-brand overlay (warm, matches site palette rather than the cool reference tones) -->
     <div class="absolute inset-0 pointer-events-none bg-[linear-gradient(180deg,rgba(45,42,38,.15)_0%,rgba(45,42,38,.35)_55%,rgba(45,42,38,.85)_100%),linear-gradient(90deg,rgba(45,42,38,.75)_0%,rgba(45,42,38,.25)_45%,rgba(45,42,38,.1)_100%)]"></div>

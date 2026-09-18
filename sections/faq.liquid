@@ -33,14 +33,15 @@
       <!-- Accordion -->
       <div class="flex flex-col gap-3">
         {% for block in section.blocks %}
+          {% assign is_open = section.settings.open_by_default %}
           <div data-gs="faq-item" class="faq-item watercolor-card overflow-hidden" {{ block.shopify_attributes }}>
             <button type="button" class="faq-toggle w-full flex items-start justify-between gap-4 p-6 text-left transition-colors duration-300">
               <span class="text-body font-medium" style="color: var(--color-foreground);">{{ block.settings.question }}</span>
-              <svg class="w-5 h-5 shrink-0 faq-icon transition-transform duration-300 mt-0.5" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 shrink-0 faq-icon transition-transform duration-300 mt-0.5 {% if is_open %}rotate-180{% endif %}" style="color: var(--color-blush);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500">
+            <div class="faq-content {% if is_open %}max-h-[1000px]{% else %}max-h-0{% endif %} overflow-hidden transition-all duration-500">
               <div class="px-6 pb-6 text-body-sm leading-relaxed" style="color: var(--color-muted); border-top: 1px solid rgba(45,42,38,0.06); padding-top: 1rem;">
                 {{ block.settings.answer }}
               </div>
@@ -69,10 +70,15 @@
     if (!section) return;
 
     section.querySelectorAll('.faq-toggle').forEach(function (toggle) {
+      var content = toggle.nextElementSibling;
+      var icon = toggle.querySelector('.faq-icon');
+      var isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+      if (isOpen) {
+        icon.style.transform = 'rotate(180deg)';
+      }
+
       toggle.addEventListener('click', function () {
-        var content = toggle.nextElementSibling;
-        var icon = toggle.querySelector('.faq-icon');
-        var isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+        isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
 
         if (!isOpen) {
           content.style.maxHeight = content.scrollHeight + 'px';
@@ -129,6 +135,12 @@
       "type": "url",
       "id": "cta_link",
       "label": "CTA button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Open all items by default",
+      "default": true
     }
   ],
   "blocks": [

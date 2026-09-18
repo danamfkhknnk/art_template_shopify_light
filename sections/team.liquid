@@ -8,7 +8,7 @@
   {% assign team_count = team_members | size %}
 
   {% if team_count > 0 %}
-    <div class="team-showcase relative mx-auto max-w-[1440px] flex flex-col lg:flex-row lg:items-stretch gap-6 lg:gap-0 w-[90%] lg:w-full lg:px-0 py-20 lg:py-6 lg:h-screen lg:max-h-[1024px]">
+    <div class="team-showcase relative mx-auto max-w-[1440px] flex flex-col lg:flex-row lg:items-stretch gap-6 lg:gap-0 w-[90%] lg:w-full lg:px-0 py-20 lg:py-6 lg:h-[90vh]">
 
       <!-- Mobile/tablet-only: heading + subheading (centered) -->
       <div class="flex lg:hidden w-full flex-col items-center text-center gap-4">
@@ -56,13 +56,13 @@
         {% for member in team_members %}
           <button
             type="button"
-            class="team-thumb shrink-0 w-16 h-30 lg:w-full lg:aspect-square rounded-lg overflow-hidden transition-opacity duration-300{% if forloop.first %} opacity-100{% else %} opacity-35{% endif %}"
+            class="team-thumb shrink-0 w-20 h-30 lg:w-full lg:aspect-square rounded-lg overflow-hidden transition-opacity duration-300{% if forloop.first %} opacity-100{% else %} opacity-35{% endif %}"
             data-team-index="{{ forloop.index0 }}"
             aria-label="{{ member.name }}"
             aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
           >
-            {% if member.logo %}
-              <img src="{{ member.logo | image_url: width: 200 }}" alt="" class="h-full w-full object-cover" loading="lazy" width="78" height="78">
+            {% if member.photo %}
+              <img src="{{ member.photo | image_url: width: 200 }}" alt="" class="h-full w-full object-cover" loading="lazy" width="78" height="78">
             {% endif %}
           </button>
         {% endfor %}

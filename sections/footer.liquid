@@ -56,18 +56,18 @@
         <div>
           <h4 class="text-body font-semibold mb-4" style="color: var(--color-foreground);">{{ section.settings.heading_contact }}</h4>
           <div class="space-y-3">
-            <p class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
+            <a href="{{ section.settings.email_link | default: 'mailto:' | append: section.settings.email }}" class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
               <iconify-icon icon="mdi:email-outline" class="w-4 h-4" style="color: var(--color-blush);"></iconify-icon>
               {{ section.settings.email }}
-            </p>
-            <p class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
+            </a>
+            <a href="{{ section.settings.discord_link }}" class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
               <iconify-icon icon="simple-icons:discord" class="w-4 h-4" style="color: var(--color-lavender);"></iconify-icon>
               {{ section.settings.discord_text }}
-            </p>
-            <p class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
+            </a>
+            <a href="{{ section.settings.twitter_link }}" class="text-body-sm flex items-center gap-2" style="color: var(--color-muted);">
               <iconify-icon icon="simple-icons:x" class="w-4 h-4" style="color: var(--color-blush);"></iconify-icon>
               {{ section.settings.twitter_text }}
-            </p>
+            </a>
           </div>
         </div>
       </div>
@@ -77,19 +77,13 @@
       </div>
 
       <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4" style="border-top: 1px solid rgba(45,42,38,0.06);">
-        <p class="text-caption" style="color: var(--color-muted);">
-          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}
-        </p>
+        
         <p class="text-caption" style="color: var(--color-muted);">
           {{ section.settings.bottom_text_1 }} <span class="gradient-text font-medium">{{ section.settings.bottom_emphasis_1 }}</span> {{ section.settings.bottom_text_2 }} <span class="gradient-text font-medium">{{ section.settings.bottom_emphasis_2 }}</span>
         </p>
-        {% if section.settings.show_payment_icons %}
-          <div class="flex gap-2">
-            {% for type in shop.enabled_payment_types %}
-              {{ type | payment_type_svg_tag }}
-            {% endfor %}
-          </div>
-        {% endif %}
+        <p class="text-caption" style="color: var(--color-muted);">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ section.settings.copyright }}
+        </p>
       </div>
     </div>
   </div>
@@ -189,16 +183,32 @@
       "default": "hello@example.com"
     },
     {
+      "type": "url",
+      "id": "email_link",
+      "label": "Email Link (optional, defaults to mailto:)",
+      "info": "Leave empty to auto-generate mailto: link from email address"
+    },
+    {
       "type": "text",
       "id": "discord_text",
       "label": "Discord Text",
       "default": "discord_username"
     },
     {
+      "type": "url",
+      "id": "discord_link",
+      "label": "Discord Link"
+    },
+    {
       "type": "text",
       "id": "twitter_text",
       "label": "Twitter/X Text",
       "default": "@username"
+    },
+    {
+      "type": "url",
+      "id": "twitter_link",
+      "label": "Twitter/X Link"
     },
     {
       "type": "text",
