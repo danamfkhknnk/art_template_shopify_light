@@ -781,6 +781,24 @@
   .resize-none {
     resize: none;
   }
+  .scroll-mt-0 {
+    scroll-margin-top: 0px;
+  }
+  .scroll-mt-10 {
+    scroll-margin-top: calc(var(--spacing) * 10);
+  }
+  .scroll-mt-20 {
+    scroll-margin-top: calc(var(--spacing) * 20);
+  }
+  .scroll-mt-64 {
+    scroll-margin-top: calc(var(--spacing) * 64);
+  }
+  .scroll-p-64 {
+    scroll-padding: calc(var(--spacing) * 64);
+  }
+  .scroll-p-100 {
+    scroll-padding: calc(var(--spacing) * 100);
+  }
   .\[scrollbar-width\:none\] {
     scrollbar-width: none;
   }
@@ -1630,6 +1648,9 @@
     }
     .lg\:shrink-0 {
       flex-shrink: 0;
+    }
+    .lg\:scroll-mt-20 {
+      scroll-margin-top: calc(var(--spacing) * 20);
     }
     .lg\:columns-3 {
       columns: 3;
