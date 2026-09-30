@@ -18,18 +18,16 @@
       </div>
     </div>
 
-    <!-- Masonry board (same behaviour as gallery): card height follows each
-         artwork's real aspect ratio. Data source: Credit Metaobjects
-         (type `credit`: image + source name + source url) plus section
-         blocks as fallback for the theme editor / local preview. -->
     {% assign credit_items = shop.metaobjects.credit.values %}
 
     <div class="relative" id="credit-masonry">
       {% for item in credit_items %}
         {% assign credit_image = item.image | default: item.img %}
         {% if credit_image %}
-          {% assign credit_name = item.source | default: item.source_name | default: item.link_text | default: item.name | default: item.title | default: 'Source' %}
-          {% assign credit_url = item.url | default: item.link | default: item.link_url | default: item.source_url | default: '#' %}
+          {% comment %} `source` is a metaobject field of type Link: { text, url }. {% endcomment %}
+          {% assign credit_link = item.source.value | default: item.link.value %}
+          {% assign credit_name = credit_link.text | default: item.source_name | default: item.name | default: item.title | default: 'Source' %}
+          {% assign credit_url = credit_link.url | default: item.source_url | default: item.url | default: '#' %}
           {% assign item_ratio = credit_image.aspect_ratio | default: credit_image.preview_image.aspect_ratio %}
           {% assign item_width = credit_image.width | default: credit_image.preview_image.width %}
           {% assign item_height = credit_image.height | default: credit_image.preview_image.height %}
@@ -189,19 +187,19 @@
       "type": "text",
       "id": "subheading",
       "label": "Subheading",
-      "default": "Credit"
+      "default": "A Little Appreciation"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Image Credits"
+      "default": "Artists Make It Happen"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "All artwork sources used across this site."
+      "default": "This collection wouldn't exist without the artists behind every piece. Explore their work, discover their style, and support their creativity."
     }
   ],
   "blocks": [
@@ -234,9 +232,9 @@
     {
       "name": "Credit",
       "settings": {
-        "subheading": "Credit",
-        "heading": "Image Credits",
-        "description": "All artwork sources used across this site."
+        "subheading": "A Little Appreciation",
+        "heading": "Artists Make It Happen",
+        "description": "This collection wouldn't exist without the artists behind every piece. Explore their work, discover their style, and support their creativity."
       }
     }
   ]
