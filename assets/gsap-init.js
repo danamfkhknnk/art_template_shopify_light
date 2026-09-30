@@ -342,6 +342,36 @@
     /* ============================================================
        5. TEAM SECTION — Scroll Reveal
     ============================================================ */
+    function initCredit() {
+      var section = document.querySelector('[data-gs-section="credit"]');
+      if (!section) return;
+
+      var headings = section.querySelectorAll('[data-gs="credit-heading"]');
+      if (headings.length) {
+        gsap.fromTo(headings,
+          { y: 40, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.8, stagger: 0.1,
+            scrollTrigger: { trigger: section, start: 'top 75%', once: true }
+          }
+        );
+      }
+
+      var items = section.querySelectorAll('[data-gs="credit-item"]');
+      if (items.length) {
+        gsap.fromTo(items,
+          { y: 50, opacity: 0, scale: 0.95 },
+          {
+            y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.1,
+            scrollTrigger: { trigger: section, start: 'top 70%', once: true }
+          }
+        );
+      }
+    }
+
+    /* ============================================================
+       5. TEAM SECTION — Scroll Reveal
+    ============================================================ */
     function initTeam() {
       var section = document.querySelector('[data-gs-section="team"]');
       if (!section) return;
@@ -835,6 +865,7 @@
       initAbout();
       initServices();
       initGallery();
+      initCredit();
       initTeam();
       initTestimonials();
       initContact();

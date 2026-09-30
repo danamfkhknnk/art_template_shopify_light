@@ -1,0 +1,244 @@
+<section data-gs-section="credit" class="relative pt-36 pb-24 px-4" style="background: var(--bg-contact, #FAF7F2);">
+  <!-- Watercolor wash background (same as gallery) -->
+  <div class="absolute top-0 left-0 w-full h-full pointer-events-none" style="background: radial-gradient(ellipse at 70% 20%, rgba(155,142,196,0.04) 0%, transparent 50%), radial-gradient(ellipse at 30% 80%, rgba(196,162,101,0.03) 0%, transparent 50%);"></div>
+
+  <div class="relative section-content">
+    <!-- Heading — same layout as gallery -->
+    <div class="mb-16">
+      <div class="text-center">
+        <p data-gs="credit-heading" class="text-caption tracking-[0.25em] uppercase mb-4 font-medium inline-flex items-center gap-2" style="color: var(--color-blush);">
+          <span class="w-8 h-px" style="background: linear-gradient(to right, transparent, var(--color-blush));"></span>
+          {{ section.settings.subheading }}
+          <span class="w-8 h-px" style="background: linear-gradient(to left, transparent, var(--color-blush));"></span>
+        </p>
+        <h1 data-gs="credit-heading" class="font-display mb-4" style="color: var(--color-foreground); font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: 0.02em;">
+          {{ section.settings.heading }}
+        </h1>
+        <p data-gs="credit-heading" class="text-body-lg max-w-md mx-auto" style="color: var(--color-muted);">{{ section.settings.description }}</p>
+      </div>
+    </div>
+
+    <!-- Masonry board (same behaviour as gallery): card height follows each
+         artwork's real aspect ratio. Data source: Credit Metaobjects
+         (type `credit`: image + source name + source url) plus section
+         blocks as fallback for the theme editor / local preview. -->
+    {% assign credit_items = shop.metaobjects.credit.values %}
+
+    <div class="relative" id="credit-masonry">
+      {% for item in credit_items %}
+        {% assign credit_image = item.image | default: item.img %}
+        {% if credit_image %}
+          {% assign credit_name = item.source | default: item.source_name | default: item.link_text | default: item.name | default: item.title | default: 'Source' %}
+          {% assign credit_url = item.url | default: item.link | default: item.link_url | default: item.source_url | default: '#' %}
+          {% assign item_ratio = credit_image.aspect_ratio | default: credit_image.preview_image.aspect_ratio %}
+          {% assign item_width = credit_image.width | default: credit_image.preview_image.width %}
+          {% assign item_height = credit_image.height | default: credit_image.preview_image.height %}
+          <div data-gs="credit-item" class="credit-item absolute top-0 left-0" data-ratio="{{ item_ratio }}">
+            <a
+              href="{{ credit_url }}"
+              {% if credit_url != '#' %}target="_blank" rel="noopener"{% endif %}
+              class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500"
+              style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);"
+              aria-label="{{ credit_name | escape }}"
+            >
+              <img
+                src="{{ credit_image | image_url: width: 800 }}"
+                alt="{{ credit_image.alt | default: credit_name | escape }}"
+                class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
+                width="{{ item_width }}"
+                height="{{ item_height }}"
+                loading="lazy"
+              >
+              <!-- Source overlay inside the image -->
+              <span class="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3" style="background: linear-gradient(180deg, transparent 0%, rgba(45,42,38,0.72) 100%);">
+                <span class="inline-flex min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-caption font-medium tracking-wide" style="background: rgba(250,247,242,0.92); color: var(--color-foreground); backdrop-filter: blur(6px);">
+                  <span class="opacity-60">Source:</span>
+                  <span class="truncate">{{ credit_name }}</span>
+                </span>
+                <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background: rgba(250,247,242,0.92); color: var(--color-foreground);" aria-hidden="true">
+                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </span>
+              </span>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% for block in section.blocks %}
+        {% if block.settings.image %}
+          {% assign block_ratio = block.settings.image.aspect_ratio %}
+          <div data-gs="credit-item" class="credit-item absolute top-0 left-0" data-ratio="{{ block_ratio }}" {{ block.shopify_attributes }}>
+            <a
+              href="{{ block.settings.source_url | default: '#' }}"
+              {% if block.settings.source_url != blank %}target="_blank" rel="noopener"{% endif %}
+              class="group relative block w-full cursor-pointer overflow-hidden rounded-md transition-all duration-500"
+              style="background: var(--color-surface); box-shadow: var(--shadow-card); border: 1px solid rgba(45,42,38,0.05);"
+              aria-label="{{ block.settings.source_name | default: 'Source' | escape }}"
+            >
+              <img
+                src="{{ block.settings.image | image_url: width: 800 }}"
+                alt="{{ block.settings.image.alt | default: block.settings.source_name | escape }}"
+                class="block w-full h-auto transition-transform duration-700 group-hover:scale-105"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                loading="lazy"
+              >
+              <span class="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3" style="background: linear-gradient(180deg, transparent 0%, rgba(45,42,38,0.72) 100%);">
+                <span class="inline-flex min-w-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-caption font-medium tracking-wide" style="background: rgba(250,247,242,0.92); color: var(--color-foreground); backdrop-filter: blur(6px);">
+                  <span class="opacity-60">Source:</span>
+                  <span class="truncate">{{ block.settings.source_name | default: 'Source' }}</span>
+                </span>
+                <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style="background: rgba(250,247,242,0.92); color: var(--color-foreground);" aria-hidden="true">
+                  <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                </span>
+              </span>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if credit_items.size == 0 and section.blocks.size == 0 %}
+      <p class="text-center text-body-sm" style="color: var(--color-muted);">Add entries to the <strong>credit</strong> metaobject (image + source name + source URL) to fill this page.</p>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var masonry = document.getElementById('credit-masonry');
+    if (!masonry) return;
+    var items = masonry.querySelectorAll('.credit-item');
+    if (!items.length) return;
+
+    var GAP = 16;
+
+    var resolveRatio = function(item) {
+      var stored = parseFloat(item.dataset.ratio);
+      if (stored && !isNaN(stored)) return Promise.resolve(stored);
+      var img = item.querySelector('img');
+      if (!img) return Promise.resolve(1);
+      return new Promise(function(resolve) {
+        var finish = function() {
+          var ratio = (img.naturalWidth && img.naturalHeight) ? (img.naturalWidth / img.naturalHeight) : 1;
+          item.dataset.ratio = ratio;
+          resolve(ratio);
+        };
+        if (img.complete && img.naturalWidth) {
+          finish();
+        } else {
+          img.addEventListener('load', finish, { once: true });
+          img.addEventListener('error', function() { item.dataset.ratio = 1; resolve(1); }, { once: true });
+        }
+      });
+    };
+
+    var getColumnCount = function() {
+      var w = window.innerWidth;
+      if (w < 640) return 1;
+      if (w < 1024) return 2;
+      return 3;
+    };
+
+    var layoutMasonry = function(orderedItems) {
+      if (!orderedItems.length) return;
+      var containerWidth = masonry.clientWidth;
+      var columnCount = getColumnCount();
+      var columnWidth = (containerWidth - GAP * (columnCount - 1)) / columnCount;
+      var columnHeights = new Array(columnCount).fill(0);
+
+      orderedItems.forEach(function(item) {
+        var ratio = parseFloat(item.dataset.ratio) || 1;
+        var targetCol = 0;
+        for (var c = 1; c < columnCount; c++) {
+          if (columnHeights[c] < columnHeights[targetCol]) targetCol = c;
+        }
+        var itemHeight = columnWidth / ratio;
+        var x = targetCol * (columnWidth + GAP);
+        var y = columnHeights[targetCol];
+        item.style.width = columnWidth + 'px';
+        item.style.left = x + 'px';
+        item.style.top = y + 'px';
+        columnHeights[targetCol] = y + itemHeight + GAP;
+      });
+
+      masonry.style.height = (Math.max.apply(Math, columnHeights) - GAP) + 'px';
+    };
+
+    var order = Array.prototype.slice.call(items);
+
+    Promise.all(order.map(resolveRatio)).then(function() {
+      layoutMasonry(order);
+    });
+
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() { layoutMasonry(order); }, 150);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Credit",
+  "tag": "section",
+  "class": "shopify-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Credit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Image Credits"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "All artwork sources used across this site."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "credit",
+      "name": "Credit",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "source_name",
+          "label": "Source name",
+          "info": "Example: SomieStudio@Vgen",
+          "default": "SomieStudio@Vgen"
+        },
+        {
+          "type": "url",
+          "id": "source_url",
+          "label": "Source URL",
+          "info": "Example: https://vgen.co/portfolio/1df26f67-c89a-4aa2-a719-1f97f349defa"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Credit",
+      "settings": {
+        "subheading": "Credit",
+        "heading": "Image Credits",
+        "description": "All artwork sources used across this site."
+      }
+    }
+  ]
+}
+{% endschema %}

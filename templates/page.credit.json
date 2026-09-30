@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "credit": {
+      "type": "credit",
+      "settings": {
+        "subheading": "Credit",
+        "heading": "Image Credits",
+        "description": "All artwork sources used across this site."
+      }
+    }
+  },
+  "order": [
+    "credit"
+  ]
+}
