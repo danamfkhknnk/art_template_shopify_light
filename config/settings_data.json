@@ -1,13 +1,14 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
-    "sections": {
-      "header": {
-        "type": "header",
-        "settings": {
-          "menu": "main-menu"
-        }
-      }
-    },
     "order": [
       "header"
     ],
@@ -23,6 +24,30 @@
       "button_primary_text": "#FFFFFF",
       "button_secondary_bg": "transparent",
       "button_secondary_text": "#2D2A26"
+    },
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu"
+        }
+      }
+    },
+    "content_for_index": [],
+    "blocks": {
+      "553131063372250519": {
+        "type": "shopify://apps/ai-store-assistant/blocks/chat-widget/01a11001-0b9c-758c-8924-6bd23f406b29",
+        "disabled": false,
+        "settings": {
+          "title": "AI Shopping Assistant",
+          "welcome_message": "Hi! How can I help you today?",
+          "position": "bottom-right",
+          "primary_color": "#111827",
+          "button_text": "Ask AI",
+          "show_products": true,
+          "show_price": true
+        }
+      }
     }
   }
 }
