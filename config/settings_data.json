@@ -37,7 +37,7 @@
     "blocks": {
       "553131063372250519": {
         "type": "shopify://apps/ai-store-assistant/blocks/chat-widget/01a11001-0b9c-758c-8924-6bd23f406b29",
-        "disabled": false,
+        "disabled": true,
         "settings": {
           "title": "AI Shopping Assistant",
           "welcome_message": "Hi! How can I help you today?",
