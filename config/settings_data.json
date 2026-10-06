@@ -37,15 +37,13 @@
     "blocks": {
       "553131063372250519": {
         "type": "shopify://apps/ai-store-assistant/blocks/chat-widget/01a11001-0b9c-758c-8924-6bd23f406b29",
-        "disabled": true,
+        "disabled": false,
         "settings": {
-          "title": "AI Shopping Assistant",
-          "welcome_message": "Hi! How can I help you today?",
           "position": "bottom-right",
-          "primary_color": "#111827",
-          "button_text": "Ask AI",
-          "show_products": true,
-          "show_price": true
+          "primary_color": "#4BB711",
+          "bg_color": "#050912",
+          "text_color": "#3C115D",
+          "button_text": "Ask AI"
         }
       }
     }
